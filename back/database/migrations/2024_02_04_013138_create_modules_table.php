@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->comment('Roles registrados en el sistema');
+        Schema::create('modules', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 40)->comment('Nombre');
+            $table->integer('code')->unique()->comment('Código del módulo');
+            $table->string('name', 45)->comment('Nombre');
             $table->string('description', 255)->nullable()->comment('Descripción');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('modules');
     }
 };

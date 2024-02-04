@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('surnames', 60)->comment('Apellidos');
             $table->string('email', 100)->comment('Correo electrónico');
             $table->string('password', 255)->comment('Contraseña');
-            $table->integer('state')->comment('Estado del usuario: 0: Si el usuario esta inactivo 1: Si el usuario esta activo 2: Si la empresa esta pendiente de pago');
+            $table->integer('state')->defult(1)->comment('Estado del usuario: 0: Si el usuario esta inactivo 1: Si el usuario esta activo 2: Si la empresa esta pendiente de pago');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });

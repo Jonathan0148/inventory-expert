@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->comment('Roles registrados en el sistema');
+        Schema::create('sale_balances', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 40)->comment('Nombre');
-            $table->string('description', 255)->nullable()->comment('Descripción');
+            $table->integer('sale_id')->unsigned()->comment('ID de la venta');
+            $table->foreign('sale_id')->references('id')->on('sales');
+            $table->float('value')->comment('Valor del abono');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('sale_balances');
     }
 };
