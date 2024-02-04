@@ -25,6 +25,7 @@ return new class extends Migration
             $table->float('total')->comment('Total de la venta');
             $table->text('observations')->nullable()->comment('Observaciones de la venta');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

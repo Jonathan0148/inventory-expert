@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rows', function (Blueprint $table) {
+        Schema::create('audits', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('column_id')->unsigned()->comment('ID de la columna donde se encuentra');
-            $table->foreign('column_id')->references('id')->on('columns');
-            $table->string('name', 40)->comment('Nombre');
+            $table->integer('user_id')->unsigned()->comment('ID del usuario que ejecuto alguna acción');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('description', 150)->comment('Descripción de la auditoria');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rows');
+        Schema::dropIfExists('audits');
     }
 };

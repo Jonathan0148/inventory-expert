@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('shelf_id')->references('id')->on('shelves');
             $table->string('name', 40)->comment('Nombre');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

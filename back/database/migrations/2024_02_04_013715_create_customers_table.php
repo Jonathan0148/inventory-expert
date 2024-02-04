@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('email', 100)->nullable()->comment('Número de celular');
             $table->boolean('state')->defult(1)->comment('Estado del cliente: 0: Si el cliente esta inactivo 1: Si el cliente esta activo');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

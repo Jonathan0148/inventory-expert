@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('module_id')->unsigned()->comment('ID del modulo');
             $table->foreign('module_id')->references('id')->on('modules');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

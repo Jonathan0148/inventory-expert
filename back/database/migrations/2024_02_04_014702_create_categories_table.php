@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name', 50)->comment('Nombre');
             $table->string('description', 255)->nullable()->comment('Descripción');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

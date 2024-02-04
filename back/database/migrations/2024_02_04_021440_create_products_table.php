@@ -38,6 +38,7 @@ return new class extends Migration
             $table->string('image_3', 255)->nullable()->comment('Imagen 3');
             $table->string('barcode', 255)->nullable()->comment('Código de barras');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

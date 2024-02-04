@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('sale_id')->references('id')->on('sales');
             $table->float('value')->comment('Valor del abono');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

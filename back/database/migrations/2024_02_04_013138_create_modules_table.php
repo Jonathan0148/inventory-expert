@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('code')->unique()->comment('Código del módulo');
             $table->string('name', 45)->comment('Nombre');
             $table->string('description', 255)->nullable()->comment('Descripción');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

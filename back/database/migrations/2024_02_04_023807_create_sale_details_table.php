@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('quantity')->comment('Cantidad de producto');
             $table->float('value')->comment('Valor del producto');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 
