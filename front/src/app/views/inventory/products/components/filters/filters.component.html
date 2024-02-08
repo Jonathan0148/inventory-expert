@@ -1,0 +1,26 @@
+<div class="d-flex flex-wrap">
+    <div class="m-b-10 m-r-10 d-flex align-items-center">
+        <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Categorías" [(ngModel)]="selectedCategory" (ngModelChange)="onChangeCategory($event)"  nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getCategories()" (nzOnSearch)="onSearchCategory($event)" nzShowSearch nzServerSearch>
+            <nz-option *ngFor="let option of categoriesList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+        </nz-select>
+    </div>
+    <div class="m-b-10 m-r-10 d-flex align-items-center">
+        <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Subcategorías" [(ngModel)]="selectedSubcategory" (ngModelChange)="onChangeSubcategory($event)" nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getCategories()" (nzOnSearch)="onSearchSubcategory($event)" nzShowSearch nzServerSearch>
+            <nz-option *ngFor="let option of subcategoriesList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+        </nz-select>
+    </div>
+    <div class="m-b-10 m-r-10 d-flex align-items-center">
+        <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Marcas" [(ngModel)]="selectedBrand" (ngModelChange)="onChangeBrand($event)" nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getCategories()" (nzOnSearch)="onSearchBrand($event)" nzShowSearch nzServerSearch>
+            <nz-option *ngFor="let option of brandsList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+        </nz-select>
+    </div>
+    <div class="m-b-10 m-r-10 d-flex align-items-center">
+        <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Estado" [(ngModel)]="selectedStatus" (ngModelChange)="statusChange($event)" nzAllowClear>
+            <nz-option *ngFor="let item of statusList" [nzLabel]="item?.label" [nzValue]="item?.value"></nz-option>
+        </nz-select>
+    </div>
+    
+    <ng-template #renderTemplate>
+        <nz-spin *ngIf="isLoading"></nz-spin>
+    </ng-template>
+</div>

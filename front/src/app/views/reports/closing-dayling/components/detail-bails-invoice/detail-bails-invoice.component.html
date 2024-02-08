@@ -1,0 +1,39 @@
+<div>
+    <div class="mb-5">
+        <h2>{{ 'closingDaylind.bailsInvoicesClosing' | translate }}</h2>
+    </div>
+    <div>
+        <div class="row mb-5">
+            <div class="col-6">
+                <i nz-icon nzType="pie-chart" class="opacity-10"></i>
+                <span class="mr-3 ml-1"> <b>{{ 'closingDaylind.numBails' | translate }}:</b> </span>
+                <span>{{ bailsInvoicesClosing?.num }}</span>
+            </div>
+            <div class="col-6">
+                <i nz-icon nzType="dollar-circle" class="opacity-10"></i>
+                <span class="mr-3 ml-1"> <b>{{ 'closingDaylind.bailsDay' | translate }}:</b> </span>
+                <span>${{ bailsInvoicesClosing?.valueDay | number }}</span>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-6">
+                <span class="mr-3">{{ 'closingDaylind.cash' | translate }}:</span>
+                <span>${{ bailsInvoicesClosing?.cash | number }}</span>
+            </div>
+            <div class="col-6">
+                <span class="mr-3">{{ 'closingDaylind.bancolombia' | translate }}:</span>
+                <span>${{ bailsInvoicesClosing?.bancolombia | number }}</span>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-6">
+                <span class="mr-3">{{ 'closingDaylind.nequi' | translate }}:</span>
+                <span>${{ bailsInvoicesClosing?.nequi | number }}</span>
+            </div>
+            <div class="col-6">
+                <span class="mr-3">{{ 'closingDaylind.daviplata' | translate }}:</span>
+                <span>${{ bailsInvoicesClosing?.daviplata | number }}</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="form" (ngSubmit)="submit()" [nzLayout]="'vertical'" >            
+        <div class="row">
+            <div class="col-sm-12 col-12">
+                <nz-card>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h3>{{ 'sales.referenceSale' | translate }} # <input class="input__reference" nz-input nzTooltipTrigger="focus" nzTooltipPlacement="topLeft" placeholder="Referencia" formControlName="reference" [readonly]="true" /></h3>
+                            <div class="fz-16">
+                                <nz-date-picker
+                                nzShowTime
+                                nzFormat="dd/MM/yyyy HH:mm a"
+                                formControlName="date"
+                                [nzDisabled]="!!id"
+                              ></nz-date-picker>
+                            </div>
+                        </div>
+                        <nz-divider nzType="horizontal"></nz-divider>
+                        <!--  -->
+                        <app-info-client-sales [form]="form"></app-info-client-sales>
+                </nz-card>
+            </div>
+            <div class="col-sm-9">
+                <app-info-products-form [form]="form" [products]="products"></app-info-products-form>
+                <app-list-products-form [form]="form" [products]="products"></app-list-products-form>
+            </div>
+            <div class="col-sm-3 col-12">
+                <app-detail-payment [form]="form" [products]="products" (submited)="submit()" [id]="id"></app-detail-payment>
+                <app-observations-sales [form]="form"></app-observations-sales>
+            </div>
+        </div>
+    </form>
+</nz-spin>
+
+
+<ng-template #pricePrefix>
+    <span>$</span>
+</ng-template>  

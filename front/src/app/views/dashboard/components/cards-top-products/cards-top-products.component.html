@@ -1,0 +1,44 @@
+<nz-card>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5>{{ 'dashboard.topProducts' | translate }}</h5>
+        <div>
+            <a nz-button nzType="default" nzSize="small" [routerLink]="['/','inventario','productos']">{{ 'notification.viewAll' | translate }}</a>
+        </div>
+    </div>
+    <div class="m-t-30">
+        <nz-spin [nzSpinning]="loading">
+            <nz-table #productTable [nzData]="productsList" [nzShowPagination]="false" class="no-border-last">
+                  <thead>
+                      <tr>
+                          <th>{{ 'products.name' | translate }}</th>
+                          <th>{{ 'dashboard.salesProduct' | translate }}</th>
+                          <th>{{ 'dashboard.earning' | translate }}</th>
+                          <th>{{ 'dashboard.stockLeft' | translate }}</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let item of productTable.data">
+                          <td>
+                              <div class="d-flex align-items-center cursor-pointer" [routerLink]="['/','inventario','productos','editar',item.id]" nz-tooltip="Ir al producto" nzTooltipPlacement="right">
+                                  <nz-avatar nzShape="square"  nzIcon="picture" [nzSrc]="item.avatar"></nz-avatar>
+                                 <span class="m-l-10">{{item.name}}</span>
+                              </div>
+                          </td>
+                          <td>{{item.sales_detail_sum_amount}}</td>
+                          <td>${{item.sales_detail_sum_amount * item.sales_detail_sum_price | number:'3.2-5'}}</td>
+                          <td>
+                              <div class="d-flex align-items-center">
+                                  <div class="w-90 p-r-10">
+                                      <nz-progress *ngIf="item.stock > 60" [nzStrokeColor]="cyan" [nzPercent]="item.stock" nzSize="small" [nzShowInfo]="false"></nz-progress>
+                                      <nz-progress *ngIf="item.stock > 40 && item.stock < 60" [nzStrokeColor]="gold" [nzPercent]="item.stock" nzSize="small" [nzShowInfo]="false"></nz-progress>
+                                      <nz-progress *ngIf="item.stock < 40" [nzStrokeColor]="red" [nzPercent]="item.stock" nzSize="small" [nzShowInfo]="false"></nz-progress>
+                                  </div>
+                                  <span>{{item.stock}}</span>
+                              </div>
+                          </td>
+                      </tr>
+                  </tbody>
+            </nz-table>  
+        </nz-spin>
+    </div>
+</nz-card>

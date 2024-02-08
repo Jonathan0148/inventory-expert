@@ -1,0 +1,43 @@
+
+<form nz-form [formGroup]="form" (ngSubmit)="submit()" [nzLayout]="'vertical'" >
+    <div class="row">
+        <div class="col-lg-6 col-sm-6 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.paymentMethod' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'sales.paymentMethod' | translate }}" nzAllowClear formControlName="id_payment_method">
+                        <nz-option *ngFor="let option of paymentMethodList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-lg-6 col-sm-6 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.fertiliser' | translate }}</nz-form-label>
+                <nz-form-control  [nzErrorTip]="errorsPassword">
+                    <nz-input-group [nzPrefix]="pricePrefix">
+                        <input nz-input placeholder="{{ 'sales.fertiliser' | translate }}" type="text" formControlName="price" currencyMask >
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <nz-form-item>
+                <nz-form-control>
+                    <button nz-button nzType="primary" [disabled]="!form.valid" nz-button nzType="primary" [nzLoading]="loading">{{ 'global.save' | translate }}</button>
+                </nz-form-control>
+            </nz-form-item>
+        </div>    
+    </div>
+</form>
+
+<ng-template #pricePrefix>
+    <span>$</span>
+</ng-template> 
+
+<ng-template #errorsPassword let-control>
+    <ng-container *ngIf="control.hasError('required')">Campo requerido</ng-container>
+    <ng-container *ngIf="control.hasError('no-same')">No puedes hacer un abono que supere al total de la venta</ng-container>
+</ng-template>

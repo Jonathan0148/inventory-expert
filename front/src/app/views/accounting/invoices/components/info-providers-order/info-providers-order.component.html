@@ -1,0 +1,54 @@
+<form [formGroup]="form">
+    <div class="row">
+
+        <div class="col-12">
+            <h4 class="mt-1">{{ 'orders.infoProvider' | translate }}</h4>
+        </div>
+        <div class="col-sm-6 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'orders.providersList' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'orders.providersList' | translate }}" formControlName="provider" nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getProviders()" (nzOnSearch)="onSearchProvider($event)" nzShowSearch nzServerSearch (ngModelChange)="onChangeProvider($event)" >
+                        <nz-option *ngFor="let option of providersList" [nzValue]="option" [nzLabel]="option.full_name" ></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-sm-6 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'providers.nit' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'providers.nit' | translate }}" type="text" formControlName="nit" [readonly]="true">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-sm-4 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.name' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'sales.name' | translate }}" type="text" formControlName="full_name" [readonly]="true">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-sm-4 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.email' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'sales.email' | translate }}" type="email" formControlName="email" [readonly]="true">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-sm-4 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.phone' | translate }}</nz-form-label>
+                <nz-form-control >
+                    <input nz-input placeholder="{{ 'sales.phone' | translate }}" type="text" formControlName="cellphone" [readonly]="true">
+                </nz-form-control>
+            </nz-form-item> 
+        </div>
+    </div>
+</form>
+
+<ng-template #renderTemplate>
+    <nz-spin *ngIf="loading"></nz-spin>
+</ng-template>

@@ -1,0 +1,19 @@
+<nz-spin [nzSpinning]="isSpinning">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <nz-form-item>
+            <nz-form-label>{{ 'products.selectFile' | translate }}</nz-form-label>
+            <nz-input-group>
+                <input formControlName="file" nz-input type="file" (change)="uploadFile($event)">
+            </nz-input-group>
+        </nz-form-item>
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <nz-form-item>
+                    <nz-form-control>
+                        <button nz-button nzType="primary" [disabled]="!form.valid" nz-button nzType="primary">{{ 'global.save' | translate }}</button>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>    
+        </div>
+    </form>
+</nz-spin>

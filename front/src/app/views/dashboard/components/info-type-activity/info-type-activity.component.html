@@ -1,0 +1,23 @@
+
+<ng-container *ngIf="type?.value === 'producto'">
+    <span class="m-l-5">#{{ item?.product?.reference }}</span>
+</ng-container>
+
+<ng-container *ngIf="type?.value === 'venta'">
+    <span class="m-l-5">#{{ item?.sale?.reference }}</span>
+</ng-container>
+
+<ng-container *ngIf="type?.value === 'orden'">
+    <span class="m-l-5">#{{ item?.order?.reference }}</span>
+</ng-container>
+<!-- <ng-container *ngIf="selectedTypeAudit?.value === 'producto'">
+    <span class="m-l-5">#{{ item?.product.reference }}</span>
+</ng-container>
+
+<ng-container *ngIf="selectedTypeAudit?.value === 'producto'">
+    <span class="m-l-5">#{{ item?.product.reference }}</span>
+</ng-container>
+
+<ng-container *ngIf="selectedTypeAudit?.value === 'producto'">
+    <span class="m-l-5">#{{ item?.product.reference }}</span>
+</ng-container> -->

@@ -1,0 +1,17 @@
+.grid__modules{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+}
+
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    background: rgba(63, 135, 245, 0.1);
+    border-color: #3f87f5;
+    color: #3F87F5;
+}
+
+.bordered{
+    background: rgba(63, 135, 245, 0.1);
+    border-color: #3f87f5 !important;
+    color: #3f87f5;
+}

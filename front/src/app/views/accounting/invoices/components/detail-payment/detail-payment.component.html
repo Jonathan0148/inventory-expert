@@ -1,0 +1,103 @@
+<nz-card>
+    <form [formGroup]="form">
+        <h4>{{ 'sales.detailsPayment' | translate }}</h4>
+        
+        <div class="mt-4">
+            <div class="row my-3">
+                <div class="col-6 align-items-center d-flex">
+                    <span> <b> {{ 'sales.total' | translate }}</b> </span>
+                </div>
+                <div class="col-6 align-items-center d-flex">
+                    <nz-form-item class="mb-0">
+                        <nz-form-control nzErrorTip="">
+                            <nz-input-group [nzPrefix]="pricePrefix">
+                                <input nz-input formControlName="total" type="text" currencyMask maxlength="11">
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col-6 align-items-center d-flex">
+                    <span> <b> {{ 'sales.iva' | translate }}</b> </span>
+                </div>
+                <div class="col-6 align-items-center d-flex">
+                    <nz-form-item>
+                        <nz-form-control nzErrorTip="">
+                            <nz-input-group [nzPrefix]="porcentagePrefix">
+                                <input nz-input formControlName="tax" type="text" (change)="onChangeTax()" maxlength="3">
+                            </nz-input-group>
+                            <ng-template #porcentagePrefix>
+                                <span>%</span>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <nz-divider nzType="horizontal"></nz-divider>
+            <div class="row my-3">
+                <div class="col-12">
+                    <nz-form-item class="mb-0">
+                        <nz-form-label>{{ 'orders.dueDate' | translate }}</nz-form-label>
+                        <nz-form-control>
+                            <nz-date-picker formControlName="due_date" class="w-100" nzFormat="yyyy/MM/dd" nzPlaceHolder="{{ 'orders.dueDate' | translate }}" ngModel></nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col-sm-12 col-12">
+                    <nz-form-item class="mb-0">
+                        <nz-form-label>{{ 'sales.paymentMethod' | translate }}</nz-form-label>
+                        <nz-form-control>
+                            <nz-select class="w-100" nzPlaceHolder="{{ 'sales.paymentMethod' | translate }}" nzAllowClear formControlName="id_payment_method">
+                                <nz-option *ngFor="let option of paymentMethodList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col-sm-12 col-12"> 
+                    <nz-form-item class="mb-0">
+                        <nz-form-label>{{ 'orders.status' | translate }}</nz-form-label>
+                        <nz-form-control>
+                            <nz-select class="w-100" nzPlaceHolder="{{ 'orders.status' | translate }}" nzAllowClear formControlName="payment_status" (ngModelChange)="onChangeStatus()">
+                                <nz-option *ngFor="let option of statusList" [nzValue]="option.value" [nzLabel]="option.label" ></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col-sm-12 col-12" *ngIf="form.get('payment_status').value === 2 && !id"> 
+                    <nz-form-item class="mb-0">
+                        <nz-form-label>{{ 'sales.fertiliser' | translate }}</nz-form-label>
+                        <nz-form-control [nzErrorTip]="errorsPassword">
+                            <nz-input-group [nzPrefix]="pricePrefix">
+                                <input nz-input placeholder="{{ 'sales.fertiliser' | translate }}" type="text" formControlName="bail" maxlength="11" currencyMask >
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mt-1">
+                    <button nz-button nzType="primary" class="w-100" (click)="onClickSubmit()" [disabled]="form.invalid">
+                        <i nz-icon nzType="save" theme="outline"></i>
+                        <span>{{ 'global.save' | translate }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</nz-card>
+
+<ng-template #pricePrefix>
+    <span>$</span>
+</ng-template> 
+
+<ng-template #errorsPassword let-control>
+    <ng-container *ngIf="control.hasError('required')">Campo requerido</ng-container>
+    <ng-container *ngIf="control.hasError('no-same')">No puedes hacer un abono mayor al total de la venta</ng-container>
+</ng-template>

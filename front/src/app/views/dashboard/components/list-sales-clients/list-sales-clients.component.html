@@ -1,0 +1,20 @@
+<nz-table #innerTable [nzData]="sales" [nzShowPagination]="false">
+    <thead>
+        <tr>
+            <th>{{ 'products.reference' | translate }}</th>
+            <th>{{ 'dashboard.date' | translate }}</th>
+            <th>{{ 'dashboard.debtor' | translate }} </th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let sale of sales">
+            <tr nz-tooltip="Ir a la venta" nzTooltipPlacement="right" class="cursor-pointer" [routerLink]="['/','contabilidad','ventas','editar', sale.id]">
+                <td>
+                    #00{{sale.reference}}
+                </td>
+                <td>{{ sale.created_at | date:'d/M/yy, h:mm a'  }}</td>
+                <td>{{ (sale.total - sale.total_bails) | currency:'USD': 'symbol':'1.0-0' }}</td>
+            </tr>
+        </ng-container>
+    </tbody>
+</nz-table>

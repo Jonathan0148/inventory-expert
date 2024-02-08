@@ -1,0 +1,58 @@
+<form [formGroup]="form">
+    <nz-card>
+        <h3>{{ 'sales.productList' | translate }}</h3>
+        <nz-table nzTemplateMode>
+            <thead>
+                <tr>
+                    <th>{{ 'products.reference' | translate }}</th>
+                    <th>{{ 'products.name' | translate }}</th>
+                    <th>{{ 'sales.amount' | translate }}</th>
+                    <th>{{ 'sales.unitValue' | translate }}</th>
+                    <th>{{ 'sales.subtotal' | translate }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container formArrayName="products" >
+                    <tr *ngFor="let productsForm of products?.controls; let indexProduct = index">
+                        <ng-container [formGroup]="productsForm">
+                                <td>#{{ productsForm?.get('reference')?.value }}</td>
+                                <td>{{  productsForm?.get('name')?.value }}</td>
+                                <td style="vertical-align: middle;">
+                                    <nz-form-control>
+                                        <nz-input-group [nzErrorTip]="errorsPassword">
+                                            <input nz-input placeholder="{{ 'sales.amount' | translate }}" type="number" formControlName="amount"(change)="onChangeAmount(indexProduct)" >
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </td>
+                                <td style="vertical-align: middle;"> 
+                                    <nz-form-control>
+                                        <nz-input-group [nzPrefix]="pricePrefix">
+                                            <input nz-input placeholder="{{ 'sales.unitValue' | translate }}" type="text" formControlName="price" (ngModelChange)="onChangePrice()" currencyMask class="m-w-100">
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </td>
+                                <td>{{ (productsForm?.get('amount')?.value * productsForm?.get('price')?.value) | currency:'USD': 'symbol':'1.0-0'  }}</td>
+                                <td>
+                                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm"
+                                    (nzOnConfirm)="confirm(indexProduct, productsForm?.get('sale_id')?.value)" (nzOnCancel)="cancel()">
+                                        <i nz-icon nzType="delete" theme="outline"></i>
+                                    </button>
+                                </td>
+                        </ng-container>
+                    </tr>
+                </ng-container>
+            </tbody>
+          </nz-table>
+    </nz-card>
+</form>
+
+<ng-template #pricePrefix>
+    <span>$</span>
+</ng-template>  
+
+
+<ng-template #errorsPassword let-control>
+    <ng-container *ngIf="control.hasError('required')">Campo requerido</ng-container>
+    <ng-container *ngIf="control.hasError('no-same')">No hay suficientes unidades disponibles</ng-container>
+</ng-template>

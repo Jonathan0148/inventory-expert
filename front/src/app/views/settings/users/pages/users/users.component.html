@@ -1,0 +1,47 @@
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-7">
+            <div class="d-md-flex">
+                <div class="m-b-10 m-r-20">
+                    <nz-input-group [nzPrefix]="prefixTemplate">
+                        <input type="text" nz-input placeholder="Buscar Usuario" [(ngModel)]="searchInput" (ngModelChange)="search()">
+                    </nz-input-group>      
+                    <ng-template #prefixTemplate>
+                        <i nz-icon nzType="search" class="opacity-05"></i>
+                    </ng-template>   
+                </div>
+                <div class="m-b-10 m-r-20 d-flex align-items-center">
+                    <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Rol" nzAllowClear [(ngModel)]="selectedRole" (ngModelChange)="onChangeRole($event)" [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getRoles()" (nzOnSearch)="onSearchRole($event)" nzShowSearch nzServerSearch>
+                        <nz-option *ngFor="let option of roleList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                    </nz-select>
+                </div>
+                <div class="m-b-10 m-r-20 d-flex align-items-center">
+                    <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Estado" [(ngModel)]="selectedStatus" nzAllowClear (ngModelChange)="onChangeStatus($event)">
+                        <nz-option *ngFor="let option of statusList" [nzValue]="option" [nzLabel]="option.label" ></nz-option>
+                    </nz-select>
+                </div>
+            </div>          
+        </div>
+        <div class="col-lg-5 text-right">
+            <app-export-button [path]="'/users/exportExcel'" [type]="'excel'" [nameFile]="'Listado Usuarios'"></app-export-button>
+            <a nz-button nzType="primary" [routerLink]="['/','usuarios','crear']" class="m-l-5">
+                <i nz-icon nzType="plus-circle" theme="outline"></i>
+                <span>{{ 'users.add' | translate }}</span>
+            </a>
+        </div>
+    </div>
+    
+    <app-list-users [usersList]="usersList" [orderColumn]="orderColumn" [loading]="loading"></app-list-users>
+    
+    <div class="row">
+        <div class="col-12 mt-4 d-flex justify-content-end">
+            <nz-pagination class="pagination" nzShowSizeChanger nzShowQuickJumper [nzResponsive]="true" [nzTotal]="totalItems" [(nzPageIndex)]="page" (nzPageSizeChange)="pageSizeChanged($event)" (nzPageIndexChange)="pageIndexChanged($event)">
+            </nz-pagination>
+        </div>
+    </div>
+
+</nz-card>
+
+<ng-template #renderTemplate>
+    <nz-spin *ngIf="isLoading"></nz-spin>
+</ng-template>

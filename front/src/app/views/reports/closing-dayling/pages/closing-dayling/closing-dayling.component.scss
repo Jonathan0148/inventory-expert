@@ -1,0 +1,7 @@
+.gap-2{
+    gap: 16px;
+}
+
+:host ::ng-deep .ant-tabs-tabpane {
+    margin-bottom: 16px;
+}

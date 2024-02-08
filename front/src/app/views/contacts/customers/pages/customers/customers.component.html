@@ -1,0 +1,32 @@
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-7">
+            <div class="d-md-flex">
+                <div class="m-b-10 m-r-20">
+                    <nz-input-group [nzPrefix]="prefixTemplate">
+                        <input type="text" nz-input placeholder="Buscar Cliente" [(ngModel)]="searchInput" (ngModelChange)="search()">
+                    </nz-input-group>      
+                    <ng-template #prefixTemplate>
+                        <i nz-icon nzType="search" class="opacity-05"></i>
+                    </ng-template>   
+                </div>
+            </div>          
+        </div>
+        <div class="col-lg-5 text-right">
+            <app-export-button [path]="'/customers/exportExcel'" [type]="'excel'" [nameFile]="'Listado Clientes'"></app-export-button>
+            <a nz-button nzType="primary" [routerLink]="['/','contactos','clientes','crear']" class="m-l-5">
+                <i nz-icon nzType="plus-circle" theme="outline"></i>
+                <span>{{ 'customers.add' | translate }}</span>
+            </a>
+        </div>
+    </div>
+    
+    <app-list-customers [customersList]="customersList" [orderColumn]="orderColumn" [loading]="loading"></app-list-customers>
+    
+    <div class="row">
+        <div class="col-12 mt-4 d-flex justify-content-end">
+            <nz-pagination class="pagination" nzShowSizeChanger nzShowQuickJumper [nzResponsive]="true" [nzTotal]="totalItems" [(nzPageIndex)]="page" (nzPageSizeChange)="pageSizeChanged($event)" (nzPageIndexChange)="pageIndexChanged($event)">
+            </nz-pagination>
+        </div>
+    </div>
+</nz-card>

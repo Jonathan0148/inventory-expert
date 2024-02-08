@@ -1,0 +1,60 @@
+<form [formGroup]="form">
+    <div class="row">
+
+        <div class="col-12">
+            <h4 class="mt-1">{{ 'sales.infoClient' | translate }}</h4>
+        </div>
+        <div class="col-sm-4 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.typeDocument' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'sales.typeDocument' | translate }}" nzAllowClear formControlName="id_type_document">
+                        <nz-option *ngFor="let option of typeDocumentsList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-sm-4 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.document' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'sales.document' | translate }}" type="text" formControlName="document" (change)="onChangeDocument($event.target.value)">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-sm-4 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.name' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'sales.name' | translate }}" type="text" formControlName="full_name" [readonly]="isClient">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-sm-4 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.typePerson' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'sales.typePerson' | translate }}" nzAllowClear formControlName="id_type_person" [nzDisabled]="isClient">
+                        <nz-option *ngFor="let option of typePersonsList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-sm-4 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.phone' | translate }}</nz-form-label>
+                <nz-form-control >
+                    <input nz-input placeholder="{{ 'sales.phone' | translate }}" type="text" formControlName="cellphone" [readonly]="isClient">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-sm-4 col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'sales.email' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'sales.email' | translate }}" type="email" formControlName="email" [readonly]="isClient">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+</form>

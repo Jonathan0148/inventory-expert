@@ -1,0 +1,62 @@
+<form [formGroup]="form">
+    <nz-card>
+        <nz-form-item>
+            <nz-form-label nzFor="cost" nzRequired>{{ 'products.cost' | translate }}:</nz-form-label>
+            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                <nz-input-group [nzPrefix]="pricePrefix">
+                    <input nz-input formControlName="cost" type="text" currencyMask>
+                </nz-input-group>
+                <ng-template #pricePrefix>
+                    <span>$</span>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="price" nzRequired>{{ 'products.price' | translate }}:</nz-form-label>
+            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                <nz-input-group [nzPrefix]="pricePrefix">
+                    <input nz-input formControlName="price" type="text" currencyMask>
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="discount" nzRequired>{{ 'products.discount' | translate }}:</nz-form-label>
+            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                <nz-input-group [nzPrefix]="porcentagePrefix">
+                    <input nz-input formControlName="discount" type="text">
+                </nz-input-group>
+                <ng-template #porcentagePrefix>
+                    <span>%</span>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="id_section" >{{ 'products.sections' | translate }}:</nz-form-label>
+            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                <nz-select formControlName="id_section" class="w-100" nzPlaceHolder="{{ 'products.sections' | translate }}" nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getSections()" (nzOnSearch)="onSearchSection($event)" nzShowSearch nzServerSearch (ngModelChange)="onChangeSection($event)" >
+                    <nz-option *ngFor="let option of sectionList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="id_column" >{{ 'products.column' | translate }}:</nz-form-label>
+            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                <nz-select formControlName="id_column" class="w-100" nzPlaceHolder="{{ 'products.column' | translate }}" nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getColumns()" (nzOnSearch)="onSearchColumn($event)" nzShowSearch nzServerSearch  >
+                    <nz-option *ngFor="let option of columnList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="id_row" >{{ 'products.row' | translate }}:</nz-form-label>
+            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                <nz-select formControlName="id_row" class="w-100" nzPlaceHolder="{{ 'products.row' | translate }}" nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getRows()" (nzOnSearch)="onSearchRow($event)" nzShowSearch nzServerSearch>
+                    <nz-option *ngFor="let option of rowList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+    </nz-card>
+</form>
+
+<ng-template #renderTemplate>
+    <nz-spin *ngIf="isLoading"></nz-spin>
+</ng-template>

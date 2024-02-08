@@ -1,0 +1,58 @@
+<form nz-form [formGroup]="form" (ngSubmit)="submit()" [nzLayout]="'vertical'" >
+    <div class="row">
+        <div class="col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'users.name' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'users.name' | translate }}" formControlName="name" >
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'role.description' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input placeholder="{{ 'role.description' | translate }}" [nzAutosize]="{ minRows: 4 }" formControlName="description"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h4>{{ 'modules.title' | translate }}</h4>
+            <span>{{ 'role.descritionModule' | translate }}</span>
+        </div>
+        <div class="col-12">
+            <div class="grid__modules">
+                <div class="my-2"><strong>{{ 'modules.name' | translate }}</strong> </div>
+                <div class="my-2"><strong>{{ 'modules.has_admin' | translate }}</strong></div>
+            </div>
+            <div class="flex__body">
+                <ng-container formArrayName="modules">
+                    <ng-container *ngFor="let modulesForm of modules.controls;  let i = index">
+                        <ng-container [formGroup]="modulesForm">
+                            <div class="grid__modules my-3">
+                                <button type="button" nz-button nzType="default" nzBlock [ngClass]="{ 'bordered': modulesForm.get('selected').value }" class="border d-flex align-items-center justify-content-center" (click)="onClickModuleActive(i)">{{ modulesForm.get('name').value }}</button>
+                                <div class="">
+                                    <nz-radio-group nzButtonStyle="solid" formControlName="has_admin" [nzDisabled]="!modulesForm.get('selected').value">
+                                        <label nz-radio-button nzValue="1">Administrador</label>
+                                        <label nz-radio-button nzValue="0">Visualizador</label>
+                                    </nz-radio-group>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <nz-form-item>
+                <nz-form-control>
+                    <button nz-button nzType="primary" [disabled]="!form.valid" nz-button nzType="primary" [nzLoading]="loading">{{ 'global.save' | translate }}</button>
+                </nz-form-control>
+            </nz-form-item>
+        </div>    
+    </div>
+</form>

@@ -1,0 +1,45 @@
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-8">
+            <div class="d-md-flex">
+                <div class="m-b-10 m-r-20">
+                    <nz-input-group [nzPrefix]="prefixTemplate">
+                        <input type="text" nz-input placeholder="Buscar factura" [(ngModel)]="searchInput" (ngModelChange)="search()">
+                    </nz-input-group>      
+                    <ng-template #prefixTemplate>
+                        <i nz-icon nzType="search" class="opacity-05"></i>
+                    </ng-template>   
+                </div>
+            </div>          
+        </div>
+        <div class="col-lg-4 text-right">
+            <a nz-button nzType="primary" [routerLink]="['/','contabilidad','ordenes','crear']">
+                <i nz-icon nzType="plus-circle" theme="outline"></i>
+                <span>{{ 'orders.add' | translate }}</span>
+            </a>
+        </div>
+        <div class="col-12">
+            <nz-collapse nzGhost [nzBordered]="false">
+                <nz-collapse-panel [nzHeader]="titleFilter" [nzActive]="false" >
+                    <app-filter (getDate)="onChangeFilter($event)"></app-filter>
+                </nz-collapse-panel>
+              </nz-collapse>
+        </div>
+    </div>
+
+    <app-list-invoices [invoicesList]="invoicesList" [orderColumn]="orderColumn" [loading]="loading"></app-list-invoices>
+    
+    <div class="row">
+        <div class="col-12 mt-4 d-flex justify-content-end">
+            <nz-pagination class="pagination" nzShowSizeChanger nzShowQuickJumper [nzResponsive]="true" [nzTotal]="totalItems" [(nzPageIndex)]="page" (nzPageSizeChange)="pageSizeChanged($event)" (nzPageIndexChange)="pageIndexChanged($event)">
+            </nz-pagination>
+        </div>
+    </div>
+</nz-card>   
+
+<ng-template #renderTemplate>
+    <nz-spin *ngIf="isLoading"></nz-spin>
+</ng-template>
+<ng-template #titleFilter>
+   <app-title-filter></app-title-filter>
+</ng-template>

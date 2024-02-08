@@ -1,0 +1,39 @@
+<div>
+    <div class="mb-5">
+        <h2>{{ 'closingDaylind.sales' | translate }}</h2>
+    </div>
+    <div>
+        <div class="row mb-5">
+            <div class="col-6">
+                <i nz-icon nzType="bar-chart" class="opacity-10"></i>
+                <span class="mr-3 ml-1"> <b>{{ 'closingDaylind.numSales' | translate }}:</b> </span>
+                <span>{{ salesClosing?.num }}</span>
+            </div>
+            <div class="col-6">
+                <i nz-icon nzType="dollar-circle" class="opacity-10"></i>
+                <span class="mr-3 ml-1"> <b>{{ 'closingDaylind.valueDay' | translate }}:</b> </span>
+                <span>${{ salesClosing?.valueDay | number }}</span>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-6">
+                <span class="mr-3">{{ 'closingDaylind.cash' | translate }}:</span>
+                <span>${{ salesClosing?.cash | number }}</span>
+            </div>
+            <div class="col-6">
+                <span class="mr-3">{{ 'closingDaylind.bancolombia' | translate }}:</span>
+                <span>${{ salesClosing?.bancolombia | number }}</span>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-6">
+                <span class="mr-3">{{ 'closingDaylind.nequi' | translate }}:</span>
+                <span>${{ salesClosing?.nequi | number }}</span>
+            </div>
+            <div class="col-6">
+                <span class="mr-3">{{ 'closingDaylind.daviplata' | translate }}:</span>
+                <span>${{ salesClosing?.daviplata | number }}</span>
+            </div>
+        </div>
+    </div>
+</div>

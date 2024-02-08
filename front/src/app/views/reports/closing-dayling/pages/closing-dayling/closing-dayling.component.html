@@ -1,0 +1,119 @@
+<nz-page-header class="site-page-header" nzBackIcon>
+  <nz-page-header-title>{{
+    "closingDaylind.title" | translate
+  }}</nz-page-header-title>
+</nz-page-header>
+<div class="container-fluid">
+  <form nz-form [nzLayout]="'vertical'">
+    <div class="row">
+      <div class="col-12 col-sm-6">
+        <app-filter-date
+          [date]="date"
+          (changeDate)="changeDate($event)"
+        ></app-filter-date>
+      </div>
+      <div class="col-12 col-sm-6 d-flex align-items-end pb-3">
+        <a
+          nz-button
+          nzType="default"
+          nz-tooltip="Generar reporte"
+          (click)="downloadReport()"
+        >
+          <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+        </a>
+      </div>
+    </div>
+  </form>
+  <nz-spin [nzSpinning]="isSpinning">
+    <div class="row">
+      <div class="col-md-6 col-12">
+        <app-detail-card-report
+          [value]="balanceClosing?.general"
+          icon="sliders"
+          [title]="'closingDaylind.balance' | translate"
+          [description]="'closingDaylind.balanceDescription' | translate"
+        ></app-detail-card-report>
+      </div>
+      <div class="col-md-6 col-12">
+        <app-detail-card-report
+          [value]="balanceClosing?.revenue"
+          icon="rise"
+          [title]="'closingDaylind.revenue' | translate"
+          [description]="'closingDaylind.revenueDescription' | translate"
+        ></app-detail-card-report>
+      </div>
+      <div class="col-md-6 col-12">
+        <app-detail-card-report
+          [value]="salesClosing?.valueDay"
+          icon="dollar-circle"
+          [title]="'closingDaylind.sales' | translate"
+          [description]="'closingDaylind.salesDescription' | translate"
+          [hasDetail]="true"
+          [type]="'simple'"
+          [listPrices]="salesClosing"
+          [prefix]="'closingDaylind.sales' | translate"
+        ></app-detail-card-report>
+      </div>
+      <div class="col-md-6 col-12">
+        <app-detail-card-report
+          [value]="invoicesClosing?.valueDay"
+          icon="dollar-circle"
+          [title]="'closingDaylind.invoices' | translate"
+          [description]="'closingDaylind.invoicesDescription' | translate"
+          [hasDetail]="true"
+          [type]="'simple'"
+          [listPrices]="invoicesClosing"
+          [prefix]="'closingDaylind.invoices' | translate"
+        ></app-detail-card-report>
+      </div>
+      <div class="col-md-6 col-12">
+        <app-detail-card-report
+          [value]="bailsClosing?.valueDay"
+          icon="dollar-circle"
+          [title]="
+            ('closingDaylind.bails' | translate) +
+            ' ' +
+            ('closingDaylind.sales' | translate | lowercase)
+          "
+          [description]="'closingDaylind.bailsDescription' | translate"
+          [hasDetail]="true"
+          [type]="'simple'"
+          [listPrices]="bailsClosing"
+          [prefix]="'closingDaylind.bails' | translate"
+        ></app-detail-card-report>
+      </div>
+      <div class="col-md-6 col-12">
+        <app-detail-card-report
+          [value]="bailsInvoicesClosing?.valueDay"
+          icon="dollar-circle"
+          [title]="
+            ('closingDaylind.bails' | translate) +
+            ' ' +
+            ('closingDaylind.invoices' | translate | lowercase)
+          "
+          [description]="'closingDaylind.bailsInvoicesDescription' | translate"
+          [hasDetail]="true"
+          [type]="'simple'"
+          [listPrices]="bailsInvoicesClosing"
+          [prefix]="'closingDaylind.bails' | translate"
+        ></app-detail-card-report>
+      </div>
+      <div class="col-md-6 col-12">
+        <app-detail-card-report
+          [value]="expensesClosing?.valueDay"
+          icon="credit-card"
+          [title]="'closingDaylind.expenses' | translate"
+          [description]="'closingDaylind.expensesDescription' | translate"
+        ></app-detail-card-report>
+      </div>
+      <div class="col-md-6 col-12">
+        <app-detail-card-report
+          [value]="shoppingsClosing?.value"
+          icon="shopping-cart"
+          [title]="'closingDaylind.shoppings' | translate"
+          [description]="'closingDaylind.shoppingsDescription' | translate"
+        ></app-detail-card-report>
+      </div>
+    </div>
+  </nz-spin>
+</div>

@@ -1,0 +1,25 @@
+<nz-card>
+    <div class="content__header-card">
+        <div class="rounded__border">
+            <span nz-icon [nzType]="icon" nzTheme="outline"></span>
+        </div>
+        <div class="w-95">
+            <div class="d-flex justify-content-between">
+                <h6>{{ title }}</h6>
+                <span nz-icon nzType="info-circle" nzTheme="outline" [nzTheme]="'twotone'" [nzTwotoneColor]="'#3f87f5'"
+                    [nz-tooltip]="'global.detail' | translate" (click)="isCollapsed = !isCollapsed"
+                    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic" class="fz-20 cursor-pointer" *ngIf="hasDetail"></span>
+            </div>
+            <span class="text-muted">{{ description }}</span>
+        </div>
+    </div>
+    <div class="content__body-card">
+        <span class="text__principaly-card">${{ value | number }}</span>
+        <div id="collapseBasic" [collapse]="!isCollapsed" [isAnimated]="true">
+            <hr>
+            <div class="d-flex flex-column">
+                <app-detail-type-simple-report [listPrices]="listPrices" [prefix]="prefix" [type]="type"></app-detail-type-simple-report>
+            </div>
+        </div>
+    </div>
+</nz-card>

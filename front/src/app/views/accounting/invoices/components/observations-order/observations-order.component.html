@@ -1,0 +1,10 @@
+<nz-card>
+    <form [formGroup]="form">
+        <nz-form-control>
+            <nz-form-label>{{ 'sales.observations' | translate }}</nz-form-label>
+            <nz-textarea-count [nzMaxCharacterCount]="500">
+                <textarea rows="4" nz-input maxlength="500" formControlName="observations"></textarea>
+            </nz-textarea-count>
+        </nz-form-control>
+    </form>
+</nz-card>

@@ -1,0 +1,144 @@
+<div class="page-header has-tab" *ngIf="!isEdit">
+    <div class="d-md-flex m-b-15 align-items-center justify-content-between">
+        <div class="media align-items-center m-b-15">
+            <nz-avatar nzShape="square" [nzSize]="70" nzSrc=""></nz-avatar>
+            <div class="m-l-15">
+                <h4 class="m-b-0">{{ product?.name }}</h4>
+                <p class="text-muted m-b-0">{{ 'products.code' | translate  }}: #{{ product?.code }}</p>
+            </div>
+        </div>
+        <div class="m-b-15">
+            <button nz-button nzType="primary" *ngIf="!isEdit" (click)="edit()">
+                <i nz-icon nzType="edit" theme="outline"></i>
+                <span>{{ 'global.edit' | translate }}</span>
+            </button>
+        </div>
+    </div>
+</div>
+<nz-tabset class="page-header-tab" *ngIf="!isEdit">
+    <nz-tab nzTitle="{{ 'products.overview' | translate }}">
+        <div class="row">
+            <div class="col-md-4">
+                <nz-card class="py__0">
+                    <div class="media align-items-center">
+                        <div class="m-0 p-0">
+                            <p class="m-b-0 text-muted">{{ 'products.barcode' | translate }}</p>
+                            <ngx-barcode [bc-value]="product?.reference" [bc-display-value]="false" [bc-height]="40" [bc-font-size]="10" [bc-margin]="0" [bc-width]="1"></ngx-barcode>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+            <div class="col-md-4">
+                <nz-card class="py__2">
+                    <div class="media align-items-center">
+                        <i class="font-size-40 text-primary" nz-icon nzType="shopping-cart" theme="outline"></i>
+                        <div class="m-l-15">
+                            <p class="m-b-0 text-muted">{{ 'products.sales' | translate }}</p>
+                            <h3 class="m-b-0 ls-1">{{ product?.sales_detail_sum_amount ?? 0 | number }}</h3>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+            <div class="col-md-4">
+                <nz-card class="py__2">
+                    <div class="media align-items-center">
+                        <i class="font-size-40 text-primary" nz-icon nzType="stock" theme="outline"></i>
+                        <div class="m-l-15">
+                            <p class="m-b-0 text-muted">{{ 'products.stockAvailable' | translate }}</p>
+                            <h3 class="m-b-0 ls-1">{{ product?.stock | number }}</h3>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+        </div>
+        <nz-card>
+            <h5>{{ 'products.infoBasic' | translate }}</h5>
+            <table class="product-info-table m-t-20">
+                <tbody>
+                    <tr>
+                        <td>{{ 'products.reference' | translate }}:</td>
+                        <td class="text-dark font-weight-semibold">#{{ product?.reference }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.category' | translate }}:</td>
+                        <td>  
+                            <ng-container *ngFor="let item of product?.categories; let i = index">
+                                <nz-tag nzColor="default" >{{ item.name_category }} <ng-container *ngIf="item?.name_subcategory" > / {{ item.name_subcategory }}</ng-container> </nz-tag>
+                            </ng-container> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.brands' | translate }}:</td>
+                        <td>{{ product?.brand }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.tax' | translate }}:</td>
+                        <td>% {{ product?.tax }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.original' | translate }}:</td>
+                        <td class="text-dark font-weight-semibold">{{ product?.original ? 'Si' : 'No'  }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.status' | translate }}:</td>
+                        <td>
+                            <nz-tag *ngIf="product?.status == 'in-stock'" [nzColor]="product?.status | colorProduct">{{ product?.status | statusProduct }}</nz-tag>
+                            <nz-tag *ngIf="product?.status == 'out-stock'" [nzColor]="product?.status | colorProduct">{{ product?.status | statusProduct }}</nz-tag>
+                            <nz-tag *ngIf="product?.status == 'low-stock'" [nzColor]="product?.status | colorProduct">{{ product?.status | statusProduct }}</nz-tag>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
+        </nz-card>
+        <nz-card>
+            <h5>{{ 'products.infoOptional' | translate }}</h5>
+            <table class="product-info-table m-t-20">
+                <tbody>
+                    <tr>
+                        <td>{{ 'products.cost' | translate }}:</td>
+                        <td class="text-dark font-weight-semibold">{{product?.cost | currency:'USD': 'symbol':'1.0-0' }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.price' | translate }}:</td>
+                        <td class="text-dark font-weight-semibold">{{product?.price | currency:'USD': 'symbol':'1.0-0' }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.discount' | translate }}:</td>
+                        <td>%{{product?.discount }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.sections' | translate }}:</td>
+                        <td>{{product?.section }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.column' | translate }}:</td>
+                        <td>{{product?.column }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'products.row' | translate }}:</td>
+                        <td>{{product?.row }}</td>
+                    </tr>
+                </tbody>
+            </table> 
+        </nz-card>
+        <nz-card nzTitle="{{ 'products.applications' | translate }}">
+            <div [innerHTML]="product?.applications"></div>
+        </nz-card>    
+        <nz-card nzTitle="{{ 'products.descriptionTab' | translate }}">
+            <div [innerHTML]="product?.description"></div>
+        </nz-card>    
+    </nz-tab>
+    <nz-tab nzTitle="{{ 'products.images' | translate }}" nzDisabled>
+        <nz-card>
+            <div class="row">
+                <div *ngFor="let item of fileList" class="col-md-3">
+                    <img class="img-fluid" [src]="item.url == null ? 'assets/images/others/local-image.jpg' : item.url" [alt]="item.name">
+                </div>
+            </div>
+        </nz-card>
+    </nz-tab>
+</nz-tabset>
+
+<ng-container *ngIf="isEdit">
+    <app-form-products [id]="id" [isDetailForm]="true" [product]="product" (isEditEmit)="editClose()"></app-form-products>
+</ng-container>

@@ -1,0 +1,54 @@
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-8">
+            <div class="d-md-flex">
+                <div class="m-b-10 m-r-20">
+                    <nz-input-group [nzPrefix]="prefixTemplate">
+                        <input type="text" nz-input placeholder="Buscar abono" [(ngModel)]="searchInput" (ngModelChange)="search()">
+                    </nz-input-group>      
+                    <ng-template #prefixTemplate>
+                        <i nz-icon nzType="search" class="opacity-05"></i>
+                    </ng-template>   
+                </div>
+            </div>          
+        </div>
+        <ng-container *ngIf="(total - totalBails)">
+            <div class="col-lg-4 text-right">
+                <a nz-button nzType="primary" [routerLink]="['/','contabilidad','ordenes','abonos',this.id,'crear']">
+                    <i nz-icon nzType="plus-circle" theme="outline"></i>
+                    <span>{{ 'bails.add' | translate }}</span>
+                </a>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-2">
+            <div class="">
+                <span><strong>Referencia de venta: </strong> #{{ reference }}</span>
+            </div>
+            <div class="">
+                <span><strong>Total abonos: </strong> {{ totalBails | currency:'USD': 'symbol':'1.0-0' }}</span>
+            </div>
+            <div class="">
+                <span> <strong>Total deuda:</strong>  {{ total | currency:'USD': 'symbol':'1.0-0' }}</span>
+            </div>
+            <div class="">
+                <span> <strong>Saldo:</strong>  {{ (total - totalBails) | currency:'USD': 'symbol':'1.0-0' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <app-list-bails [bailsList]="bailsList" [orderColumn]="orderColumn" [loading]="loading"></app-list-bails>
+    
+    <div class="row">
+        <div class="col-12 mt-4 d-flex justify-content-end">
+            <nz-pagination class="pagination" nzShowSizeChanger nzShowQuickJumper [nzResponsive]="true" [nzTotal]="totalItems" [(nzPageIndex)]="page" (nzPageSizeChange)="pageSizeChanged($event)" (nzPageIndexChange)="pageIndexChanged($event)">
+            </nz-pagination>
+        </div>
+    </div>
+</nz-card>   
+
+<ng-template #renderTemplate>
+    <nz-spin *ngIf="isLoading"></nz-spin>
+</ng-template>

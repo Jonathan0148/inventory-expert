@@ -1,0 +1,14 @@
+<nz-page-header class="site-page-header" nzBackIcon>
+    <nz-page-header-title>{{ 'users.addTitle' | translate }}</nz-page-header-title>
+</nz-page-header>
+
+<div class="container mt-3">
+    <nz-card nzTitle="{{ 'users.infoBasic' | translate }}">
+      <app-form-users [id]="id"></app-form-users>
+    </nz-card>
+    <ng-container *ngIf="id">
+        <nz-card nzTitle="{{ 'users.changePassword' | translate }}">
+            <app-form-password [id]="id"></app-form-password>
+        </nz-card>    
+    </ng-container>
+</div>

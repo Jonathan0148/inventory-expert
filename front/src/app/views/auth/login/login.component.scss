@@ -1,0 +1,38 @@
+.card-login {
+    box-shadow: 10px 7px 24px rgb(0 0 0 / 4%);
+    border-radius: 5px;
+    padding: 2.5rem 3rem;
+    background: #fff;
+}
+.title__principaly{
+    font-size: 24px;
+    font-weight: bold;
+    margin: 16px 0 0 0;
+}
+.bg-image-1{
+    background-image:url('/assets/images/others/login.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    &::before{
+        content: '';
+        width: 100%;
+        height: 100%;
+        top: 0;
+        position: absolute;
+        background-color: rgba($color: #000000, $alpha: .5);
+        z-index: 0;
+    }
+}
+
+.z-index-1{
+    position: relative;
+    z-index: 1;
+}
+
+::ng-deep{
+    app-logo{
+        position: relative;
+        z-index: 2;
+    }
+}

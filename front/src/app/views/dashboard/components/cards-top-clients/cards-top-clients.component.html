@@ -1,0 +1,27 @@
+<nz-card>
+    <h5>{{ 'dashboard.customers' | translate }}</h5>
+    <div class="m-v-45 text-center" style="height: 210px">
+        <canvas baseChart 
+            class="chart mb-3"
+            [data]="customersChartData"
+            [labels]="customersChartLabels"
+            [chartType]="doughnutChartType"
+            [legend]="true"
+            [colors]="customersChartColors"
+            [options]="customersChartOptions">
+        </canvas>
+    </div>
+    <div class="row p-t-25">
+        <div class="col-md-8 m-h-auto">
+            <div class="d-flex justify-content-between align-items-center m-b-20" *ngFor="let item of customers; let first = first;let i = index; let last = last">
+                <p class="m-b-0 d-flex align-items-center">
+                    <nz-badge nzStatus="default" *ngIf="first" [nzColor]="gold"></nz-badge>
+                    <nz-badge nzStatus="default" *ngIf="i === 1"[nzColor]="blue"></nz-badge>
+                    <nz-badge nzStatus="default" *ngIf="last" [nzColor]="red"></nz-badge>
+                    <span><a class="text-muted" [routerLink]="[ '/','contactos','clientes','editar',item.id ]">{{ item.full_name }}</a></span>
+                </p>
+                <h5 class="m-b-0">{{ item.sales_count }}</h5>
+            </div>
+        </div>
+    </div>
+</nz-card>

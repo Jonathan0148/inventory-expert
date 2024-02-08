@@ -1,0 +1,12 @@
+nz-tag {
+    height: 2.5rem;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: medium;
+}
+
+::ng-deep{
+    .ant-table-content{
+        overflow-x: auto;
+    }
+}

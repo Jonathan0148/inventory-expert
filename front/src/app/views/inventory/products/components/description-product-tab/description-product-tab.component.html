@@ -1,0 +1,16 @@
+<form [formGroup]="form">
+    <nz-card>
+        <nz-form-item>
+            <nz-form-label nzFor="brand" >{{ 'products.description' | translate }}:</nz-form-label>
+            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                <quill-editor formControlName="description" [style]="{height: '250px'}" [modules]="editorConfig" placeholder=""></quill-editor>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="brand" >{{ 'products.applications' | translate }}:</nz-form-label>
+            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                <quill-editor formControlName="applications" [style]="{height: '250px'}" [modules]="editorConfig" placeholder=""></quill-editor>
+            </nz-form-control>
+        </nz-form-item>
+    </nz-card>
+</form>

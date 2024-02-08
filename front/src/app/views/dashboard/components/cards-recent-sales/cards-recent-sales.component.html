@@ -1,0 +1,58 @@
+<nz-card>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5>{{ 'dashboard.recentSales' | translate }} </h5>
+        <div>
+            <a nz-button nzType="default" nzSize="small" [routerLink]="['/','contabilidad','ventas']">{{ 'notification.viewAll' | translate }}</a>
+        </div>
+    </div>
+    <div class="m-t-30">
+        <nz-spin [nzSpinning]="loading">
+            <nz-table #ordersListTable [nzData]="ordersList"  [nzShowPagination]="false" class="no-border-last">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>{{ 'dashboard.customers' | translate }}</th>
+                        <th>{{ 'dashboard.paymentMethod' | translate }} </th>
+                        <th>{{ 'dashboard.date' | translate }}</th>
+                        <th>{{ 'dashboard.amount' | translate }} </th>
+                        <th>{{ 'dashboard.status' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of ordersListTable.data"  [routerLink]="['/','contabilidad','ventas','editar', item.id]" nz-tooltip="Ir a la venta" nzTooltipPlacement="right" class="cursor-pointer">
+                        <td>#00{{item.reference}} </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <nz-avatar
+                                [nzGap]="2"
+                                [ngStyle]="{ 'background-color': item.color}"
+                                [nzText]="item.shortName"
+                                nzSize="large"
+                                style="vertical-align: middle;"
+                                ></nz-avatar>
+                                <h6 class="m-l-10 m-b-0">  
+                                    {{ item.customer?.full_name }}
+                                    <br>
+                                    <span class="text-muted">
+                                        {{ item.customer?.type_document?.prefix }} {{ item.customer?.document }}<br>
+                                    </span>
+                                </h6>
+                            </div>
+                        </td>
+                        <td>
+                            {{ item?.payment_method?.name }}
+                        </td>
+                        <td>{{ item.created_at | date:'d/M/yy, h:mm a' }}</td>
+                        <td>${{item.total | number:'3.0'}}</td>
+                        <td>
+                            <nz-badge *ngIf="(item.status | statusSale)?.value  == 1" nzStatus="success"></nz-badge>
+                            <nz-badge *ngIf="(item.status | statusSale)?.value  == 3" nzStatus="error"></nz-badge>
+                            <nz-badge *ngIf="(item.status | statusSale)?.value  == 2"  nzStatus="processing"></nz-badge> 
+                            <span class="text-capitalize">{{(item.status | statusSale)?.label }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-spin>
+    </div>
+</nz-card>

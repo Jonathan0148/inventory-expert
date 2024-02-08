@@ -1,0 +1,35 @@
+<form nz-form [formGroup]="form" (ngSubmit)="submit()" [nzLayout]="'vertical'" >
+    <div class="row">
+        <div class="col-12">
+            <nz-form-item>
+                <nz-form-label nzFor="description" nzRequired>{{ 'expenses.description' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input placeholder="{{ 'expenses.description' | translate }}" formControlName="description"  [nzAutosize]="{ minRows: 2 }" ></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-12">
+            <nz-form-item>
+                <nz-form-label nzFor="value" nzRequired>{{ 'expenses.value' | translate }}:</nz-form-label>
+                <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                    <nz-input-group [nzPrefix]="pricePrefix">
+                        <input nz-input formControlName="value" type="text" currencyMask maxlength="20" >
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <nz-form-item>
+                <nz-form-control>
+                    <button nz-button nzType="primary" [disabled]="!form.valid" nz-button nzType="primary" [nzLoading]="loading">{{ 'global.save' | translate }}</button>
+                </nz-form-control>
+            </nz-form-item>
+        </div>    
+    </div>
+</form>
+
+<ng-template #pricePrefix>
+    <span>$</span>
+</ng-template>

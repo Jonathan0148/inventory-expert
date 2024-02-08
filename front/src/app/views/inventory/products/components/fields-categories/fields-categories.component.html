@@ -1,0 +1,41 @@
+<form [formGroup]="form">
+    <div class="row">
+        <div class="col-12 col-md-5">
+            <nz-form-item>
+                <nz-form-label nzFor="category" >{{ 'products.category' | translate }}:</nz-form-label>
+                <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                    <nz-select formControlName="category" class="w-100" nzPlaceHolder="{{ 'products.category' | translate }}" (ngModelChange)="onChangeCategory($event)" nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getCategories()" (nzOnSearch)="onSearchCategory($event)" nzShowSearch nzServerSearch [nzLoading]="loadingCategory" >
+                        <nz-option *ngFor="let option of categoriesList" [nzValue]="option" [nzLabel]="option.name" ></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-12 col-md-5">
+            <nz-form-item>
+                <nz-form-label nzFor="category" >{{ 'products.subcategory' | translate }}:</nz-form-label>
+                <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                    <nz-select formControlName="subcategory" class="w-100" nzPlaceHolder="{{ 'products.subcategory' | translate }}" nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getSubcategories()" (nzOnSearch)="onSearchSubcategory($event)" nzShowSearch nzServerSearch [nzLoading]="loading">
+                        <nz-option *ngFor="let option of subcategoriesList" [nzValue]="option" [nzLabel]="option.name" ></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-12 col-md-2 d-flex align-items-center">
+            <button nz-button nzType="primary" class="w-100" (click)="onClickAddCategoryItem()" [disabled]="validatorFieldCategory() &&validatorFieldSubcategory()">
+                <span nz-icon nzType="plus" nzTheme="outline"></span>
+                <span>{{ 'global.add' | translate }}</span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 d-flex align-items-center">
+            <ng-container *ngFor="let item of categoriesListAdd; let i = index">
+                <nz-tag nzColor="default" >{{ item.name_category }} <ng-container *ngIf="item?.name_subcategory" > / {{ item.name_subcategory }}</ng-container> </nz-tag> <span nz-icon nzType="delete" nzTheme="outline" class="cursor-pointer mr-2 danger" (click)="onDeleteCategory(i)"></span>
+            </ng-container>
+        </div>
+    </div>
+</form>
+    
+<ng-template #renderTemplate>
+    <nz-spin *ngIf="isLoading"></nz-spin>
+</ng-template>      

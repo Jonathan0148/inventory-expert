@@ -1,0 +1,19 @@
+<div>
+    <div class="mb-5">
+        <h2>{{ 'closingDaylind.expenses' | translate }}</h2>
+    </div>
+    <div>
+        <div class="row mb-5">
+            <div class="col-6">
+                <i nz-icon nzType="bar-chart" class="opacity-10"></i>
+                <span class="mr-3 ml-1"> <b>{{ 'closingDaylind.numExpenses' | translate }}:</b> </span>
+                <span>{{ expensesClosing?.num ?? 0  }}</span>
+            </div>
+            <div class="col-6">
+                <i nz-icon nzType="dollar-circle" class="opacity-10"></i>
+                <span class="mr-3 ml-1"> <b>{{ 'closingDaylind.total' | translate }}:</b> </span>
+                <span>${{ expensesClosing?.valueDay ?? 0  | number }}</span>
+            </div>
+        </div>
+    </div>
+</div>

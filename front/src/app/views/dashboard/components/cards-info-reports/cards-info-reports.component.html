@@ -1,0 +1,68 @@
+
+<div class="col-12">
+    <nz-collapse nzGhost [nzBordered]="false">
+        <nz-collapse-panel [nzHeader]="titleFilter" [nzActive]="false" >
+            <app-filter (getDate)="onChangeFilter($event)"></app-filter>
+        </nz-collapse-panel>
+      </nz-collapse>
+</div>
+<nz-spin [nzSpinning]="loading">
+    <div class="row mt-3">
+        <div class="col-md-6 col-lg-3">
+            <nz-card>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="m-b-0">{{ 'dashboard.sales' | translate  }}</p>
+                        <h2 class="m-b-0">
+                            <span>{{ totalSales | currency:'USD': 'symbol':'1.0-0' }}</span>
+                        </h2>
+                    </div>
+                    <nz-avatar [nzSize]="50" nzIcon="dollar" class="ant-avatar-blue"></nz-avatar>
+                </div>
+            </nz-card>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <nz-card>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="m-b-0">{{ 'dashboard.margin' | translate  }}</p>
+                        <h2 class="m-b-0">
+                            <span>{{ totalSalesCount }} </span>
+                        </h2>
+                    </div>
+                    <nz-avatar [nzSize]="50" nzIcon="bar-chart" class="ant-avatar-cyan"></nz-avatar>
+                </div>
+            </nz-card>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <nz-card>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="m-b-0">{{ 'dashboard.valueInventory' | translate  }}</p>
+                        <h2 class="m-b-0">
+                            <span>{{ totalProductsValue | currency:'USD': 'symbol':'1.0-0' }}</span>
+                        </h2>
+                    </div>
+                    <nz-avatar [nzSize]="50" nzIcon="profile" class="ant-avatar-red"></nz-avatar>
+                </div>
+            </nz-card>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <nz-card>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="m-b-0">{{ 'dashboard.cilentsAll' | translate  }}</p>
+                        <h2 class="m-b-0">
+                            <span>{{ totalClientsCount }}</span>
+                        </h2>
+                    </div>
+                    <nz-avatar [nzSize]="50" nzIcon="bar-chart" class="ant-avatar-gold"></nz-avatar>
+                </div>
+            </nz-card>
+        </div>
+    </div>
+</nz-spin>
+
+<ng-template #titleFilter>
+    <app-title-filter></app-title-filter>
+ </ng-template>

@@ -1,0 +1,34 @@
+<nz-page-header class="site-page-header" nzBackIcon>
+    <nz-page-header-title>{{ (id ? 'local.editTitle' : 'local.addTitle') | translate }}</nz-page-header-title>
+</nz-page-header>
+
+<div class="container mt-3">
+    <nz-card  style="width: 100%;" class="no-p">
+        <nz-tabset>
+            <nz-tab nzTitle="{{ 'local.section' | translate }}">
+                <app-form-locals [id]="id" [section]="section" (isEditEmit)="editForm($event)"></app-form-locals>
+            </nz-tab>
+            <nz-tab nzTitle="{{ 'local.row' | translate }}">
+                <app-form-rows [id]="id" [section]="section"></app-form-rows>
+                <nz-divider></nz-divider>
+                <app-list-rows [id]="id"></app-list-rows>
+            </nz-tab>
+            <nz-tab nzTitle="{{ 'local.column' | translate }}">
+                <app-form-columns [id]="id" [section]="section" ></app-form-columns>  
+                <nz-divider></nz-divider>
+                <app-list-columns [id]="id"></app-list-columns>
+            </nz-tab>
+          </nz-tabset>
+    </nz-card>
+
+    <!-- <ng-container *ngIf="id && section">
+        <nz-card [nzTitle]="'Sección ' + section?.name">
+            <div class="row">
+                <div class="col-12">
+                    <p>Así tienes organizada tu sección</p>
+                </div>
+            </div>
+        </nz-card>
+    </ng-container> -->
+
+</div>

@@ -1,0 +1,20 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="title"
+  (nzOnCancel)="handleCancel()"
+>
+  <div *nzModalContent>
+    <ng-content select="[body]"></ng-content>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">
+      Cancelar
+    </button>
+    <button nz-button 
+      nzType="primary"
+      (click)="handleOk()"
+      [nzLoading]="isConfirmLoading" >
+      {{ btnConfirm }}
+    </button>
+  </div>
+</nz-modal>

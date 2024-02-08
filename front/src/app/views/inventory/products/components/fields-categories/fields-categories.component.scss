@@ -1,0 +1,13 @@
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.danger{
+    color: crimson;
+}
+
+::ng-deep{
+    .ant-tag{
+        margin: 0 12px 0 0;
+    }
+}

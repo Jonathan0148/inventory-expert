@@ -1,0 +1,50 @@
+<nz-table #productsListTable #sortTable [nzData]="productsList" [nzLoading]="loading"
+[nzShowPagination]="false" [nzFrontPagination]="false" >
+    <thead>
+        <tr>
+            <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of productsListTable.data;  let i=index">
+            <ng-container *ngIf="isModal">
+                <td>
+                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.add' | translate }}" class="btn-add" nz-popconfirm nzPopconfirmTitle="{{ 'global.addConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm"
+                    (nzOnConfirm)="confirmAdd(item.id)" (nzOnCancel)="cancel()" nzPopconfirmPlacement="left">
+                        <i nz-icon nzType="plus" theme="outline"></i>
+                    </button>
+                </td>
+            </ng-container>
+            <td>#{{item.id}}</td>
+            <td>
+                {{item.reference}}
+            </td>
+            <td>{{item.name}}</td>
+            <td *ngIf="!isModal">  
+                <ng-container *ngFor="let category of item?.categories; let i = index">
+                    <span nzColor="default" >{{ category.name_category }} <ng-container *ngIf="category?.name_subcategory" > - {{ category.name_subcategory }}</ng-container> </span><br>
+                </ng-container>  
+            </td>
+            <td>{{ item.brand }}</td>
+            <td><p [innerHTML]="item.applications"></p></td>
+            <td>{{item.price_total | currency:'USD': 'symbol':'1.0-0' }}</td>
+            <td >
+                <b [ngStyle]="{ 'color': item.status === 'in-stock' ? '#00C82C' : item.status === 'out-stock' ? '#FF0000' : 'gold'}">{{item.stock}}</b>
+                <nz-progress [nzPercent]="item.status === 'in-stock' ? 90 : item.status === 'out-stock' ? 10 : 20" [nzShowInfo]="false" [nzStrokeColor]="item.status === 'in-stock' ? '#00C82C' : item.status === 'out-stock' ? '#FF0000' : 'gold'"></nz-progress>
+            </td>
+            <td> <nz-tag  [nzColor]="item.status | colorProduct" >{{ item.status | statusProduct }}</nz-tag></td>
+            <ng-container *ngIf="!isModal">
+                <td class="text-md-right">
+                    <div class="d-flex">
+                        <a class="m-r-5 btn-warning" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.edit' | translate }}" [routerLink]="['/','inventario','productos', 'editar', item.id]" >
+                            <span nz-icon nzType="edit" nzTheme="outline"></span>
+                        </a>
+                        <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm" (nzOnConfirm)="confirm(item.id)" (nzOnCancel)="cancel()">
+                            <i nz-icon nzType="delete" theme="outline"></i>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+        </tr>
+    </tbody>
+</nz-table>

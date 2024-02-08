@@ -1,0 +1,8 @@
+.m-w-100{
+    min-width: 100px;
+}
+::ng-deep{
+    .ant-table-content{
+        overflow-x: auto;
+    }
+}

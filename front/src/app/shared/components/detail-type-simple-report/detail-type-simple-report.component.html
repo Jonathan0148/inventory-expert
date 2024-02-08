@@ -1,0 +1,20 @@
+<div class="flex-item mt-1">
+    <strong># {{ prefix }}: </strong>
+    <span> {{ listPrices?.num ?? 0 | number }}</span>
+</div>
+<div class="flex-item mt-1">
+    <strong>{{ 'closingDaylind.cash' | translate }}: </strong>
+    <span> {{ listPrices?.cash ?? 0 | currency:'USD': 'symbol':'1.0-0' }}</span>
+</div>
+<div class="flex-item mt-1">
+    <strong>{{ 'closingDaylind.bancolombia' | translate }}: </strong>
+    <span> {{ listPrices?.bancolombia ?? 0 | currency:'USD': 'symbol':'1.0-0' }}</span>
+</div>
+<div class="flex-item mt-1">
+    <strong>{{ 'closingDaylind.nequi' | translate }}: </strong>
+    <span> {{ listPrices?.nequi ?? 0 | currency:'USD': 'symbol':'1.0-0' }}</span>
+</div>
+<div class="flex-item mt-1">
+    <strong> {{ 'closingDaylind.daviplata' | translate }}: </strong>
+    <span> {{ listPrices?.daviplata ?? 0 | currency:'USD': 'symbol':'1.0-0' }}</span>
+</div>

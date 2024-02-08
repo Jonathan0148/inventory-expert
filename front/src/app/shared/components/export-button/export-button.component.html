@@ -1,0 +1,8 @@
+<a nz-button nzType="default" nz-tooltip="Generar reporte" (click)="downloadReport()">
+    <ng-container *ngIf="type === 'excel'; else pdfIcon">
+        <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+    </ng-container>
+    <ng-template #pdfIcon>
+        <i nz-icon nzType="file-pdf" nzTheme="outline"></i>
+    </ng-template>
+</a>

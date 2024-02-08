@@ -1,0 +1,52 @@
+<nz-card>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5>{{ 'dashboard.invoicesPending' | translate }} </h5>
+    </div>
+    <div class="m-t-30">
+        <nz-spin [nzSpinning]="loading">
+            <nz-table #ordersListTable [nzData]="ordersList"  [nzShowPagination]="false" class="no-border-last">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>{{ 'dashboard.providers' | translate }}</th>
+                        <th>{{ 'dashboard.dueDate' | translate }}</th>
+                        <th>{{ 'dashboard.amount' | translate }} </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of ordersListTable.data">
+                        <td>#00{{item.id}} </td>
+                        <td nz-tooltip="Ver información del proveedor" nzTooltipPlacement="right" class="cursor-pointer" [routerLink]="['/','contactos','proveedores','editar', item.id]">
+                            <div class="d-flex align-items-center" >
+                                <nz-avatar
+                                [nzGap]="2"
+                                [ngStyle]="{ 'background-color': item.color}"
+                                [nzText]="item.shortName"
+                                nzSize="large"
+                                style="vertical-align: middle;"
+                                ></nz-avatar>
+                                <h6 class="m-l-10 m-b-0">  
+                                    {{ item?.full_name }}
+                                    <br>
+                                    <span class="text-muted">
+                                        NIT: {{ item?.nit }}<br>
+                                    </span>
+                                </h6>
+                            </div>
+                        </td>
+                        <td>
+                            <nz-badge *ngIf="!calculateDate(item?.orders[0]?.due_date)"  nzStatus="processing"  nz-tooltip="Pendiente"></nz-badge> 
+                            <nz-badge *ngIf="calculateDate(item?.orders[0]?.due_date)" nzStatus="error" nz-tooltip="Vencida"></nz-badge>
+                            <span class="text-capitalize">{{ item?.orders[0]?.due_date | date:'dd/MM/YYYY' }}</span>
+                        </td>
+                        <td>${{item.orders_sum_total_orderstotal_bails | number:'3.0'}}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-spin>
+    </div>
+    <div class="col-12 mt-4 d-flex justify-content-end">
+        <nz-pagination class="pagination" [nzResponsive]="true" [nzTotal]="totalItems" [(nzPageIndex)]="page" (nzPageSizeChange)="pageSizeChanged($event)" (nzPageIndexChange)="pageIndexChanged($event)" >
+        </nz-pagination>
+    </div>
+</nz-card>

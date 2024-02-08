@@ -1,0 +1,9 @@
+<nz-page-header class="site-page-header" nzBackIcon>
+    <nz-page-header-title>{{ (id ? 'categories.editTitle' : 'categories.addTitle') | translate }}</nz-page-header-title>
+</nz-page-header>
+
+<div class="container mt-3">
+    <nz-card>
+      <app-form-categories [id]="id"></app-form-categories>
+    </nz-card>
+</div>

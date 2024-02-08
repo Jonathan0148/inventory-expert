@@ -1,0 +1,26 @@
+<nz-card>
+    <div class="d-md-flex justify-content-between align-items-center">
+        <h5>{{ 'dashboard.salesProduct' | translate }}</h5>
+    </div>
+    <div class="m-t-50">
+        <!-- <canvas ngChartjs 
+            style="height: 220px"
+            [datasets]="salesChartData" 
+            [labels]="salesChartLabels"
+            [options]="salesChartOptions" 
+            [colors]="salesChartColors"
+            [legend]="false" 
+            [chartType]="salesChartType">
+        </canvas> -->
+        <canvas baseChart 
+            class="chart mb-3"
+            [data]="salesChartData"
+            [labels]="salesChartLabels"
+            [chartType]="salesChartType"
+            [legend]="true"
+            [colors]="salesChartColors"
+            [options]="salesChartOptions"
+            >
+        </canvas>
+    </div>
+</nz-card>

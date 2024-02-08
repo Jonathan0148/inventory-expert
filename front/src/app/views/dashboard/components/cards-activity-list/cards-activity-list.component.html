@@ -1,0 +1,57 @@
+<nz-spin [nzSpinning]="loading">
+    <nz-card>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="m-b-0">Actividad</h5>
+            <div>
+                <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Actividad" nzAllowClear [(ngModel)]="selectedTypeAudit" (ngModelChange)="onChangeTypeActivity($event)" [nzDropdownRender]="renderTemplate" nzShowSearch>
+                    <nz-option *ngFor="let option of typeAuditList" [nzValue]="option" [nzLabel]="option.name" ></nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <div class="m-t-30">
+            <perfect-scrollbar class="overflow-y-auto" style="height: 437px">
+                <div class=" p-l-10 p-t-15">
+                    <ng-container *ngIf="!activityList?.length; else timeline">
+                        <nz-empty></nz-empty>
+                    </ng-container>
+
+                    <ng-template #timeline>
+                        <nz-timeline>
+                            <nz-timeline-item *ngFor="let item of activityList" [nzDot]="dotTemplate">
+                                <div class="m-l-20">
+                                    <h5 class="m-b-5">{{ item.user.full_name }}</h5>
+                                    <p class="m-b-0">
+                                        <span class="font-weight-semibold">
+                                            {{ (item.type | actionAudit)?.text }} 
+                                            <ng-container *ngIf="item.type === 4">
+                                                de {{ item?.bail?.price | currency:'USD': 'symbol':'1.0-0'  }} a 
+                                            </ng-container>
+                                            {{ selectedTypeAudit?.connector  }} 
+                                            {{ selectedTypeAudit.value }}
+                                        </span> 
+                                        <app-info-type-activity [item]="item" [type]="selectedTypeAudit"></app-info-type-activity>
+                                    </p>
+                                    <span class="text-muted font-size-13">
+                                        <i nz-icon nzType="clock-circle" theme="outline"></i>
+                                        <span class="m-l-5">{{ item.created_at | date:'dd/MM/yy, h:mm a'}}</span>
+                                    </span>
+                                </div>
+                                <ng-template #dotTemplate>
+                                    <nz-avatar nzSize="small" [style.background-color]="item.avatar" nzText="{{item?.user?.full_name | slice:0:1}}"></nz-avatar>
+                                </ng-template>
+                            </nz-timeline-item>
+                        </nz-timeline>
+                    </ng-template>
+                    <div class="col-12 mt-4 d-flex justify-content-end">
+                        <nz-pagination class="pagination" [nzResponsive]="true" [nzTotal]="totalItems" [(nzPageIndex)]="page" (nzPageIndexChange)="pageIndexChanged($event)">
+                        </nz-pagination>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+        </div>
+    </nz-card>   
+</nz-spin>
+
+<ng-template #renderTemplate>
+    <nz-spin *ngIf="isLoading"></nz-spin>
+</ng-template>

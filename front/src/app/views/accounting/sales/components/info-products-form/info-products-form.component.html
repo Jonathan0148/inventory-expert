@@ -1,0 +1,84 @@
+<form [formGroup]="form">
+    <nz-card>
+        <div class="row mb-4">
+            <div class="col-12 col-sm-8">
+                <h4>{{ 'sales.addProduct' | translate  }}</h4>
+            </div>
+            <div class="col-12 col-sm-4">
+                <button nz-button nzType="text" nzBlock class="w-100" type="button" (click)="onClikOpenModal()">
+                    <i nz-icon nzType="search" theme="outline"></i>
+                    {{ 'global.searchProduct' | translate }}
+                </button>
+            </div>
+        </div>
+        <form nz-form [formGroup]="formProduct" [nzLayout]="'vertical'" (ngSubmit)="submit()">            
+            <div class="row">
+                <div class="col-sm-4 col-12">
+                    <nz-form-item>
+                        <nz-form-label>{{ 'products.reference' | translate }}</nz-form-label>
+                        <nz-form-control>
+                            <nz-input-group>
+                                <input nz-input placeholder="{{ 'products.reference' | translate }}" type="text" formControlName="reference" (change)="onChangeReference($event.target.value)">
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div class="col-sm-5 col-12">
+                    <nz-form-item>
+                        <nz-form-label>{{ 'products.name' | translate }}</nz-form-label>
+                        <nz-form-control>
+                            <nz-input-group>
+                                <input nz-input placeholder="{{ 'products.name' | translate }}" type="text" formControlName="name" [readonly]="true" >
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div class="col-sm-3 col-12">
+                    <nz-form-item>
+                        <nz-form-label>{{ 'products.stock' | translate }}</nz-form-label>
+                        <nz-form-control>
+                            <nz-input-group>
+                                <input nz-input placeholder="{{ 'products.stock' | translate }}" type="number" formControlName="stock" [readonly]="true" >
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div class="col-sm-4 col-12">
+                    <nz-form-item>
+                        <nz-form-label>{{ 'sales.amount' | translate }}</nz-form-label>
+                        <nz-form-control >
+                            <nz-input-group>
+                                <input nz-input placeholder="{{ 'sales.amount' | translate }}" type="number" formControlName="amount" (change)="onChangeAmount($event.target.value)">
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div class="col-sm-5 col-12">
+                    <nz-form-item>
+                        <nz-form-label>{{ 'products.price' | translate }}</nz-form-label>
+                        <nz-form-control>
+                            <nz-input-group [nzPrefix]="pricePrefix">
+                                <input nz-input placeholder="{{ 'products.price' | translate }}" type="text" formControlName="price" currencyMask>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div class="col-sm-3 col-12 d-flex align-items-center">
+                    <button nz-button nzType="default" class="w-100" [disabled]="!formProduct.valid" [nzLoading]="loading">
+                        <i nz-icon nzType="plus" theme="outline"></i>
+                        <span>{{ 'global.add' | translate }}</span>
+                    </button>
+                </div>
+            </div>
+        </form>            
+    </nz-card>
+</form>
+
+<ng-template #pricePrefix>
+    <span>$</span>
+</ng-template>  
+
+<ng-template #errorsPassword let-control>
+    <ng-container *ngIf="control.hasError('required')">Campo requerido</ng-container>
+    <ng-container *ngIf="control.hasError('no-same')">No hay suficientes unidades disponibles</ng-container>
+</ng-template>
