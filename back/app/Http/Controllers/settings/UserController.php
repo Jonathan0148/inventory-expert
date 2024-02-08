@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Hash;
 use App\Models\settings\User;
 
 /**
@@ -53,11 +54,23 @@ class UserController extends Controller
                 'role_id' => 'required',
                 'names' => 'required',
                 'surnames' => 'nullable',
-                'email' => 'required',
-                'password' => 'required',
+                'type_document' => 'required',
+                'document' => 'required',
+                'email' => 'required|email',
                 'state' => 'required'
             ]);
-            $data = User::create($validatedData);
+            
+            $data = User::create([
+                'store_id' => $validatedData['store_id'],
+                'role_id' => $validatedData['role_id'],
+                'names' => $validatedData['names'],
+                'surnames' => $validatedData['surnames'],
+                'type_document' => $validatedData['type_document'],
+                'document' => $validatedData['document'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['document'].strtolower(substr($validatedData['names'], 0, 1))),
+                'state' => $validatedData['state']
+            ]);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
         } catch (\Throwable $th) {

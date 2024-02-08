@@ -4,6 +4,7 @@ namespace App\Http\Controllers\auth;
 
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\settings\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,13 +30,10 @@ class AuthController extends Controller
             
             $cookie = cookie('cookie_token', $token, 60 * 24);
             
-            $modules = $this->getModules();
-            
             return response([
                 'success' => true,
                 'token' => $token,
                 'user' => $user,
-                'modules' => $modules,
                 'token_type' => 'bearer',
                 'expires_in' => 60 * 24,
                 'date' => Carbon::now()
