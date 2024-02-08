@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('roles_modules', function (Blueprint $table) {
+            $table->comment('Relación muchos a muchos con roles y módulos');
             $table->increments('id');
             $table->integer('role_id')->unsigned()->comment('ID del rol');
             $table->foreign('role_id')->references('id')->on('roles');

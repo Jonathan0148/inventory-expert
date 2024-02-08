@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('columns', function (Blueprint $table) {
+            $table->comment('Columnas del estante');
             $table->increments('id');
             $table->integer('shelf_id')->unsigned()->comment('ID del estante donde se encuentra');
             $table->foreign('shelf_id')->references('id')->on('shelves');

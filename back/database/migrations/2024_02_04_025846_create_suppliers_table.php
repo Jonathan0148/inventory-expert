@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('suppliers', function (Blueprint $table) {
+            $table->comment('Proveedores del local o tienda');
             $table->increments('id');
             $table->integer('store_id')->unsigned()->comment('ID de la tienda');
             $table->foreign('store_id')->references('id')->on('stores');
