@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('audits', function (Blueprint $table) {
+            $table->comment('Auditoria de los usuarios');
             $table->increments('id');
             $table->integer('user_id')->unsigned()->comment('ID del usuario que ejecuto alguna acción');
             $table->foreign('user_id')->references('id')->on('users');

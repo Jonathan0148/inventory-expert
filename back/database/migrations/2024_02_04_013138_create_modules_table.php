@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('modules', function (Blueprint $table) {
+            $table->comment('Módulos del sistema');
             $table->increments('id');
             $table->integer('code')->unique()->comment('Código del módulo');
             $table->string('name', 45)->comment('Nombre');
