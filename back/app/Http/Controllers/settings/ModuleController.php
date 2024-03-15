@@ -20,7 +20,7 @@ class ModuleController extends Controller
     {
         $modules = Module::paginate();
 
-        return view('module.index1', compact('modules'))
+        return view('module.index', compact('modules'))
             ->with('i', (request()->input('page', 1) - 1) * $modules->perPage());
     }
 
