@@ -26,27 +26,29 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('logout', 'logout');
     });
 
-    Route::controller(StoreController::class)->prefix('stores')->group(function () {
-        Route::get('index', 'index');
-        Route::post('create', 'create');
-        Route::get('show/{id}', 'show');
-        Route::put('edit/{id}', 'edit');
-        Route::delete('destroy/{id}', 'destroy');
-    });
-    
-    Route::controller(RoleController::class)->prefix('roles')->group(function () {
-        Route::get('index', 'index');
-        Route::post('create', 'create');
-        Route::get('show/{id}', 'show');
-        Route::put('edit/{id}', 'edit');
-        Route::delete('destroy/{id}', 'destroy');
-    });
-    
-    Route::controller(UserController::class)->prefix('users')->group(function () {
-        Route::get('index', 'index');
-        Route::post('create', 'create');
-        Route::get('show/{id}', 'show');
-        Route::put('edit/{id}', 'edit');
-        Route::delete('destroy/{id}', 'destroy');
+    Route::prefix('settings')->group(function() {
+        Route::controller(StoreController::class)->prefix('stores')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::put('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
+        });
+        
+        Route::controller(RoleController::class)->prefix('roles')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::put('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
+        });
+        
+        Route::controller(UserController::class)->prefix('users')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::put('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
+        });
     });
 });
