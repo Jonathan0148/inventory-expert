@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Module extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
     
     /**
      * Attributes that should be mass-assignable.

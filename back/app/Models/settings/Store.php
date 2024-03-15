@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Store extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     /**
      * Attributes that should be mass-assignable.
