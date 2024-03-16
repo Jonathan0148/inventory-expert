@@ -22,7 +22,9 @@
                 </div>
             </td>
             <td>
-                {{ (item.role) ? item.role : 'role.admin' | translate }}
+                <div class="d-flex align-items-center">
+                    <span class="m-l-10">{{item.nameRol}}</span>
+                </div>
             </td>
             <td>
                 <nz-badge *ngIf="item.state == 1" nzStatus="success"></nz-badge>

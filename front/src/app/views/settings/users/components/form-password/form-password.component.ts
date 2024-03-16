@@ -29,8 +29,8 @@ export class FormPasswordComponent implements OnInit {
   ngOnInit(): void {
     this.changePWForm = this.fb.group({
         oldPassword: [ null, [ Validators.required ] ],
-        password: [ null, [ Validators.required ] ],
-        password_confirmation: [ null, [ Validators.required] ]
+        password: [ null, [ Validators.required, Validators.minLength(5) ] ],
+        password_confirmation: [ null, [ Validators.required, Validators.minLength(5) ] ]
     },
     {
       validator: ValidationsForm.match('password', 'password_confirmation', 'password-mismatch')
@@ -59,7 +59,7 @@ export class FormPasswordComponent implements OnInit {
         .subscribe((res:any) => {
           const { success } = res;
           if(success){
-            console.log('creado');
+            this.changePWForm.reset();
           }
     })
   }
