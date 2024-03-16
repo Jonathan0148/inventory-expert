@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->comment('Productos del local o tienda');
             $table->increments('id');
-            $table->integer('store_id')->unsigned()->comment('ID de la tienda');
-            $table->foreign('store_id')->references('id')->on('stores');
+            $table->integer('store_id')->unsigned()->comment('ID de la tienda')->default(1);
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->integer('category_id')->unsigned()->nullable()->comment('ID de la categoria');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->integer('brand_id')->unsigned()->nullable()->comment('ID de la marca');
-            $table->foreign('brand_id')->references('id')->on('brands');
+            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
             $table->integer('row_id')->unsigned()->nullable()->comment('ID de la fila donde se encuentra el producto');
-            $table->foreign('row_id')->references('id')->on('rows');
+            $table->foreign('row_id')->references('id')->on('rows')->onDelete('cascade');
             $table->string('reference', 100)->unique()->comment('Referencia');
             $table->string('name', 50)->comment('Nombre');
             $table->string('description', 255)->nullable()->comment('Descripción');

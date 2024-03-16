@@ -35,9 +35,9 @@ class Role extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function rolesModules()
+    public function modules()
     {
-        return $this->hasMany('App\Models\settings\RolesModule', 'role_id', 'id');
+        return $this->belongsToMany(Module::class, 'roles_modules')->withPivot('has_admin','selected','created_at','updated_at');
     }
     
     /**

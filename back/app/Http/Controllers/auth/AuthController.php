@@ -4,6 +4,8 @@ namespace App\Http\Controllers\auth;
 
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\settings\Role;
+use App\Models\settings\RolesModule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +35,7 @@ class AuthController extends Controller
                 'success' => true,
                 'token' => $token,
                 'user' => $user,
+                'modules' => $this->getModules(),
                 'token_type' => 'bearer',
                 'expires_in' => 60 * 24,
                 'date' => Carbon::now()
@@ -50,5 +53,18 @@ class AuthController extends Controller
         $cookie = Cookie::forget('cookie_token');
 
         return response(Response::HTTP_OK)->withCookie($cookie);
+    }
+
+    /**
+     * Trae los modulos del rol
+     */
+    public function getModules()
+    {
+        $modules = RolesModule::select('modules.id', 'modules.code')
+        ->join('modules', 'roles_modules.module_id', '=', 'modules.id')
+        ->where(['selected' => '1', 'role_id' => Auth::user()->role_id])
+        ->get();
+
+        return $modules;
     }
 }

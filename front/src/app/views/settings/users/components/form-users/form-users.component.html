@@ -9,8 +9,12 @@
             </p>
         </div>
         <nz-upload 
+            class="avatar-uploader"
+            [nzAction]="serverURL + '/upload-file'"
+            [nzHeaders]="{ authorization: 'authorization-text' }"
             nzName="avatar"
             [nzShowUploadList]="false"
+            [nzBeforeUpload]="beforeUpload"
             (nzChange)="handleChange($event)">
             <button nz-button nzType="primary" type="button">
                 <span>  {{ 'users.uploadImage' | translate  }}</span>
@@ -19,46 +23,52 @@
     </div>
     <hr class="m-v-25">
     <div class="row">
-        <div class="col-lg-6 col-sm-6 col-12">
+        <div class=" col-sm-6 col-12">
             <nz-form-item>
-                <nz-form-label>{{ 'users.name' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'users.store' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'users.name' | translate }}" formControlName="full_name" >
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.store' | translate }}" nzAllowClear formControlName="store_id">
+                        <nz-option *ngFor="let option of storesList" [nzValue]="option.id" [nzLabel]="option.store_name" ></nz-option>
+                    </nz-select>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div class="col-lg-6 col-sm-6 col-12">
+        <div class="col-sm-6 col-12">
             <nz-form-item>
-                <nz-form-label>{{ 'login.email' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'users.role' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'login.email' | translate }}" type="email" formControlName="email">
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.role' | translate }}" nzAllowClear formControlName="role_id"  nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getRoles()" (nzOnSearch)="onSearchRole($event)"  nzShowSearch nzServerSearch>
+                        <nz-option *ngFor="let option of rolesList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                    </nz-select>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6 col-12">
+        <div class="col-lg-6 col-sm-6 col-12">
             <nz-form-item>
-                <nz-form-label>{{ 'users.phone' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'users.name' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'users.phone' | translate }}"  formControlName="phone">
+                    <input nz-input placeholder="{{ 'users.name' | translate }}" formControlName="names">
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div class="col-sm-6 col-12">
+        <div class="col-lg-6 col-sm-6 col-12">
             <nz-form-item>
-                <nz-form-label>{{ 'users.datebirth' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'users.surnames' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-date-picker class="w-100" nzFormat="yyyy/MM/dd" nzPlaceHolder="{{ 'users.datebirth' | translate }}" formControlName="date_birth" ngModel></nz-date-picker>
+                    <input nz-input placeholder="{{ 'users.surnames' | translate }}" formControlName="surnames">
                 </nz-form-control>
             </nz-form-item>
         </div>
+    </div>
+    <div class="row">
         <div class=" col-sm-6 col-12">
             <nz-form-item>
                 <nz-form-label>{{ 'users.typeDocument' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.typeDocument' | translate }}" nzAllowClear formControlName="id_type_document">
-                        <nz-option *ngFor="let option of typeDocumentsList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.typeDocument' | translate }}" nzAllowClear formControlName="type_document">
+                        <nz-option *ngFor="let option of typeDocumentsList" [nzValue]="option.value" [nzLabel]="option.label" ></nz-option>
                     </nz-select>
                 </nz-form-control>
             </nz-form-item>
@@ -73,21 +83,19 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6 col-12">
+        <div class="col-lg-6 col-sm-6 col-12">
             <nz-form-item>
-                <nz-form-label>{{ 'users.role' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'login.email' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.rolePlaceholder' | translate }}" nzAllowClear formControlName="id_role"  nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getRoles()" (nzOnSearch)="onSearchRole($event)"  nzShowSearch nzServerSearch>
-                        <nz-option *ngFor="let option of rolesList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
-                    </nz-select>
+                    <input nz-input placeholder="{{ 'login.email' | translate }}" type="email" formControlName="email">
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div class="col-sm-6 col-12">
             <nz-form-item>
-                <nz-form-label>{{ 'users.status' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'users.state' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.status' | translate }}" nzAllowClear formControlName="status">
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.state' | translate }}" nzAllowClear formControlName="state">
                         <nz-option *ngFor="let option of statusList" [nzValue]="option.value" [nzLabel]="option.label" ></nz-option>
                     </nz-select>
                 </nz-form-control>

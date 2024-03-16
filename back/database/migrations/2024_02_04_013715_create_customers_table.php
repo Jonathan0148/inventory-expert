@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->comment('Clientes del local o tienda');
             $table->increments('id');
-            $table->integer('store_id')->unsigned()->comment('ID de la tienda');
-            $table->foreign('store_id')->references('id')->on('stores');
+            $table->integer('store_id')->unsigned()->comment('ID de la tienda')->default(1);
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->string('full_name', 100)->comment('Nombre completo');
             $table->integer('type_document')->nullable()->comment('Tipo de documento: 0: Si es cédula de ciudadanía 1: Si es cédula de extranjería 2: Si es tarjeta de identidad 3: Si es pasaporte');
             $table->string('document', 30)->nullable()->unique()->comment('Número de documento');

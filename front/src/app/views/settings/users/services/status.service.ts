@@ -5,16 +5,13 @@ import { StatusModel } from '../../../../shared/interfaces/status';
   providedIn: 'root'
 })
 export class StatusService {
-
-
   statusList:StatusModel[] = [
-    { label: 'Habilitado', value: 1 },
-    { label: 'Deshabilitado', value: 0 },
+    { label: 'Inactivo', value: 0 },
+    { label: 'Activo', value: 1 },
+    { label: 'Pendiente', value: 2 }
   ];
-
 
   public get():StatusModel[] {
     return this.statusList;
   }
-
 }

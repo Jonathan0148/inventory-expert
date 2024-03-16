@@ -36,7 +36,7 @@ export class SideNavComponent{
             sub = [];
             menuItem.submenu.forEach(module_ => {
                 this.modules.map(m => {
-                     if(m.name === module_.title) sub.push(module_);
+                     if(m.code === module_.code) sub.push(module_);
                 })
             });
             if(sub.length || menuItem.title == 'Dashboard') {

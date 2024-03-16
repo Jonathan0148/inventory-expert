@@ -42,7 +42,7 @@ export class FormRolesComponent implements OnInit {
   public submit(): void {
     this.loading = true;
 
-    let path = this.id ? `/roles/update/${this.id}` : `/roles/create`;
+    let path = this.id ? `/settings/roles/edit/${this.id}` : `/settings/roles/create`;
     
     this.modules_attach = this.getModulesAttach();
 
@@ -65,7 +65,7 @@ export class FormRolesComponent implements OnInit {
   //------------------------------------------------------------------------
   
   public getRole(){
-    this._crudSvc.getRequest(`/roles/show/${this.id}`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/settings/roles/show/${this.id}`).subscribe((res: any) => {
       const { data:{role, modules} } = res;
       this.form.patchValue(role);
       this.setModulesForm(modules);
@@ -73,7 +73,7 @@ export class FormRolesComponent implements OnInit {
   }
   
   private getModules():void {
-    this._crudSvc.getRequest(`/roles/getModules`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/settings/roles/getModules`).subscribe((res: any) => {
         const { data } = res;
         this.setModulesForm(data);
     })

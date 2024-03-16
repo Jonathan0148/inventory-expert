@@ -15,9 +15,9 @@ return new class extends Migration
             $table->comment('Detalle de las ventas');
             $table->increments('id');
             $table->integer('sale_id')->unsigned()->comment('ID de la venta');
-            $table->foreign('sale_id')->references('id')->on('sales');
+            $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
             $table->integer('product_id')->unsigned()->comment('ID del producto');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->float('quantity')->comment('Cantidad de producto');
             $table->float('value')->comment('Valor del producto');
             $table->timestamps();

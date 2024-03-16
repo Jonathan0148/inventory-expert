@@ -54,7 +54,7 @@ export class FormPasswordComponent implements OnInit {
 
   private submit(): void {
     this.loading = true;
-    this.crudSvc.putRequest('/users/changePassword', {id: this.id ,...this.changePWForm.value})
+    this.crudSvc.putRequest('/settings/users/changePassword', {id: this.id ,...this.changePWForm.value})
         .pipe((finalize(() => this.loading = false)))
         .subscribe((res:any) => {
           const { success } = res;
@@ -68,7 +68,7 @@ export class FormPasswordComponent implements OnInit {
   public onChangePassword(value:string):void{
     if(!value) return
     this.loading = true;
-    this.crudSvc.postRequest('/users/validatePassword', {id: this.id,password: value})
+    this.crudSvc.postRequest('/settings/users/validatePassword', {id: this.id,password: value})
         .pipe((finalize(() => this.loading = false)))
         .subscribe((res:any) => {
           const { success } = res;

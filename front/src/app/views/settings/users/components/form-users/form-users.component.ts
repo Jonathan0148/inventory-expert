@@ -1,13 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { StatusService } from '../../services/status.service';
 import { CrudServices } from '../../../../../shared/services/crud.service';
 import { RoleModel } from '../../../../../shared/interfaces/role';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { StoreModel } from 'src/app/shared/interfaces/store';
+import { TypeDocumentsService } from '../../services/type-documents.service';
+import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { Observable, Observer } from 'rxjs';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-form-users',
@@ -15,61 +19,98 @@ import { Router } from '@angular/router';
   styleUrls: ['./form-users.component.scss']
 })
 export class FormUsersComponent implements OnInit {
-  
   @Input() id:number;
 
+  serverURL: string = environment.serverUrl;
   form: FormGroup;
   avatarUrl: string = "";
-  loading:boolean;
-  typeDocumentsList:any;
-  rolesList:RoleModel[] = [];
-  pageRole:number = 1;
-  termRole:string = '';
-  lastPageRole:number;
+  rolesList: RoleModel[] = [];
+  pageRole: number = 1;
+  termRole: string = '';
+  lastPageRole: number;
+  storesList: StoreModel[] = [];
+  pageStore: number = 1;
+  termStore: string = '';
+  lastPageStore: number;
+  typeDocumentsList = this._typeDocumentsSvC.get();
   statusList = this._statusSvC.get();
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
-    private _statusSvC: StatusService,
+    private router: Router,
     private _crudSvc:CrudServices,
-    private router:Router
+    private _typeDocumentsSvC: TypeDocumentsService,
+    private _statusSvC: StatusService,
+    private msg: NzMessageService
   ) { }
   
   ngOnInit(): void {
     this.form = this.fb.group({
-        full_name: [ null, [ Validators.required ] ],
+        store_id: [ null, [ Validators.required ] ],
+        role_id: [ null, [ Validators.required ] ],
+        names: [ null, [ Validators.required ] ],
+        surnames: [ null, [ Validators.required ] ],
+        type_document: [ 0, [ Validators.required ] ],
+        document: [ null, [ Validators.required ] ],
         email: [ null, [ Validators.required, Validators.email ] ],
-        phone: [ null, [ Validators.required ] ],
-        date_birth: [ null, [ Validators.required ] ],
-        id_type_document:[ 1, [  Validators.required ]],
-        document:[null, [ Validators.required ]],
-        status:[null, [ Validators.required ]],
-        id_role:[null, [ Validators.required ]],
+        state: [ 1, [ Validators.required ]],
+        avatar: [ null, []]
     });
 
     if(this.id) this.getUser()
+    this.getStores();
     this.getRoles();
-    this.getTypeDocuments();
   }
-
   
-  private getBase64(img: File, callback: (img: {}) => void): void {
+  beforeUpload = (file: NzUploadFile, _fileList: NzUploadFile[]): Observable<boolean> =>
+    new Observable((observer: Observer<boolean>) => {
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+      if (!isJpgOrPng) {
+        this.msg.error('Solo puedes subir archivos JPG o PNG!');
+        observer.complete();
+        return;
+      }
+      const isLt2M = file.size! / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        this.msg.error('La imagen debe tener menos de 2 MB.!');
+        observer.complete();
+        return;
+      }
+      observer.next(isJpgOrPng && isLt2M);
+      observer.complete();
+    });
+
+  private getBase64(img: File, callback: (img: string) => void): void {
     const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
+    reader.addEventListener('load', () => callback(reader.result!.toString()));
     reader.readAsDataURL(img);
   }
 
   handleChange(info: { file: NzUploadFile }): void {
-    this.getBase64(info.file.originFileObj, (img: string) => {
-        this.avatarUrl = img;
-    });
+    switch (info.file.status) {
+      case 'uploading':
+        this.loading = true;
+        break;
+      case 'done':
+        this.getBase64(info.file!.originFileObj!, (img: string) => {
+          this.loading = false;
+          this.avatarUrl = img;
+          this.form.patchValue({avatar:img});
+        });
+        break;
+      case 'error':
+        this.msg.error('Error de red');
+        this.loading = false;
+        break;
+    }
   }
   
   public submit(): void {
     this.loading = true;
 
-    let path = this.id ? `/users/update/${this.id}` : `/users/create`;
-        
+    let path = this.id ? `/settings/users/edit/${this.id}` : `/settings/users/create`;
+    
     this._crudSvc.postRequest(path, this.form.value)
     .pipe(finalize( () => this.loading = false))
     .subscribe((res: any) => {
@@ -83,13 +124,30 @@ export class FormUsersComponent implements OnInit {
   //------------------------------------------------------------------------
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
+
   public getUser(){
-    this._crudSvc.getRequest(`/users/show/${this.id}`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/settings/users/show/${this.id}`).subscribe((res: any) => {
       const { data } = res;
       this.form.patchValue(data);
-  })
+      this.avatarUrl = data.avatar;
+    })
   }
 
+  public getStores():void {
+    const query = [
+      `?page=${this.pageRole}`,
+      `&term=${this.termRole}`
+    ].join('');
+    
+    if( this.lastPageRole && ((this.lastPageRole < this.pageRole) && !this.termRole) ) return
+    
+    this._crudSvc.getRequest(`/settings/stores/index${query}`).subscribe((res: any) => {
+        const { data } = res;
+        (!this.termRole) ? this.storesList = [...this.storesList,  ...data.data] : this.rolesList = data.data;
+        this.lastPageRole = data.last_page;
+        this.pageRole++;
+    })
+  }
 
   public getRoles():void {
     const query = [
@@ -99,7 +157,7 @@ export class FormUsersComponent implements OnInit {
     
     if( this.lastPageRole && ((this.lastPageRole < this.pageRole) && !this.termRole) ) return
 
-    this._crudSvc.getRequest(`/roles/index${query}`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/settings/roles/index${query}`).subscribe((res: any) => {
         const { data } = res;
         (!this.termRole) ? this.rolesList = [...this.rolesList,  ...data.data] : this.rolesList = data.data;
         this.lastPageRole = data.last_page;
@@ -107,16 +165,10 @@ export class FormUsersComponent implements OnInit {
     })
   }
 
-  private getTypeDocuments():void {
-    this._crudSvc.getRequest(`/users/getTypeDocuments`).subscribe((res: any) => {
-        const { data } = res;
-        this.typeDocumentsList = data;
-    })
-  }
-
   //------------------------------------------------------------------------
   //-------------------------------EVENTS-----------------------------------
   //------------------------------------------------------------------------
+
   public onSearchRole(event:string){
 
     if(event.length > 3) {
@@ -133,9 +185,9 @@ export class FormUsersComponent implements OnInit {
     }  
   }
 
-
   //------------------------------------------------------------------------
   //------------------------AUXILIAR FUNCTIONS------------------------------
   //------------------------------------------------------------------------
+
   private setPage = ():number => this.pageRole = 1; 
 }
