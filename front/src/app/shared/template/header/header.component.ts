@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/views/auth/services/auth.service';
 import { ThemeConstantService } from '../../services/theme-constant.service';
+import { CrudServices } from '../../services/crud.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -8,18 +10,26 @@ import { ThemeConstantService } from '../../services/theme-constant.service';
 })
 
 export class HeaderComponent{
-
+    avatarUrl: string = "";
+    names: string = "";
+    surnames: string = "";
+    role: string = "";
     searchVisible : boolean = false;
     quickViewVisible : boolean = false;
     isFolded : boolean;
     isExpand : boolean;
+    id:number;
 
     constructor( 
         private themeService: ThemeConstantService,
-        private authSvc:AuthService 
+        private authSvc:AuthService,
+        private _crudSvc:CrudServices,
+        private activatedRoute: ActivatedRoute,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
+        this.getUser();
         this.themeService.isMenuFoldedChanges.subscribe(isFolded => this.isFolded = isFolded);
         this.themeService.isExpandChanges.subscribe(isExpand => this.isExpand = isExpand);
     }
@@ -73,5 +83,24 @@ export class HeaderComponent{
 
     public loguot():void {
         this.authSvc.logout();
+    }
+
+    //------------------------------------------------------------------------
+    //-------------------------------GET DATA---------------------------------
+    //------------------------------------------------------------------------
+
+    public getUser(){
+        this._crudSvc.getRequest(`/settings/users/getUser`).subscribe((res: any) => {
+          const { data } = res;
+          this.avatarUrl = data.avatar;
+          this.names = data.names;
+          this.surnames = data.surnames;
+          this.role = data.role;
+          this.id = data.id;
+        })
+    }
+
+    public redirecToUserProfile(){
+        this.router.navigate(['/', 'usuarios', 'editar', this.id]);
     }
 }

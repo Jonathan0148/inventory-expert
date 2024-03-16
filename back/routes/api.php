@@ -27,7 +27,6 @@ Route::controller(FileController::class)->group(function (){
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    
     Route::controller(AuthController::class)->group(function (){
         Route::get('logout', 'logout');
     });
@@ -56,6 +55,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('show/{id}', 'show');
             Route::post('edit/{id}', 'edit');
             Route::delete('destroy/{id}', 'destroy');
+            Route::get('getUser', 'getUser');
+            Route::post('validatePassword', 'validatePassword');
+            Route::put('changePassword', 'changePassword');
         });
     });
 });

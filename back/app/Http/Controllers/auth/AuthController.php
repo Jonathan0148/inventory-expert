@@ -29,7 +29,7 @@ class AuthController extends Controller
             
             $token = $user->createToken('token')->plainTextToken;
             
-            $cookie = cookie('cookie_token', $token, 60 * 24);
+            $cookie = cookie('cookie_token', $token, 1440);
             
             return response([
                 'success' => true,
@@ -37,7 +37,7 @@ class AuthController extends Controller
                 'user' => $user,
                 'modules' => $this->getModules(),
                 'token_type' => 'bearer',
-                'expires_in' => 60 * 24,
+                'expires_in' => 1440,
                 'date' => Carbon::now()
             ], Response::HTTP_OK)->withoutCookie($cookie);
         }

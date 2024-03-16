@@ -8,7 +8,6 @@ import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { StoreModel } from 'src/app/shared/interfaces/store';
 import { TypeDocumentsService } from '../../services/type-documents.service';
-import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, Observer } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
@@ -35,6 +34,7 @@ export class FormUsersComponent implements OnInit {
   typeDocumentsList = this._typeDocumentsSvC.get();
   statusList = this._statusSvC.get();
   loading = false;
+  edit = false;
 
   constructor(
     private fb: FormBuilder,
@@ -71,13 +71,13 @@ export class FormUsersComponent implements OnInit {
         observer.complete();
         return;
       }
-      const isLt2M = file.size! / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.msg.error('La imagen debe tener menos de 2 MB.!');
+      const isLt5M = file.size! / 1024 / 1024 < 5;
+      if (!isLt5M) {
+        this.msg.error('La imagen debe tener menos de 5 MB.!');
         observer.complete();
         return;
       }
-      observer.next(isJpgOrPng && isLt2M);
+      observer.next(isJpgOrPng && isLt5M);
       observer.complete();
     });
 
@@ -170,12 +170,9 @@ export class FormUsersComponent implements OnInit {
   //------------------------------------------------------------------------
 
   public onSearchRole(event:string){
-
-    if(event.length > 3) {
-      this.termRole = event;
-      this.getRoles();
-      this.setPage();
-    }
+    this.termRole = event;
+    this.getRoles();
+    this.setPage();
 
     if(!event.length && this.termRole) {
       this.setPage();
