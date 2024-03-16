@@ -70,13 +70,16 @@
     "users":{
         "add":"Agregar usuario",
         "addTitle":"Agregar Usuario",
-        "name":"Nombre",
+        "store":"Tienda | Local",
+        "name":"Nombres",
+        "surnames":"Apellidos",
         "phone":"Celular",
         "datebirth":"Fecha de Nacimiento",
         "infoBasic":"Información básica",
         "changePassword":"Cambiar contraseña",
-        "enabled":"Deshabilitado",
-        "disabled":"Habilitado",
+        "active":"Activo",
+        "inactive":"Inactivo",
+        "earring":"Pendiente",
         "oldPassword":"Contraseña actual",
         "newPassword":"Nueva contraseña",
         "confirm":"Confirmar",
@@ -88,8 +91,7 @@
         "typeDocument":"Tipo de documento",
         "document":"Documento",
         "role":"Rol",
-        "rolePlaceholder":"Selecciones el Rol",
-        "status":"Estado"
+        "state":"Estado"
     },
     "customers":{
         "add":"Agregar cliente",

@@ -28,7 +28,7 @@ export class ListUsersComponent implements OnInit {
   }
 
   confirm(id:number): void {
-    this._crudSvc.deleteRequest(`/users/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/settings/users/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })

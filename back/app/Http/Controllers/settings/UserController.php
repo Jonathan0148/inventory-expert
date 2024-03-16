@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\settings\User;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class UserController
@@ -31,7 +32,7 @@ class UserController extends Controller
             return $page;
         });
 
-        $data = User::where(function ($query) use ($term) {
+        $data = User::whereNot('users.id', Auth::user()->id)->where(function ($query) use ($term) {
             $query->where('names', 'like', "%$term%");
             $query->orWhere('surnames', 'like', "%$term%");
             $query->orWhere('email', 'like', "%$term%");
@@ -57,7 +58,8 @@ class UserController extends Controller
                 'type_document' => 'required',
                 'document' => 'required',
                 'email' => 'required|email',
-                'state' => 'required'
+                'state' => 'required',
+                'avatar' => 'nullable'
             ]);
             
             $data = User::create([
@@ -69,7 +71,8 @@ class UserController extends Controller
                 'document' => $validatedData['document'],
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['document'].strtolower(substr($validatedData['names'], 0, 1))),
-                'state' => $validatedData['state']
+                'state' => $validatedData['state'],
+                'avatar' => $validatedData['avatar']
             ]);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
@@ -113,7 +116,8 @@ class UserController extends Controller
                 'role_id ' => $request->input('role_id '),
                 'names' => $request->input('names'),
                 'surnames' => $request->input('surnames'),
-                'state' => $request->input('state')
+                'state' => $request->input('state'),
+                'avatar' => $request->input('avatar')
             ]);
 
             return  ResponseHelper::CreateOrUpdate($data, 'Información actualizada correctamente',);

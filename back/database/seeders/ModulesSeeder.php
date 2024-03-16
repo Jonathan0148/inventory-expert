@@ -52,18 +52,24 @@ class ModulesSeeder extends Seeder
             [
                 "id" => 7,
                 "code" => 17,
-                "name" => "Ventas",
-                "description" => "El módulo de Ventas se encarga de gestionar y registrar las transacciones de venta dentro del sistema. Permite a los usuarios crear y procesar órdenes de venta, registrar pagos, generar facturas y llevar un seguimiento del historial de ventas. Facilita el control y la administración eficiente del proceso de venta, desde la selección de productos hasta la emisión de documentos de venta y el seguimiento del estado de las transacciones."
+                "name" => "Clientes",
+                "description" => "El módulo de Clientes se encarga de gestionar la información relacionada con los clientes de la empresa u organización. Permite mantener un registro de los datos de contacto, historial de compras, preferencias, y otras informaciones relevantes de los clientes. Facilita la gestión de relaciones con los clientes, el seguimiento de las interacciones y la personalización de los servicios ofrecidos para satisfacer sus necesidades específicas."
             ],
             [
                 "id" => 8,
                 "code" => 18,
-                "name" => "Gastos",
-                "description" => "El módulo de Gastos se encarga de registrar y gestionar los gastos incurridos por la empresa u organización. Permite a los usuarios registrar de manera organizada y detallada los gastos relacionados con diversos aspectos, como compras de suministros, servicios, pagos de facturas, entre otros. Facilita el seguimiento y control de los gastos, así como la generación de informes financieros para análisis y toma de decisiones."
+                "name" => "Ventas",
+                "description" => "El módulo de Ventas se encarga de gestionar y registrar las transacciones de venta dentro del sistema. Permite a los usuarios crear y procesar órdenes de venta, registrar pagos, generar facturas y llevar un seguimiento del historial de ventas. Facilita el control y la administración eficiente del proceso de venta, desde la selección de productos hasta la emisión de documentos de venta y el seguimiento del estado de las transacciones."
             ],
             [
                 "id" => 9,
                 "code" => 19,
+                "name" => "Gastos",
+                "description" => "El módulo de Gastos se encarga de registrar y gestionar los gastos incurridos por la empresa u organización. Permite a los usuarios registrar de manera organizada y detallada los gastos relacionados con diversos aspectos, como compras de suministros, servicios, pagos de facturas, entre otros. Facilita el seguimiento y control de los gastos, así como la generación de informes financieros para análisis y toma de decisiones."
+            ],
+            [
+                "id" => 10,
+                "code" => 20,
                 "name" => "Proveedores",
                 "description" => "El módulo de Proveedores se encarga de gestionar la información relacionada con los proveedores con los que la empresa u organización realiza transacciones comerciales. Permite mantener un registro de los datos de contacto, historial de compras, términos de contrato y otras informaciones relevantes de los proveedores. Facilita la gestión de relaciones con los proveedores y la toma de decisiones en cuanto a la selección y negociación de acuerdos comerciales."
             ],

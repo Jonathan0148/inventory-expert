@@ -15,7 +15,7 @@ return new class extends Migration
             $table->comment('Columnas del estante');
             $table->increments('id');
             $table->integer('shelf_id')->unsigned()->comment('ID del estante donde se encuentra');
-            $table->foreign('shelf_id')->references('id')->on('shelves');
+            $table->foreign('shelf_id')->references('id')->on('shelves')->onDelete('cascade');
             $table->string('name', 40)->comment('Nombre');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');

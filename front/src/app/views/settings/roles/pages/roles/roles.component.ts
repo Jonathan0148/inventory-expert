@@ -56,7 +56,7 @@ export class RolesComponent implements OnInit, OnDestroy {
       `&limit=${this.limit}`
     ].join('');
 
-    this._crudSvc.getRequest(`/roles/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/settings/roles/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
         const { data } = res;
 
         this.rolesList = data.data;
@@ -82,10 +82,10 @@ export class RolesComponent implements OnInit, OnDestroy {
       this.getRoles();
   }
 
-
   private listenObserver = () => {
     const observer1$ = this._crudSvc.requestEvent.subscribe((res) => {
       this.getRoles();
+      
     });
 
     this.listSubscribers = [observer1$];
@@ -94,6 +94,4 @@ export class RolesComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.listSubscribers.map(a => a.unsubscribe());
   }
-  
-
 }

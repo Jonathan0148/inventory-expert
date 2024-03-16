@@ -5,8 +5,10 @@ namespace App\Http\Controllers\settings;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\settings\Module;
 use Illuminate\Pagination\Paginator;
 use App\Models\settings\Role;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class RoleController
@@ -49,9 +51,11 @@ class RoleController extends Controller
         try {
             $validatedData = $request->validate([
                 'name' => 'required',
-                'description' => 'nullable'
+                'description' => 'nullable',
+                'modules' => 'required'
             ]);
             $data = Role::create($validatedData);
+            $data->modules()->sync(@$request->modules);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
         } catch (\Throwable $th) {
@@ -67,8 +71,19 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $data = Role::find($id);
+        $role = Role::find($id);
 
+        $modules = Module::select('modules.id', 'modules.name', 'roles_modules.has_admin', 'roles_modules.selected')
+        ->join('roles_modules', function($join) use ($id)
+        {
+            $join->on('modules.id', '=', 'roles_modules.module_id');
+            $join->on('role_id', '=', DB::raw("$id"));
+        })
+        ->get();
+
+        $data['role'] = $role;
+        $data['modules'] = $modules;
+        
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
@@ -95,6 +110,9 @@ class RoleController extends Controller
                 'description' => $request->input('description')
             ]);
 
+            if($data->modules) $data->modules()->detach();
+            $data->modules()->attach(@$request->modules);
+
             return  ResponseHelper::CreateOrUpdate($data, 'Información actualizada correctamente',);
         } catch (\Throwable $th) {
             return ResponseHelper::Error($th, 'La información no pudo ser actualizada');
@@ -118,5 +136,18 @@ class RoleController extends Controller
         $data->delete();
 
         return ResponseHelper::Delete('Información eliminada correctamente');
+    }
+
+     /**
+     * Display a listing of the modules.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getModules()
+    {
+        $data = Module::all();
+
+        return ResponseHelper::Get($data);
     }
 }

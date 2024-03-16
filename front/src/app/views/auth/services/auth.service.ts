@@ -34,7 +34,7 @@ export class AuthService {
 
   setterSettings = (res: any) => {
     this.cookieSvc.set('token',res.token, res.expires_in,'/');
-    this.cookieSvc.set('modules',JSON.stringify(res.modules[0].modules), res.expires_in,'/');
+    this.cookieSvc.set('modules',JSON.stringify(res.modules), res.expires_in,'/');
   }
 
   currentUser = () => {

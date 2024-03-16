@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->comment('Proveedores del local o tienda');
             $table->increments('id');
-            $table->integer('store_id')->unsigned()->comment('ID de la tienda');
-            $table->foreign('store_id')->references('id')->on('stores');
+            $table->integer('store_id')->unsigned()->comment('ID de la tienda')->default(1);
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->string('business_name', 100)->comment('Razón social');
             $table->string('nit', 100)->comment('Nit');
             $table->string('cell_phone', 20)->comment('Celular');

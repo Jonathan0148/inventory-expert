@@ -15,7 +15,7 @@ return new class extends Migration
             $table->comment('Filas de las columnas');
             $table->increments('id');
             $table->integer('column_id')->unsigned()->comment('ID de la columna donde se encuentra');
-            $table->foreign('column_id')->references('id')->on('columns');
+            $table->foreign('column_id')->references('id')->on('columns')->onDelete('cascade');
             $table->string('name', 40)->comment('Nombre');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');

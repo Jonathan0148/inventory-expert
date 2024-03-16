@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->comment('Ventas del local o tienda');
             $table->increments('id');
-            $table->integer('store_id')->unsigned()->comment('ID de la tienda');
-            $table->foreign('store_id')->references('id')->on('stores');
+            $table->integer('store_id')->unsigned()->comment('ID de la tienda')->default(1);
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->integer('customer_id')->unsigned()->comment('ID del cliente');
-            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->integer('reference')->unique()->comment('Referencia de la venta');
             $table->integer('payment_type')->default(0)->comment('Tipo de pago: 0: Efectivo 1: Bancolombia 2: Daviplata 3: Otro');
             $table->integer('state')->default(0)->comment('Estado de la venta: 0: Pagada 1: Pendiente 2: Abonado');

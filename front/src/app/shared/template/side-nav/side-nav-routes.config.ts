@@ -18,6 +18,7 @@ export const ROUTES: SideNavInterface[] = [
         submenu: [
             {
                 path: '/usuarios',
+                code: 12,
                 title: 'Usuarios',
                 iconType: 'nzIcon',
                 icon: 'user',
@@ -26,6 +27,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/roles',
+                code: 11,
                 title: 'Roles',
                 iconType: 'nzIcon',
                 icon: 'safety-certificate',
@@ -43,6 +45,7 @@ export const ROUTES: SideNavInterface[] = [
         submenu: [
             {
                 path: '/contactos/clientes',
+                code: 17,
                 title: 'Clientes',
                 iconType: 'nzIcon',
                 icon: 'contacts',
@@ -51,6 +54,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/contactos/proveedores',
+                code: 20,
                 title: 'Proveedores',
                 iconType: 'nzIcon',
                 icon: 'team',
@@ -68,6 +72,7 @@ export const ROUTES: SideNavInterface[] = [
         submenu: [
             {
                 path: '/contabilidad/gastos',
+                code: 19,
                 title: 'Gastos',
                 iconType: 'nzIcon',
                 icon: 'solution',
@@ -76,6 +81,7 @@ export const ROUTES: SideNavInterface[] = [
             }, 
             {
                 path: '/contabilidad/ventas',
+                code: 18,
                 title: 'Ventas',
                 iconType: 'nzIcon',
                 icon: 'shopping',
@@ -93,6 +99,7 @@ export const ROUTES: SideNavInterface[] = [
         submenu: [
             {
                 path: '/inventario/categorias',
+                code: 15,
                 title: 'Categorías',
                 iconType: 'nzIcon',
                 icon: 'tags',
@@ -101,7 +108,8 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/inventario/local',
-                title: 'Local',
+                code: 13,
+                title: 'Distribución del Local',
                 iconType: 'nzIcon',
                 icon: 'appstore',
                 iconTheme: 'outline',
@@ -109,6 +117,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/inventario/marcas',
+                code: 14,
                 title: 'Marcas',
                 iconType: 'nzIcon',
                 icon: 'tags',
@@ -117,6 +126,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/inventario/productos',
+                code: 16,
                 title: 'Productos',
                 iconType: 'nzIcon',
                 icon: 'shop',

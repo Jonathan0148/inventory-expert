@@ -6,6 +6,7 @@ import { finalize } from 'rxjs/operators';
 import { StatusModel } from '../../../../../shared/interfaces/status';
 import { RoleModel } from '../../../../../shared/interfaces/role';
 import { StatusService } from '../../services/status.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -13,6 +14,7 @@ import { StatusService } from '../../services/status.service';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
+  listSubscribers: Subscription[] = [];
 
   loading: boolean = false;
   limit: number = 10;
@@ -23,7 +25,13 @@ export class UsersComponent implements OnInit {
           priority: false
       },
       {
+          title: 'Avatar',
+      },
+      {
           title: 'Nombre',
+      },
+      {
+          title: 'Apellido',
       },
       {
           title: 'Rol',
@@ -54,6 +62,7 @@ export class UsersComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
+    this.listenObserver();
     this.getUsers();
     this.getRoles();
   }
@@ -74,7 +83,7 @@ export class UsersComponent implements OnInit {
       `&status=${ status }`,
     ].join('');
 
-    this._crudSvc.getRequest(`/users/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/settings/users/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
         const { data } = res;
         
         this.usersList = data.data;
@@ -91,7 +100,7 @@ export class UsersComponent implements OnInit {
      
      if(this.lastpageRole && ((this.lastpageRole < this.pageRole) && !this.termRole) ) return
  
-     this._crudSvc.getRequest(`/roles/index${query}`).subscribe((res: any) => {
+     this._crudSvc.getRequest(`/settings/roles/index${query}`).subscribe((res: any) => {
          const { data } = res;
       
          (!this.termRole) ? this.roleList = [...this.roleList,  ...data.data] : this.roleList = data.data;
@@ -147,5 +156,15 @@ export class UsersComponent implements OnInit {
 
   private setPage = ():number => this.pageRole = 1; 
 
+  private listenObserver = () => {
+    const observer1$ = this._crudSvc.requestEvent.subscribe((res) => {
+      this.getUsers();
+    });
 
+    this.listSubscribers = [observer1$];
+  }
+  
+  ngOnDestroy(): void {
+    this.listSubscribers.map(a => a.unsubscribe());
+  }
 }

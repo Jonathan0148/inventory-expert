@@ -21,6 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property $email
  * @property $password
  * @property $state
+ * @property $avatar
  * @property $created_at
  * @property $updated_at
  * @property $deleted_at
@@ -36,12 +37,16 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
     // SoftDeletes;
 
+    protected $casts = [
+        'avatar' => 'array'
+    ];
+
     /**
      * Attributes that should be mass-assignable.
      *
      * @var array
      */
-    protected $fillable = ['store_id','role_id','names','surnames','type_document','document','email','password','state'];
+    protected $fillable = ['store_id','role_id','names','surnames','type_document','document','email','password','state', 'avatar'];
 
 
     /**
