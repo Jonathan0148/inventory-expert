@@ -68,14 +68,19 @@ class StoreController extends Controller
                 'state' => 'required'
             ]);
 
-            if ($request->input('state') == 1){
-                $validateLicense = License::first();
-                $amountLocals = Store::where('state', 1)->count();
-    
-                if ($amountLocals >= $validateLicense->number_of_premises){
-                    return ResponseHelper::NoExits('Solo puedes administrar '.$validateLicense->number_of_premises.' locales');
-                };
-            }
+            $validateLicense = License::first();
+            $amountLocals = Store::where('state', 1)->count();
+
+            if ($amountLocals >= $validateLicense->number_of_stores){
+                switch ($validateLicense->number_of_stores) {
+                    case 1:
+                        return ResponseHelper::NoExits('Solo se permite la creación de 1 local');
+                        break;
+                    default:
+                        return ResponseHelper::NoExits('Solo se permite la creación de '.$validateLicense->number_of_stores.' locales');
+                        break;
+                }
+            };
 
             $data = Store::create($validatedData);
             
@@ -116,17 +121,10 @@ class StoreController extends Controller
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
 
-        if ($request->input('state') == 1){
-            $validateLicense = License::first();
-            $amountLocals = Store::where('state', 1)->count();
-
-            if ($amountLocals >= $validateLicense->number_of_premises){
-                return ResponseHelper::NoExits('Solo puedes administrar '.$validateLicense->number_of_premises.' locales');
-            };
-        }elseif ($request->input('state') == 0 || $request->input('state') == 2){
+        if ($request->input('state') == 0 || $request->input('state') == 2){
             $amountLocals = Store::where('state', 1)->count();
             if ($amountLocals <= 1){
-                return ResponseHelper::NoExits('No pueden quedar todos los locales inactivos');
+                return ResponseHelper::NoExits('Es necesario que al menos un local permanezca activo para poder acceder al sistema correctamente. Por favor, asegúrese de dejar al menos un local activo antes de continuar');
             }
         }
 
@@ -165,7 +163,7 @@ class StoreController extends Controller
 
         // $data->delete();
 
-        return ResponseHelper::NoExits('No se pueden eliminar locales');
+        return ResponseHelper::NoExits('No es posible eliminar locales en este momento');
     }
 
     /**

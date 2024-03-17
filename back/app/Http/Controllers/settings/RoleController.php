@@ -5,6 +5,7 @@ namespace App\Http\Controllers\settings;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\License;
 use App\Models\settings\Module;
 use Illuminate\Pagination\Paginator;
 use App\Models\settings\Role;
@@ -55,6 +56,14 @@ class RoleController extends Controller
                 'description' => 'nullable',
                 'modules' => 'required'
             ]);
+
+            $validateLicense = License::first();
+            $amountRoles = Role::count();
+
+            if ($amountRoles >= $validateLicense->number_of_roles){
+                return ResponseHelper::NoExits('Solo se permite la creación de '.$validateLicense->number_of_roles.' roles');
+            };
+            
             $data = Role::create($validatedData);
             $data->modules()->sync(@$request->modules);
             
@@ -137,7 +146,7 @@ class RoleController extends Controller
         $users = User::where('role_id', $id)->get();
 
         if (sizeof($users)){
-            return ResponseHelper::NoExits('No es posible eliminar el rol ya que tiene usuarios asociados');
+            return ResponseHelper::NoExits('La eliminación del rol no es posible debido a que tiene usuarios asociados');
         }
 
         $data->delete();

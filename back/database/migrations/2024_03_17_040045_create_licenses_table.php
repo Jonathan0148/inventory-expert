@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('licenses', function (Blueprint $table) {
             $table->increments('id');
             $table->text('description')->comment('Descripción de la licencia');
-            $table->integer('number_of_premises')->comment('Cantidad de locales permitidos');
+            $table->integer('number_of_stores')->comment('Cantidad de locales permitidos');
+            $table->integer('number_of_roles')->comment('Cantidad de roles permitidos');
+            $table->integer('number_of_users_active')->comment('Cantidad de usuarios activos permitidos');
+            $table->integer('number_of_users')->comment('Cantidad de usuarios permitidos');
             $table->timestamps();
         });
     }

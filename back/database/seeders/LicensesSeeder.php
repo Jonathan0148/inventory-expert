@@ -17,8 +17,11 @@ class LicensesSeeder extends Seeder
         $data = [
             [
                 "id" => 1,
-                "description" => "Licensia predeterminada con 1 local",
-                "number_of_premises" => 1,
+                "description" => "Licencia predeterminada con 1 local, 3 roles y 5 usuarios",
+                "number_of_stores" => 1,
+                "number_of_roles" => 3,
+                "number_of_users_active" => 5,
+                "number_of_users" => 10
             ]
         ];
 

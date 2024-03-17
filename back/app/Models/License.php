@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property $id
  * @property $description
- * @property $number_of_premises
+ * @property $number_of_stores
  * @property $created_at
  * @property $updated_at
  * @property $deleted_at
@@ -26,5 +26,5 @@ class License extends Model
      *
      * @var array
      */
-    protected $fillable = ['description','number_of_premises'];
+    protected $fillable = ['description','number_of_stores','number_of_roles','number_of_users_active','number_of_users'];
 }
