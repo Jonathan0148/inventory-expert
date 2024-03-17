@@ -9,6 +9,7 @@
     },
     "user":{
         "editProfile":"Editar Perfil",
+        "locals":"Administrar Locales",
         "settings":"Configuración"
     },
     "notification":{
@@ -56,7 +57,7 @@
         "export":"Exportar",
         "copy":"Copiar",
         "save":"Guardar",   
-        "detail":"Ver detalle",
+        "detail":"Ver Detalle",
         "edit":"Editar",
         "back":"Regresar",
         "delete":"Eliminar",
@@ -70,6 +71,7 @@
     "users":{
         "add":"Agregar usuario",
         "addTitle":"Agregar Usuario",
+        "editTitle":"Editar Usuario",
         "store":"Tienda | Local",
         "name":"Nombres",
         "surnames":"Apellidos",
@@ -96,6 +98,7 @@
     "customers":{
         "add":"Agregar cliente",
         "addTitle":"Agregar Cliente",
+        "editTitle":"Editar Cliente",
         "infoBasic":"Información básica",
         "name":"Nombre",
         "email":"Correo Electrónico",
@@ -108,6 +111,7 @@
     "providers":{
         "add":"Agregar proveedor",
         "addTitle":"Agregar Proveedor",
+        "editTitle":"Editar Proveedor",
         "infoBasic":"Información básica",
         "nit":"Nit",
         "name":"Nombre",
@@ -153,8 +157,9 @@
     },
     "role":{
         "admin":"Administrador",
-        "add":"Agregar rol",
-        "addTitle":"Agregar rol",
+        "add":"Agregar Rol",
+        "addTitle":"Agregar Rol",
+        "editTitle":"Editar Rol",
         "description":"Descripción",
         "descritionModule":"Seleccione los modulos y los permisos que se van a habilitar al usuario:"
     },
@@ -163,6 +168,21 @@
         "addTitle":"Agregar marca",
         "editTitle":"Editar marca",
         "code":"Código"
+    },
+    "locals":{
+        "add":"Agregar Local",
+        "addTitle":"Agregar Local",
+        "editTitle":"Editar Local",
+        "storeName":"Nombre tienda",
+        "nit":"NIT",
+        "cellPhone":"Teléfono celular",
+        "landline":"Teléfono fijo",
+        "email":"Correo",
+        "country":"País",
+        "department":"Departamento",
+        "city":"Ciudad",
+        "address":"Dirección",
+        "state":"Estado"
     },
     "orders":{
         "add":"Agregar factura",

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\settings\Module;
 use Illuminate\Pagination\Paginator;
 use App\Models\settings\Role;
+use App\Models\settings\User;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -131,6 +132,12 @@ class RoleController extends Controller
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
+        }
+
+        $users = User::where('role_id', $id)->get();
+
+        if (sizeof($users)){
+            return ResponseHelper::NoExits('No es posible eliminar el rol ya que tiene usuarios asociados');
         }
 
         $data->delete();

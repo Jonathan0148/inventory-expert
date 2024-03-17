@@ -3,6 +3,7 @@ import { RoleModel } from '../../../../../shared/interfaces/role';
 import { CrudServices } from '../../../../../shared/services/crud.service';
 import { finalize } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-roles',
@@ -10,7 +11,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./roles.component.scss']
 })
 export class RolesComponent implements OnInit, OnDestroy {
-
   listSubscribers: Subscription[] = [];
   limit: number = 10;
   loading: boolean = false;
@@ -34,14 +34,18 @@ export class RolesComponent implements OnInit, OnDestroy {
   searchInput: any;
   term: string = '';
   totalItems:number;
+  hasAdminModule: boolean = false;
+  modules = this.cookieSvc.get('modules') ? JSON.parse(this.cookieSvc.get('modules')) : []; 
   
   constructor(
-    private _crudSvc:CrudServices 
+    private _crudSvc:CrudServices,
+    private cookieSvc: CookieService
   ){}
 
   ngOnInit(): void {
     this.listenObserver();
     this.getRoles();
+    this.setHasAdmin();
   }
 
   // ---------------------------------------------------------------------
@@ -89,6 +93,11 @@ export class RolesComponent implements OnInit, OnDestroy {
     });
 
     this.listSubscribers = [observer1$];
+  }
+
+  private setHasAdmin(){
+    const hasAdminModule = this.modules.find((module) => module.code === 11);
+    if (hasAdminModule.has_admin) this.hasAdminModule = true;
   }
   
   ngOnDestroy(): void {

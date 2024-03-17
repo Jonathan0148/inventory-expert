@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { RoleModel } from '../../../../../shared/interfaces/role';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { CrudServices } from '../../../../../shared/services/crud.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-list-roles',
@@ -13,16 +14,16 @@ export class ListRolesComponent implements OnInit {
   @Input() rolesList:RoleModel[];
   @Input() orderColumn:any;
   @Input() displayData:any;
-  @Input() loading:boolean; 
+  @Input() loading:boolean;
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private nzMessageService: NzMessageService,
-    private _crudSvc:CrudServices,
+    private _crudSvc:CrudServices
     ) 
     {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   cancel(): void {
     this.nzMessageService.info('Operacion cancelada');

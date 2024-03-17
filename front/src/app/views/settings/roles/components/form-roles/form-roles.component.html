@@ -4,7 +4,7 @@
             <nz-form-item>
                 <nz-form-label>{{ 'users.name' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'users.name' | translate }}" formControlName="name" >
+                    <input nz-input placeholder="{{ 'users.name' | translate }}" formControlName="name" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -12,7 +12,7 @@
             <nz-form-item>
                 <nz-form-label>{{ 'role.description' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <textarea nz-input placeholder="{{ 'role.description' | translate }}" [nzAutosize]="{ minRows: 4 }" formControlName="description"></textarea>
+                    <textarea nz-input placeholder="{{ 'role.description' | translate }}" [nzAutosize]="{ minRows: 4 }" formControlName="description" [readonly]="isDetail"></textarea>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -32,9 +32,9 @@
                     <ng-container *ngFor="let modulesForm of modules.controls;  let i = index">
                         <ng-container [formGroup]="modulesForm">
                             <div class="grid__modules my-3">
-                                <button type="button" nz-button nzType="default" nzBlock [ngClass]="{ 'bordered': modulesForm.get('selected').value }" class="border d-flex align-items-center justify-content-center" (click)="onClickModuleActive(i)">{{ modulesForm.get('name').value }}</button>
+                                <button type="button" nz-button nzType="default" nzBlock [ngClass]="{ 'bordered': modulesForm.get('selected').value }" class="border d-flex align-items-center justify-content-center" (click)="onClickModuleActive(i)" [disabled]="isDetail">{{ modulesForm.get('name').value }}</button>
                                 <div class="">
-                                    <nz-radio-group nzButtonStyle="solid" formControlName="has_admin" [nzDisabled]="!modulesForm.get('selected').value">
+                                    <nz-radio-group nzButtonStyle="solid" formControlName="has_admin" [nzDisabled]="!modulesForm.get('selected').value || isDetail">
                                         <label nz-radio-button nzValue="1">Administrador</label>
                                         <label nz-radio-button nzValue="0">Visualizador</label>
                                     </nz-radio-group>
@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="!isDetail">
         <div class="col-md-12 text-right">
             <nz-form-item>
                 <nz-form-control>

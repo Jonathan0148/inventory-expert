@@ -17,8 +17,9 @@ class RolesSeeder extends Seeder
         $data = [
             [
                 "id" => 1,
-                "name" => "Administrador",
-                "description" => "Rol encargado de la administración"
+                "name" => "Super Administrador",
+                "description" => "Rol super administrador con todos los permisos",
+                "is_super" => true
             ]
         ];
 

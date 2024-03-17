@@ -16,7 +16,7 @@
             [nzShowUploadList]="false"
             [nzBeforeUpload]="beforeUpload"
             (nzChange)="handleChange($event)">
-            <button nz-button nzType="primary" type="button">
+            <button nz-button nzType="primary" type="button" [disabled]="isDetail">
                 <span>  {{ 'users.uploadImage' | translate  }}</span>
             </button>
         </nz-upload>
@@ -27,7 +27,7 @@
             <nz-form-item>
                 <nz-form-label>{{ 'users.store' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.store' | translate }}" nzAllowClear formControlName="store_id">
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.store' | translate }}" nzAllowClear formControlName="store_id" [nzDisabled]="isDetail">
                         <nz-option *ngFor="let option of storesList" [nzValue]="option.id" [nzLabel]="option.store_name" ></nz-option>
                     </nz-select>
                 </nz-form-control>
@@ -37,9 +37,9 @@
             <nz-form-item>
                 <nz-form-label>{{ 'users.role' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.role' | translate }}" nzAllowClear formControlName="role_id"  nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getRoles()" (nzOnSearch)="onSearchRole($event)"  nzShowSearch nzServerSearch>
-                        <nz-option *ngFor="let option of rolesList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
-                    </nz-select>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.role' | translate }}" nzAllowClear formControlName="role_id"  nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getRoles()" (nzOnSearch)="onSearchRole($event)" [nzDisabled]="isProfile || isDetail" nzShowSearch nzServerSearch>
+                        <nz-option *ngFor="let option of rolesList" [nzValue]="option.id" [nzLabel]="option.name"></nz-option>
+                    </nz-select>                    
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -49,7 +49,7 @@
             <nz-form-item>
                 <nz-form-label>{{ 'users.name' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'users.name' | translate }}" formControlName="names">
+                    <input nz-input placeholder="{{ 'users.name' | translate }}" formControlName="names" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -57,7 +57,7 @@
             <nz-form-item>
                 <nz-form-label>{{ 'users.surnames' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'users.surnames' | translate }}" formControlName="surnames">
+                    <input nz-input placeholder="{{ 'users.surnames' | translate }}" formControlName="surnames" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -67,7 +67,7 @@
             <nz-form-item>
                 <nz-form-label>{{ 'users.typeDocument' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.typeDocument' | translate }}" nzAllowClear formControlName="type_document">
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.typeDocument' | translate }}" nzAllowClear formControlName="type_document" [nzDisabled]="isDetail">
                         <nz-option *ngFor="let option of typeDocumentsList" [nzValue]="option.value" [nzLabel]="option.label" ></nz-option>
                     </nz-select>
                 </nz-form-control>
@@ -77,7 +77,7 @@
             <nz-form-item>
                 <nz-form-label>{{ 'users.document' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'users.document' | translate }}" formControlName="document">
+                    <input nz-input placeholder="{{ 'users.document' | translate }}" formControlName="document" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -87,7 +87,7 @@
             <nz-form-item>
                 <nz-form-label>{{ 'login.email' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'login.email' | translate }}" type="email" formControlName="email">
+                    <input nz-input placeholder="{{ 'login.email' | translate }}" type="email" formControlName="email" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -95,14 +95,14 @@
             <nz-form-item>
                 <nz-form-label>{{ 'users.state' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.state' | translate }}" nzAllowClear formControlName="state">
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'users.state' | translate }}" nzAllowClear formControlName="state" [nzDisabled]="isProfile || isDetail">
                         <nz-option *ngFor="let option of statusList" [nzValue]="option.value" [nzLabel]="option.label" ></nz-option>
                     </nz-select>
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="!isDetail">
         <div class="col-md-12 text-right">
             <nz-form-item>
                 <nz-form-control>

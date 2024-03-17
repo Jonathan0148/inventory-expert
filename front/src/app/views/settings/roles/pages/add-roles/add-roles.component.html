@@ -1,5 +1,7 @@
 <nz-page-header class="site-page-header" nzBackIcon>
-    <nz-page-header-title>{{ 'role.addTitle' | translate }}</nz-page-header-title>
+  <nz-page-header-title>
+    <ng-container>{{ (isDetail ? 'global.detail' : (id ? 'role.editTitle' : 'role.addTitle')) | translate }}</ng-container>
+  </nz-page-header-title>
 </nz-page-header>
 
 <div class="container mt-3">

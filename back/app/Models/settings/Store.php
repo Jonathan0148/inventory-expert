@@ -43,7 +43,7 @@ class Store extends Model
      *
      * @var array
      */
-    protected $fillable = ['store_name','nit','cell_phone','landline','email','country','department','city','address'];
+    protected $fillable = ['store_name','nit','cell_phone','landline','email','country','department','city','address','state'];
 
 
     /**

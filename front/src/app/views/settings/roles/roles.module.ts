@@ -32,9 +32,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     ComponentsModule
   ],
   providers: [
-      ThemeConstantService,
-      AppsService,
-      TableService
+    ThemeConstantService,
+    AppsService,
+    TableService
   ]
 })
 export class RolesModule { }

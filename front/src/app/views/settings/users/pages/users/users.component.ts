@@ -7,6 +7,7 @@ import { StatusModel } from '../../../../../shared/interfaces/status';
 import { RoleModel } from '../../../../../shared/interfaces/role';
 import { StatusService } from '../../services/status.service';
 import { Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-users',
@@ -31,10 +32,10 @@ export class UsersComponent implements OnInit {
           title: 'Nombre',
       },
       {
-          title: 'Apellido',
+          title: 'Rol',
       },
       {
-          title: 'Rol',
+          title: 'Local',
       },
       {
           title: 'Estado',
@@ -55,16 +56,20 @@ export class UsersComponent implements OnInit {
   pageRole: number = 1;
   termRole: string = '';
   lastpageRole: number;
+  hasAdminModule: boolean = false;
+  modules = this.cookieSvc.get('modules') ? JSON.parse(this.cookieSvc.get('modules')) : []; 
   
   constructor( 
     private _crudSvc:CrudServices,
-    private _statusSvc: StatusService
+    private _statusSvc: StatusService,
+    private cookieSvc: CookieService
   ){}
 
   ngOnInit(): void {
     this.listenObserver();
     this.getUsers();
     this.getRoles();
+    this.setHasAdmin();
   }
 
   // ---------------------------------------------------------------------
@@ -162,6 +167,11 @@ export class UsersComponent implements OnInit {
     });
 
     this.listSubscribers = [observer1$];
+  }
+
+  private setHasAdmin(){
+    const hasAdminModule = this.modules.find((module) => module.code === 12);
+    if (hasAdminModule.has_admin) this.hasAdminModule = true;
   }
   
   ngOnDestroy(): void {

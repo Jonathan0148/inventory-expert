@@ -12,7 +12,9 @@ export class ListUsersComponent implements OnInit {
 
   @Input() usersList:UserModel[]; 
   @Input() orderColumn:any;
-  @Input() loading:boolean;  
+  @Input() loading:boolean;
+  @Input() hasAdminModule:boolean;
+  isSuperAdmin: boolean = false;
 
   constructor(
     private nzMessageService: NzMessageService,
@@ -21,6 +23,7 @@ export class ListUsersComponent implements OnInit {
     {}
 
   ngOnInit(): void {
+    this.validateIsSuperAdmin();
   }
 
   cancel(): void {
@@ -42,4 +45,13 @@ export class ListUsersComponent implements OnInit {
     });
   }
 
+  validateIsSuperAdmin(){
+    this._crudSvc.getRequest(`/settings/users/getUser`)
+    .subscribe((res: any) => {
+      const { success, data } = res;
+      if (success) {
+        if(data.is_super == 1) this.isSuperAdmin = true;
+      }
+    })
+  }
 }

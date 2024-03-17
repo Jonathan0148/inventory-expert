@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('show/{id}', 'show');
             Route::post('edit/{id}', 'edit');
             Route::delete('destroy/{id}', 'destroy');
+            Route::get('availableLocals', 'availableLocals');
         });
         
         Route::controller(RoleController::class)->prefix('roles')->group(function () {

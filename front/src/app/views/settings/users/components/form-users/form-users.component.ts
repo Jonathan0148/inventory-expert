@@ -5,7 +5,7 @@ import { StatusService } from '../../services/status.service';
 import { CrudServices } from '../../../../../shared/services/crud.service';
 import { RoleModel } from '../../../../../shared/interfaces/role';
 import { finalize } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StoreModel } from 'src/app/shared/interfaces/store';
 import { TypeDocumentsService } from '../../services/type-documents.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -18,8 +18,9 @@ import { environment } from 'src/environments/environment.prod';
   styleUrls: ['./form-users.component.scss']
 })
 export class FormUsersComponent implements OnInit {
-  @Input() id:number;
+  id: number;
 
+  isProfile: boolean = false;
   serverURL: string = environment.serverUrl;
   form: FormGroup;
   avatarUrl: string = "";
@@ -35,6 +36,7 @@ export class FormUsersComponent implements OnInit {
   statusList = this._statusSvC.get();
   loading = false;
   edit = false;
+  isDetail: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -42,12 +44,24 @@ export class FormUsersComponent implements OnInit {
     private _crudSvc:CrudServices,
     private _typeDocumentsSvC: TypeDocumentsService,
     private _statusSvC: StatusService,
-    private msg: NzMessageService
-  ) { }
+    private msg: NzMessageService,
+    private activatedRoute: ActivatedRoute
+  ) { 
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params.id ?? '';
+      if(this.id) {
+        this.getUser();
+        this.isDetail = !!this.router.url
+          .split("/")
+          .find((a) => a === 'detalle');
+      }
+    });
+    this.validateProfile();
+  }
   
   ngOnInit(): void {
     this.form = this.fb.group({
-        store_id: [ null, [ Validators.required ] ],
+        store_id: [ 1, [ Validators.required ] ],
         role_id: [ null, [ Validators.required ] ],
         names: [ null, [ Validators.required ] ],
         surnames: [ null, [ Validators.required ] ],
@@ -63,49 +77,6 @@ export class FormUsersComponent implements OnInit {
     this.getRoles();
   }
   
-  beforeUpload = (file: NzUploadFile, _fileList: NzUploadFile[]): Observable<boolean> =>
-    new Observable((observer: Observer<boolean>) => {
-      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-      if (!isJpgOrPng) {
-        this.msg.error('Solo puedes subir archivos JPG o PNG!');
-        observer.complete();
-        return;
-      }
-      const isLt5M = file.size! / 1024 / 1024 < 5;
-      if (!isLt5M) {
-        this.msg.error('La imagen debe tener menos de 5 MB.!');
-        observer.complete();
-        return;
-      }
-      observer.next(isJpgOrPng && isLt5M);
-      observer.complete();
-    });
-
-  private getBase64(img: File, callback: (img: string) => void): void {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result!.toString()));
-    reader.readAsDataURL(img);
-  }
-
-  handleChange(info: { file: NzUploadFile }): void {
-    switch (info.file.status) {
-      case 'uploading':
-        this.loading = true;
-        break;
-      case 'done':
-        this.getBase64(info.file!.originFileObj!, (img: string) => {
-          this.loading = false;
-          this.avatarUrl = img;
-          this.form.patchValue({avatar:img});
-        });
-        break;
-      case 'error':
-        this.msg.error('Error de red');
-        this.loading = false;
-        break;
-    }
-  }
-  
   public submit(): void {
     this.loading = true;
 
@@ -116,10 +87,13 @@ export class FormUsersComponent implements OnInit {
     .subscribe((res: any) => {
       const { success } = res;
       if (success) {
+        if (this.id) this._crudSvc.requestEvent.emit('updated')
         this.router.navigate(['/', 'usuarios']);
       }
     })
   }
+
+  ngOnDestroy() {}
 
   //------------------------------------------------------------------------
   //-------------------------------GET DATA---------------------------------
@@ -141,7 +115,7 @@ export class FormUsersComponent implements OnInit {
     
     if( this.lastPageRole && ((this.lastPageRole < this.pageRole) && !this.termRole) ) return
     
-    this._crudSvc.getRequest(`/settings/stores/index${query}`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/settings/stores/availableLocals${query}`).subscribe((res: any) => {
         const { data } = res;
         (!this.termRole) ? this.storesList = [...this.storesList,  ...data.data] : this.rolesList = data.data;
         this.lastPageRole = data.last_page;
@@ -168,6 +142,42 @@ export class FormUsersComponent implements OnInit {
   //------------------------------------------------------------------------
   //-------------------------------EVENTS-----------------------------------
   //------------------------------------------------------------------------
+  
+  beforeUpload = (file: NzUploadFile, _fileList: NzUploadFile[]): Observable<boolean> =>
+    new Observable((observer: Observer<boolean>) => {
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+      if (!isJpgOrPng) {
+        this.msg.error('Solo puedes subir archivos JPG o PNG!');
+        observer.complete();
+        return;
+      }
+      const isLt5M = file.size! / 1024 / 1024 < 5;
+      if (!isLt5M) {
+        this.msg.error('La imagen debe tener menos de 5 MB.!');
+        observer.complete();
+        return;
+      }
+      observer.next(isJpgOrPng && isLt5M);
+      observer.complete();
+    });
+
+  handleChange(info: { file: NzUploadFile }): void {
+    switch (info.file.status) {
+      case 'uploading':
+        this.loading = true;
+        break;
+      case 'done':
+        this.loading = false;
+        const imageUrl = info.file.response.url;
+        this.avatarUrl = imageUrl;
+        this.form.patchValue({ avatar: imageUrl });
+        break;
+      case 'error':
+        this.msg.error('Error de red');
+        this.loading = false;
+        break;
+    }
+  }
 
   public onSearchRole(event:string){
     this.termRole = event;
@@ -186,5 +196,12 @@ export class FormUsersComponent implements OnInit {
   //------------------------AUXILIAR FUNCTIONS------------------------------
   //------------------------------------------------------------------------
 
-  private setPage = ():number => this.pageRole = 1; 
+  private setPage = ():number => this.pageRole = 1;
+
+  private validateProfile(){
+    this._crudSvc.getRequest(`/settings/users/getUser`).subscribe((res: any) => {
+      const { data } = res;
+      if (data.id == this.id) this.isProfile = true;
+    })
+  }
 }

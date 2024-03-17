@@ -92,7 +92,15 @@
                                     <span class="m-l-10">{{ 'user.editProfile' | translate }}</span>
                                 </div>
                             </a>
-                        </li>                        
+                        </li>                     
+                        <li nz-menu-item [routerLink]="['/', 'locales']" *ngIf="hasAdminModule">
+                            <a class="p-v-5 d-flex align-items-center justify-content-between">
+                                <div>
+                                    <i class="opacity-04 font-size-16" nz-icon nzType="home" theme="outline"></i>
+                                    <span class="m-l-10">{{ 'user.locals' | translate }}</span>
+                                </div>
+                            </a>
+                        </li>                    
                         <li nz-menu-item>
                             <a class="p-v-5 d-flex align-items-center justify-content-between">
                                 <div>

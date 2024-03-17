@@ -2,15 +2,12 @@ import { Routes } from '@angular/router';
 import { NoAuthGuard } from '../guards/no-auth.guard';
 
 export const CommonLayout_ROUTES: Routes = [
-
     //Dashboard
     {
         path: 'panel-control',
         canActivate: [ NoAuthGuard ],
         loadChildren: () => import('../../views/dashboard/dashboard.module').then(m => m.DashboardModule),
     },
-
-    
     // Users
     {
         path: 'usuarios',
@@ -20,7 +17,6 @@ export const CommonLayout_ROUTES: Routes = [
         },
         loadChildren: () => import('../../views/settings/users/users.module').then(m => m.UsersModule),
     },
-
     //Roles
     {
         path: 'roles',
@@ -30,7 +26,15 @@ export const CommonLayout_ROUTES: Routes = [
         },
         loadChildren: () => import('../../views/settings/roles/roles.module').then(m => m.RolesModule),
     },
-
+    //Locales
+    {
+        path: 'locales',
+        canActivate: [ NoAuthGuard ],
+        data: {
+            title: 'Locales'
+        },
+        loadChildren: () => import('../../views/settings/locals/locals.module').then(m => m.LocalsModule),
+    },
     //Contacts
     {
         path: 'contactos',
@@ -40,7 +44,6 @@ export const CommonLayout_ROUTES: Routes = [
         },
         loadChildren: () => import('../../views/contacts/contacts.module').then(m => m.ContactsModule),
     },
-
     //Inventory
     {
         path: 'inventario',
@@ -50,7 +53,6 @@ export const CommonLayout_ROUTES: Routes = [
         },
         loadChildren: () => import('../../views/inventory/inventory.module').then(m => m.InventoryModule),
     },
-
     //Accounting
     {
         path: 'contabilidad',
@@ -60,7 +62,6 @@ export const CommonLayout_ROUTES: Routes = [
         },
         loadChildren: () => import('../../views/accounting/accounting.module').then(m => m.AccountingModule),
     },
-
     //Cierre diario
     {
         path: 'reportes',

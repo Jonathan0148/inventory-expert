@@ -9,6 +9,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\settings\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class UserController
@@ -44,10 +45,11 @@ class UserController extends Controller
             $sql[] = ['users.role_id', '=', $role];
         }
 
-        $data = User::whereNotIn('users.id', [Auth::user()->id, 1])
+        $data = User::whereNotIn('users.id', [Auth::user()->id])
             ->where($sql)
-            ->select('users.id', 'users.avatar', 'users.names', 'users.surnames', 'users.state', 'roles.name as nameRol')
+            ->select('users.id', 'users.avatar', DB::raw('concat(users.names, " ", users.surnames) as fullName'),'users.email', 'users.state', 'roles.name as nameRol', 'roles.is_super', 'stores.store_name as nameStore')
             ->join('roles', 'users.role_id', '=', 'roles.id')
+            ->join('stores', 'users.store_id', '=', 'stores.id')
             ->where(function ($query) use ($term) {
                 $query->where('users.names', 'like', "%$term%");
                 $query->orWhere('users.surnames', 'like', "%$term%");
@@ -174,7 +176,7 @@ class UserController extends Controller
     {
         $userLogin = Auth::user();
 
-        $data = User::select('users.id', 'users.names', 'users.surnames', 'users.avatar', 'roles.name as role')
+        $data = User::select('users.id', 'users.names', 'users.surnames', 'users.avatar', 'roles.name as role',  'roles.is_super')
         ->join('roles', 'users.role_id', '=', 'roles.id')
         ->where('users.id', $userLogin->id)
         ->first();

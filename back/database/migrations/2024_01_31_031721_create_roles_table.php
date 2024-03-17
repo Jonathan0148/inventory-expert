@@ -16,6 +16,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('name', 40)->comment('Nombre');
             $table->string('description', 255)->nullable()->comment('Descripción');
+            $table->boolean('is_super')->default(false)->comment('Si el rol es super admin');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });

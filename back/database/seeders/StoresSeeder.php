@@ -25,7 +25,8 @@ class StoresSeeder extends Seeder
                 "country" => "Colombia",
                 "department" => "Bogotá DC",
                 "city" => "Bogotá DC",
-                "address" => "Dirección"
+                "address" => "Dirección",
+                "state" => 1
             ]
         ];
 
