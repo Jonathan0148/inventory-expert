@@ -5,6 +5,7 @@ namespace App\Http\Controllers\settings;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\License;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\settings\User;
@@ -82,7 +83,30 @@ class UserController extends Controller
                 'state' => 'required',
                 'avatar' => 'nullable'
             ]);
+
+            $validateLicense = License::first();
+            $amountUsers = User::count();
+
+            if ($amountUsers >= $validateLicense->number_of_users){
+                return ResponseHelper::NoExits('Solo se permite la creación de '.$validateLicense->number_of_users.' usuarios');
+            };
             
+            if ($request->input('state') == 1){
+                $amountUsersActive = User::where('state', 1)->count();
+        
+                if ($amountUsersActive >= $validateLicense->number_of_users_active){
+                    return ResponseHelper::NoExits('El número máximo de usuarios activos permitidos es '.$validateLicense->number_of_users_active);
+                };
+            }
+
+            if (User::where('document', $request->input('document'))->first()){
+                return ResponseHelper::NoExits('El número de documento ya ha sido registrado');
+            }
+
+            if (User::where('email', $request->input('email'))->first()){
+                return ResponseHelper::NoExits('El correo electrónico ya ha sido registrado');
+            }
+
             $data = User::create([
                 'store_id' => $validatedData['store_id'],
                 'role_id' => $validatedData['role_id'],
@@ -132,6 +156,24 @@ class UserController extends Controller
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
+
+        if ($request->input('state') == 1){
+            $validateLicense = License::first();
+            $amountUsersActive = User::whereNot('id', $id)->where('state', 1)->count();
+    
+            if ($amountUsersActive >= $validateLicense->number_of_users_active){
+                return ResponseHelper::NoExits('El número máximo de usuarios activos permitidos es '.$validateLicense->number_of_users_active);
+            };
+        }
+
+        if (User::whereNot('id', $id)->where('document', $request->input('document'))->first()){
+            return ResponseHelper::NoExits('El número de documento ya ha sido registrado');
+        }
+
+        if (User::whereNot('id', $id)->where('email', $request->input('email'))->first()){
+            return ResponseHelper::NoExits('El correo electrónico ya ha sido registrado');
+        }
+
         try {
             $data->update([
                 'role_id' => $request->input('role_id'),
