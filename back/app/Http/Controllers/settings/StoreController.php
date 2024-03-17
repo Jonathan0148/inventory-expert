@@ -5,6 +5,7 @@ namespace App\Http\Controllers\settings;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\License;
 use Illuminate\Pagination\Paginator;
 use App\Models\settings\Store;
 
@@ -63,8 +64,19 @@ class StoreController extends Controller
                 'country' => 'required',
                 'department' => 'required',
                 'city' => 'required',
-                'address' => 'required'
+                'address' => 'required',
+                'state' => 'required'
             ]);
+
+            if ($request->input('state') == 1){
+                $validateLicense = License::first();
+                $amountLocals = Store::where('state', 1)->count();
+    
+                if ($amountLocals >= $validateLicense->number_of_premises){
+                    return ResponseHelper::NoExits('Solo puedes administrar '.$validateLicense->number_of_premises.' locales');
+                };
+            }
+
             $data = Store::create($validatedData);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
@@ -103,6 +115,21 @@ class StoreController extends Controller
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
+
+        if ($request->input('state') == 1){
+            $validateLicense = License::first();
+            $amountLocals = Store::where('state', 1)->count();
+
+            if ($amountLocals >= $validateLicense->number_of_premises){
+                return ResponseHelper::NoExits('Solo puedes administrar '.$validateLicense->number_of_premises.' locales');
+            };
+        }elseif ($request->input('state') == 0 || $request->input('state') == 2){
+            $amountLocals = Store::where('state', 1)->count();
+            if ($amountLocals <= 1){
+                return ResponseHelper::NoExits('No pueden quedar todos los locales inactivos');
+            }
+        }
+
         try {
             $data->update([
                 'store_name' => $request->input('store_name'),
@@ -112,7 +139,8 @@ class StoreController extends Controller
                 'country' => $request->input('country'),
                 'department' => $request->input('department'),
                 'city' => $request->input('city'),
-                'address' => $request->input('address')
+                'address' => $request->input('address'),
+                'state' => $request->input('state')
             ]);
 
             return  ResponseHelper::CreateOrUpdate($data, 'Información actualizada correctamente',);
@@ -135,8 +163,39 @@ class StoreController extends Controller
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
 
-        $data->delete();
+        // $data->delete();
 
-        return ResponseHelper::Delete('Información eliminada correctamente');
+        return ResponseHelper::NoExits('No se pueden eliminar locales');
+    }
+
+    /**
+     * Muestra muchos registros.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function availableLocals(Request $request)
+    {
+        $data = [];
+        $page = $request->get('page') ? $request->get('page') : 1;
+        $limit = $request->get('limit') ? $request->get('limit') : 10;
+        $term = $request->get('term');
+
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
+        $data = Store::where('state', 1)->where(function ($query) use ($term) {
+            $query->where('store_name', 'like', "%$term%");
+            $query->orWhere('nit', 'like', "%$term%");
+            $query->orWhere('cell_phone', 'like', "%$term%");
+            $query->orWhere('landline', 'like', "%$term%");
+            $query->orWhere('email', 'like', "%$term%");
+            $query->orWhere('country', 'like', "%$term%");
+            $query->orWhere('department', 'like', "%$term%");
+            $query->orWhere('city', 'like', "%$term%");
+            $query->orWhere('address', 'like', "%$term%");
+        })->orderBy('id', 'DESC')->paginate($limit);
+
+        return ResponseHelper::Get($data);
     }
 }

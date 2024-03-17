@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { AuthService } from 'src/app/views/auth/services/auth.service';
 import { ThemeConstantService } from '../../services/theme-constant.service';
 import { CrudServices } from '../../services/crud.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: 'app-header',
@@ -10,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 
 export class HeaderComponent{
+    private subscription: Subscription;
     avatarUrl: string = "";
     names: string = "";
     surnames: string = "";
@@ -19,17 +22,21 @@ export class HeaderComponent{
     isFolded : boolean;
     isExpand : boolean;
     id:number;
+    hasAdminModule: boolean = false;
+    modules = this.cookieSvc.get('modules') ? JSON.parse(this.cookieSvc.get('modules')) : []; 
 
     constructor( 
         private themeService: ThemeConstantService,
         private authSvc:AuthService,
         private _crudSvc:CrudServices,
-        private activatedRoute: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private cookieSvc: CookieService
     ) {}
 
     ngOnInit(): void {
+        this.listenObserver();
         this.getUser();
+        this.setHasAdmin();
         this.themeService.isMenuFoldedChanges.subscribe(isFolded => this.isFolded = isFolded);
         this.themeService.isExpandChanges.subscribe(isExpand => this.isExpand = isExpand);
     }
@@ -101,6 +108,24 @@ export class HeaderComponent{
     }
 
     public redirecToUserProfile(){
-        this.router.navigate(['/', 'usuarios', 'editar', this.id]);
+        this.router.navigate(['/', 'usuarios']);
+        setTimeout(() => {
+            this.router.navigate(['/', 'usuarios', 'editar', this.id]);
+        }, 200);
+    }
+
+    private listenObserver = () => {
+        this.subscription = this._crudSvc.requestEvent.subscribe((res) => {
+          this.getUser();
+        });
+    }
+
+    private setHasAdmin(){
+        const hasAdminModule = this.modules.find((module) => module.code === 21);
+        if (hasAdminModule) this.hasAdminModule = true;
+      }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 }

@@ -15,6 +15,7 @@ export class FormRolesComponent implements OnInit {
   id:number;
   loading:boolean;
   modules_attach:any;
+  isDetail: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -24,9 +25,13 @@ export class FormRolesComponent implements OnInit {
   ) { 
     this.activatedRoute.params.subscribe((params) => {
       this.id = params.id ?? '';
+      if(this.id) {
+        this.getRole();
+        this.isDetail = !!this.router.url
+          .split("/")
+          .find((a) => a === 'detalle');
+      }
     });
-
-    if(this.id) this.getRole()
   }
   
   ngOnInit(): void {

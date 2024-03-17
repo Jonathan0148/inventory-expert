@@ -1,0 +1,38 @@
+<nz-table #sortTable  [nzData]="localsList" [nzLoading]="loading"
+[nzShowPagination]="false" [nzFrontPagination]="false">
+    <thead>
+        <tr>
+            <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                {{ column.title }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of sortTable.data;  let i = index">
+            <td>#{{item.id}}</td>
+            <td>{{ item.store_name }}</td>
+            <td>{{ item.nit}}</td>
+            <td>{{ item.cell_phone}}</td>
+            <td>{{ item.email}}</td>
+            <td>{{ item.city}}</td>
+            <td>
+                <nz-badge *ngIf="item.state == 1" nzStatus="success"></nz-badge>
+                <nz-badge *ngIf="item.state == 0 || item.state == 2" nzStatus="error"></nz-badge>
+                <span class="text-capitalize">
+                    {{ item.state == 0 ? ('users.inactive' | translate) : (item.state == 1 ? ('users.active' | translate) : ('users.earring' | translate)) }}
+                </span>                  
+            </td>
+            <td class="text-md-right">
+                <a class="m-r-5 btn-primary" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.detail' | translate }}" [routerLink]="['/', 'locales', 'detalle', item.id]">
+                    <span nz-icon nzType="eye" nzTheme="outline"></span>
+                </a>
+                <a class="m-r-5 btn-warning" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.edit' | translate }}" [routerLink]="['/', 'locales','editar', item.id]" [disabled]="!hasAdminModule">
+                    <span nz-icon nzType="edit" nzTheme="outline"></span>
+                </a>
+                <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm" (nzOnConfirm)="confirm(item.id)" (nzOnCancel)="cancel()" [disabled]="true">
+                    <i nz-icon nzType="delete" theme="outline"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

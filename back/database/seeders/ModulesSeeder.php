@@ -73,6 +73,12 @@ class ModulesSeeder extends Seeder
                 "name" => "Proveedores",
                 "description" => "El módulo de Proveedores se encarga de gestionar la información relacionada con los proveedores con los que la empresa u organización realiza transacciones comerciales. Permite mantener un registro de los datos de contacto, historial de compras, términos de contrato y otras informaciones relevantes de los proveedores. Facilita la gestión de relaciones con los proveedores y la toma de decisiones en cuanto a la selección y negociación de acuerdos comerciales."
             ],
+            [
+                "id" => 11,
+                "code" => 21,
+                "name" => "Locales",
+                "description" => "El módulo de Gestión de Locales proporciona una plataforma integral para administrar eficientemente los locales físicos de una empresa u organización. Permite a los usuarios registrar, editar y visualizar información detallada de cada local, incluyendo datos como dirección, horarios de apertura y contacto. Con funcionalidades de búsqueda y filtrado, facilita la localización rápida de locales específicos."
+            ]
         ];
 
         // DB::table('modules')->truncate();
