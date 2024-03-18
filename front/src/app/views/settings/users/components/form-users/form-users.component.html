@@ -2,10 +2,10 @@
     <div class="media align-items-center">
         <nz-avatar  [nzSize]="80" nzIcon="user" [nzSrc]="avatarUrl"></nz-avatar>
         <div class="m-l-20 m-r-20">
-            <h5 class="m-b-5 font-size-18">{{ 'users.avatarChange' | translate  }}</h5>
+            <h5 class="m-b-5 font-size-18">{{ 'users.avatarChange' | translate }}</h5>
             <p class="opacity-07 font-size-13 m-b-0">
-                {{ 'users.dimensions' | translate  }} <br>
-                {{ 'users.dimensionsSize' | translate  }}
+                {{ 'users.dimensions' | translate }} <br>
+                {{ 'users.dimensionsSize' | translate }}
             </p>
         </div>
         <nz-upload 
@@ -16,11 +16,18 @@
             [nzShowUploadList]="false"
             [nzBeforeUpload]="beforeUpload"
             (nzChange)="handleChange($event)">
-            <button nz-button nzType="primary" type="button" [disabled]="isDetail">
-                <span>  {{ 'users.uploadImage' | translate  }}</span>
-            </button>
+            <a nz-button nzType="primary" type="button" [disabled]="isDetail">
+                <i nz-icon nzType="file-image" theme="outline"></i>
+                <span>{{ 'users.uploadImage' | translate }}</span>
+            </a>
         </nz-upload>
-    </div>
+        <div class="m-l-5">
+            <a nz-button nzType="primary" class="m-l-5" (click)="openModalAvatar(footer)" [disabled]="isDetail">
+                <i nz-icon nzType="user" theme="outline"></i>
+                <span>{{ 'users.uploadAvatar' | translate }}</span>
+            </a>
+        </div>
+    </div>    
     <hr class="m-v-25">
     <div class="row">
         <div class=" col-sm-6 col-12">
@@ -113,7 +120,10 @@
     </div>
 </form>
 
-
 <ng-template #renderTemplate>
     <nz-spin *ngIf="isLoading"></nz-spin>
+</ng-template>
+
+<ng-template #footer>
+
 </ng-template>

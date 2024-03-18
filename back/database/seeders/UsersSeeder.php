@@ -24,6 +24,7 @@ class UsersSeeder extends Seeder
                 "document" => "1003527670",
                 "email" => "bohorquezvillamiljonathan@gmail.com",
                 'password' => Hash::make('1003527670'.strtolower(substr('Jonathan', 0, 1))),
+                'avatar' => "/assets/images/avatars/11.png",
                 "state" => 1
             ]
         ];

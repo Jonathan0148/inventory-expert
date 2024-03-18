@@ -1,0 +1,15 @@
+.avatar-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.avatar-item {
+    margin: 7px;
+}
+
+.avatar-item img {
+    width: 70px;
+    height: auto;
+    cursor: pointer;
+}  

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { StatusService } from '../../services/status.service';
@@ -11,6 +11,8 @@ import { TypeDocumentsService } from '../../services/type-documents.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, Observer } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { ModalAvatarComponent } from '../modal-avatar/modal-avatar.component';
 
 @Component({
   selector: 'app-form-users',
@@ -45,7 +47,8 @@ export class FormUsersComponent implements OnInit {
     private _typeDocumentsSvC: TypeDocumentsService,
     private _statusSvC: StatusService,
     private msg: NzMessageService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private modalService: NzModalService
   ) { 
     this.activatedRoute.params.subscribe((params) => {
       this.id = params.id ?? '';
@@ -203,5 +206,19 @@ export class FormUsersComponent implements OnInit {
       const { data } = res;
       if (data.id == this.id) this.isProfile = true;
     })
+  }
+
+  public openModalAvatar(tplFooter: TemplateRef<{}>){
+    const modalRef = this.modalService.create({
+      nzTitle: 'Seleccionar avatar',
+      nzContent: ModalAvatarComponent,
+      nzClosable: true,
+      nzFooter: tplFooter
+    });
+
+    modalRef.afterClose.subscribe((avatarUrl: string) => {
+      this.avatarUrl = avatarUrl;
+      this.form.patchValue({ avatar: avatarUrl });
+    });
   }
 }
