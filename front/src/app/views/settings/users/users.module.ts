@@ -18,6 +18,7 @@ import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
 import { SharedModule } from '../../../shared/shared.module';
 import { ComponentsModule } from 'src/app/shared/components.module';
+import { ModalAvatarComponent } from './components/modal-avatar/modal-avatar.component';
 registerLocaleData(es);
 
 
@@ -29,7 +30,8 @@ registerLocaleData(es);
     AddUsersComponent,
     ListUsersComponent,
     FormUsersComponent,
-    FormPasswordComponent
+    FormPasswordComponent,
+    ModalAvatarComponent
   ],
   imports: [
     CommonModule,
