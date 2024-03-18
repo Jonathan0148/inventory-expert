@@ -16,7 +16,7 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('store_id')->unsigned()->comment('ID de la tienda')->default(1);
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->string('description', 255)->comment('Descrición del gasto');
+            $table->text('description')->comment('Descrición del gasto');
             $table->float('value')->comment('Valor del gasto');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');

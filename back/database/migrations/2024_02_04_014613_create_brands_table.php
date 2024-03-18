@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('store_id')->unsigned()->comment('ID de la tienda')->default(1);
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->string('name', 50)->comment('Nombre');
-            $table->string('description', 255)->nullable()->comment('Descripción');
+            $table->text('description')->nullable()->comment('Descripción');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });
