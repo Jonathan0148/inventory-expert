@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudServices } from '../../../../../shared/services/crud.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
+import { StoreModel } from 'src/app/shared/interfaces/store';
 
 @Component({
   selector: 'app-form-categories',
@@ -10,32 +11,47 @@ import { finalize } from 'rxjs/operators';
   styleUrls: ['./form-categories.component.scss']
 })
 export class FormCategoriesComponent implements OnInit {
-
-  @Input() id:number;
-
+  id: number;
   form: FormGroup;
   loading:boolean;
+  storesList: StoreModel[] = [];
+  pageStore: number = 1;
+  termStore: string = '';
+  lastPageStore: number;
+  isDetail: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private _crudSvc:CrudServices,
-    private router:Router 
-  ) { }
+    private router:Router,
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params.id ?? '';
+      if(this.id) {
+        this.getCategory();
+        this.isDetail = !!this.router.url
+          .split("/")
+          .find((a) => a === 'detalle');
+      }
+    });
+   }
   
   ngOnInit(): void {
     this.form = this.fb.group({
+        store_id: [ 1, [ Validators.required ] ],
         name: [ null, [ Validators.required ] ],
-        code: [ null, [ Validators.required] ],
+        description: [ null, [ Validators.required] ]
     });
     
     if(this.id) this.getCategory();
-    if(!this.id) this.getCount();
+    this.getStores();
   }
   
   public submit(): void {
     this.loading = true;
 
-    let path = this.id ? `/categories/update/${this.id}` : `/categories/create`;
+    let path = this.id ? `/inventory/categories/edit/${this.id}` : `/inventory/categories/create`;
     
     this._crudSvc.postRequest(path, this.form.value)
     .pipe(finalize( () => this.loading = false))
@@ -49,17 +65,27 @@ export class FormCategoriesComponent implements OnInit {
   //------------------------------------------------------------------------
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
+
   public getCategory(){
-    this._crudSvc.getRequest(`/categories/show/${this.id}`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/inventory/categories/show/${this.id}`).subscribe((res: any) => {
       const { data } = res;
       this.form.patchValue(data);
     })
   }
 
-  private getCount():void {
-    this._crudSvc.getRequest(`/categories/getCount`).subscribe((res: any) => {
-      const { data } = res;
-     this.form.patchValue({ code: (data?.id ?? 0) + 1 })
+  public getStores():void {
+    const query = [
+      `?page=${this.pageStore}`,
+      `&term=${this.termStore}`
+    ].join('');
+    
+    if( this.lastPageStore && ((this.lastPageStore < this.pageStore) && !this.termStore) ) return
+    
+    this._crudSvc.getRequest(`/settings/stores/availableLocals${query}`).subscribe((res: any) => {
+        const { data } = res;
+        (!this.termStore) ? this.storesList = [...this.storesList,  ...data.data] : this.storesList = data.data;
+        this.lastPageStore = data.last_page;
+        this.pageStore++;
     })
   }
 }

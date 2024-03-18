@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('licenses', function (Blueprint $table) {
+            $table->comment('Parametrización según licencia del usuario');
             $table->increments('id');
             $table->text('description')->comment('Descripción de la licencia');
             $table->integer('number_of_stores')->comment('Cantidad de locales permitidos');

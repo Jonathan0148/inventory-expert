@@ -41,7 +41,7 @@ export class FormLocalsComponent implements OnInit {
         nit: [ null, [ Validators.required] ],
         cell_phone: [ null, [ Validators.required ] ],
         landline: [ null, [] ],
-        email: [ null, [ Validators.required ] ],
+        email: [ null, [ Validators.required, Validators.email ] ],
         country: [ null, [ Validators.required ] ],
         department: [ null, [ Validators.required ] ],
         city: [ null, [ Validators.required ] ],

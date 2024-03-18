@@ -21,6 +21,13 @@ const routes: Routes = [
     data: {
       title: 'Editar'
     }
+  },
+  {
+    path: 'detalle/:id',
+    component: AddBrandComponent,
+    data: {
+      title: 'Detalle'
+    }
   }
 ];
 

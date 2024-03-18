@@ -3,6 +3,8 @@
 use App\Http\Controllers\settings\StoreController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\inventory\BrandController;
+use App\Http\Controllers\inventory\CategoryController;
 use App\Http\Controllers\settings\RoleController;
 use App\Http\Controllers\settings\UserController;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +61,24 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('getUser', 'getUser');
             Route::post('validatePassword', 'validatePassword');
             Route::put('changePassword', 'changePassword');
+        });
+    });
+
+    Route::prefix('inventory')->group(function() {
+        Route::controller(CategoryController::class)->prefix('categories')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::post('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
+        });
+
+        Route::controller(BrandController::class)->prefix('brands')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::post('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
         });
     });
 });

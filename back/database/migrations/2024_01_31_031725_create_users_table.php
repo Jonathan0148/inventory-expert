@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('email', 100)->unique()->comment('Correo electrónico');
             $table->string('password', 255)->comment('Contraseña');
             $table->integer('state')->defult(1)->comment('Estado del usuario: 0: Si el usuario esta inactivo 1: Si el usuario esta activo 2: Si la empresa esta pendiente de pago');
-            $table->json('avatar')->nullable()->comment('Avatar del usuario');
+            $table->string('avatar', 255)->nullable()->comment('Avatar del usuario');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');

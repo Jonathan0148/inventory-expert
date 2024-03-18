@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreign('row_id')->references('id')->on('rows')->onDelete('cascade');
             $table->string('reference', 100)->unique()->comment('Referencia');
             $table->string('name', 50)->comment('Nombre');
-            $table->string('description', 255)->nullable()->comment('Descripción');
+            $table->text('description')->nullable()->comment('Descripción');
             $table->integer('measurement_unit')->defult(0)->comment('Unidad de medida del producto: - 0: Si es por cantidad - 1: Si es por libra - 2: Si es por kilo - 3: Si es por longitud');
             $table->integer('stock')->nullable()->comment('Cantidad de productos');
             $table->integer('stock_min')->nullable()->defult(5)->comment('Cantidad de productos minimo para alerta');

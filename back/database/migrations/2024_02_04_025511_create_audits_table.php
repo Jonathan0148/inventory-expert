@@ -16,7 +16,7 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->comment('ID del usuario que ejecuto alguna acción');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('description', 150)->comment('Descripción de la auditoria');
+            $table->text('description')->comment('Descripción de la auditoria');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });

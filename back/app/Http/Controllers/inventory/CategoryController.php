@@ -1,22 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\settings;
+namespace App\Http\Controllers\inventory;
 
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\inventory\Category;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\DB;
-use App\Models\settings\Module;
-use App\Models\License;
-use App\Models\settings\Role;
-use App\Models\settings\User;
+use Illuminate\Support\Facades\Auth;
 
-/**
- * Class RoleController
- * @package App\Http\Controllers
- */
-class RoleController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Muestra muchos registros.
@@ -34,7 +27,10 @@ class RoleController extends Controller
             return $page;
         });
 
-        $data = Role::where(function ($query) use ($term) {
+        $data = Category::select('categories.*', 'stores.store_name as storeName')
+        ->join('stores', 'categories.store_id', '=', 'stores.id')
+        ->where('store_id', Auth::user()->store_id)
+        ->where(function ($query) use ($term) {
             $query->where('name', 'like', "%$term%");
             $query->orWhere('description', 'like', "%$term%");
         })->orderBy('id', 'DESC')->paginate($limit);
@@ -52,20 +48,12 @@ class RoleController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'name' => 'required',
-                'description' => 'nullable',
-                'modules' => 'required'
+                'store_id' => 'required',
+                'name' => 'nullable',
+                'description' => 'required'
             ]);
-
-            $validateLicense = License::first();
-            $amountRoles = Role::count();
-
-            if ($amountRoles >= $validateLicense->number_of_roles){
-                return ResponseHelper::NoExits('Solo se permite la creación de '.$validateLicense->number_of_roles.' roles');
-            };
             
-            $data = Role::create($validatedData);
-            $data->modules()->sync(@$request->modules);
+            $data = Category::create($validatedData);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
         } catch (\Throwable $th) {
@@ -81,18 +69,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::find($id);
-
-        $modules = Module::select('modules.id', 'modules.name', 'roles_modules.has_admin', 'roles_modules.selected')
-        ->join('roles_modules', function($join) use ($id)
-        {
-            $join->on('modules.id', '=', 'roles_modules.module_id');
-            $join->on('role_id', '=', DB::raw("$id"));
-        })
-        ->get();
-
-        $data['role'] = $role;
-        $data['modules'] = $modules;
+        $data = Category::find($id);
         
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
@@ -109,19 +86,17 @@ class RoleController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $data = Role::find($id);
+        $data = Category::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
         try {
             $data->update([
+                'store_id' => $request->input('store_id'),
                 'name' => $request->input('name'),
                 'description' => $request->input('description')
             ]);
-
-            if($data->modules) $data->modules()->detach();
-            $data->modules()->attach(@$request->modules);
 
             return  ResponseHelper::CreateOrUpdate($data, 'Información actualizada correctamente',);
         } catch (\Throwable $th) {
@@ -137,33 +112,14 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $data = Role::find($id);
+        $data = Category::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
 
-        $users = User::where('role_id', $id)->get();
-
-        if (sizeof($users)){
-            return ResponseHelper::NoExits('La eliminación del rol no es posible debido a que tiene usuarios asociados');
-        }
-
         $data->delete();
 
         return ResponseHelper::Delete('Información eliminada correctamente');
-    }
-
-     /**
-     * Display a listing of the modules.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function getModules()
-    {
-        $data = Module::all();
-
-        return ResponseHelper::Get($data);
     }
 }
