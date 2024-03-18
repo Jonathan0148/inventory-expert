@@ -9,12 +9,11 @@ import { CategoryModel } from '../../../../../shared/interfaces/category';
   styleUrls: ['./list-categories.component.scss']
 })
 export class ListCategoriesComponent implements OnInit {
-
-
   @Input() categoriesList:CategoryModel[];
   @Input() orderColumn:any;
   @Input() displayData:any;
   @Input() loading:boolean; 
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private nzMessageService: NzMessageService,
@@ -22,8 +21,7 @@ export class ListCategoriesComponent implements OnInit {
   ) 
   {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   cancel(): void {
     this.nzMessageService.info('Operacion cancelada');
@@ -31,7 +29,7 @@ export class ListCategoriesComponent implements OnInit {
 
   confirm(id:number): void {
 
-    this._crudSvc.deleteRequest(`/categories/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/inventory/categories/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })

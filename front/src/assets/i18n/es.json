@@ -69,7 +69,7 @@
         "required": "Campo requerido"
     },
     "users":{
-        "add":"Agregar usuario",
+        "add":"Agregar Usuario",
         "addTitle":"Agregar Usuario",
         "editTitle":"Editar Usuario",
         "store":"Tienda | Local",
@@ -97,7 +97,7 @@
         "state":"Estado"
     },
     "customers":{
-        "add":"Agregar cliente",
+        "add":"Agregar Cliente",
         "addTitle":"Agregar Cliente",
         "editTitle":"Editar Cliente",
         "infoBasic":"Información básica",
@@ -110,7 +110,7 @@
         "address":"Dirección"
     },
     "providers":{
-        "add":"Agregar proveedor",
+        "add":"Agregar Proveedor",
         "addTitle":"Agregar Proveedor",
         "editTitle":"Editar Proveedor",
         "infoBasic":"Información básica",
@@ -147,7 +147,7 @@
         "images":"Imagenes",
         "description":"Descripción",
         "applications":"Aplicaciones",
-        "add":"Agregar producto",
+        "add":"Agregar Producto",
         "barcode":"Código de barras",
         "sales":"Ventas",
         "stockAvailable":"Cantidad disponible",
@@ -165,10 +165,12 @@
         "descritionModule":"Seleccione los modulos y los permisos que se van a habilitar al usuario:"
     },
     "brand":{
-        "add":"Agregar marca",
-        "addTitle":"Agregar marca",
-        "editTitle":"Editar marca",
-        "code":"Código"
+        "add":"Agregar Marca",
+        "addTitle":"Agregar Marca",
+        "editTitle":"Editar Marca",
+        "store":"Nombre tienda",
+        "name":"Nombre",
+        "description":"Descripción"
     },
     "locals":{
         "add":"Agregar Local",
@@ -186,9 +188,9 @@
         "state":"Estado"
     },
     "orders":{
-        "add":"Agregar factura",
-        "addTitle":"Agregar factura",
-        "editTitle":"Editar factura",
+        "add":"Agregar Factura",
+        "addTitle":"Agregar Factura",
+        "editTitle":"Editar Factura",
         "reference":"Referencia",
         "infoProvider":"Información proveedor",
         "providersList":"Lista de proveedores",
@@ -196,8 +198,8 @@
         "dueDate":"Fecha de vencimiento"
     },
     "sales":{
-        "add":"Agregar venta",
-        "addTitle":"Agregar venta",
+        "add":"Agregar Venta",
+        "addTitle":"Agregar Venta",
         "addSail":"Adicionar abono",
         "viewSail":"Ver abonos",
         "downloadInvoice":"Generar factura",
@@ -226,9 +228,9 @@
         "dailyClosing":"Cierre diario"
     },
     "local":{
-        "add":"Agregar sección",
-        "addTitle":"Agregar sección",
-        "editTitle":"Editar sección",
+        "add":"Agregar Sección",
+        "addTitle":"Agregar Sección",
+        "editTitle":"Editar Sección",
         "section":"Sección",
         "row":"Filas",
         "column":"Columnas"
@@ -240,27 +242,30 @@
     },
     "categories":{
         "title":"Categorías",
-        "add":"Agregar categoría",
-        "addTitle":"Agregar categoría",
-        "editTitle":"Editar categoría"
+        "add":"Agregar Categoría",
+        "addTitle":"Agregar Categoría",
+        "editTitle":"Editar Categoría",
+        "store":"Nombre tienda",
+        "name":"Nombre",
+        "description":"Descripción"
     },
     "expenses":{
         "title":"Gastos",
-        "add":"Agregar gasto",
-        "addTitle":"Agregar gasto",
-        "editTitle":"Editar gasto",
+        "add":"Agregar Gasto",
+        "addTitle":"Agregar Gasto",
+        "editTitle":"Editar Gasto",
         "description":"Descripción",
         "value":"Valor"
     },
     "subcategories":{
         "title":"Subcategorías",
-        "add":"Agregar subcategoría",
-        "addTitle":"Agregar subcategoría",
-        "editTitle":"Editar subcategoría"
+        "add":"Agregar Subcategoría",
+        "addTitle":"Agregar Subcategoría",
+        "editTitle":"Editar Subcategoría"
     },
     "bails":{
-        "add":"Agregar abono",
-        "addTitle":"Agregar abono"
+        "add":"Agregar Abono",
+        "addTitle":"Agregar Abono"
     },
     "reports":{
         "date":"Día",

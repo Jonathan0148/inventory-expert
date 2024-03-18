@@ -9,11 +9,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   styleUrls: ['./list-brand.component.scss']
 })
 export class ListBrandComponent implements OnInit {
-
   @Input() brandsList:BrandModel[];
   @Input() orderColumn:any;
   @Input() displayData:any;
   @Input() loading:boolean; 
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private nzMessageService: NzMessageService,
@@ -30,7 +30,7 @@ export class ListBrandComponent implements OnInit {
 
   confirm(id:number): void {
 
-    this._crudSvc.deleteRequest(`/brands/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/inventory/brands/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })

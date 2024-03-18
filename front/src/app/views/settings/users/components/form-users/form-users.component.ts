@@ -112,17 +112,17 @@ export class FormUsersComponent implements OnInit {
 
   public getStores():void {
     const query = [
-      `?page=${this.pageRole}`,
-      `&term=${this.termRole}`
+      `?page=${this.pageStore}`,
+      `&term=${this.termStore}`
     ].join('');
     
-    if( this.lastPageRole && ((this.lastPageRole < this.pageRole) && !this.termRole) ) return
+    if( this.lastPageStore && ((this.lastPageStore < this.pageStore) && !this.termStore) ) return
     
     this._crudSvc.getRequest(`/settings/stores/availableLocals${query}`).subscribe((res: any) => {
         const { data } = res;
-        (!this.termRole) ? this.storesList = [...this.storesList,  ...data.data] : this.rolesList = data.data;
-        this.lastPageRole = data.last_page;
-        this.pageRole++;
+        (!this.termStore) ? this.storesList = [...this.storesList,  ...data.data] : this.storesList = data.data;
+        this.lastPageStore = data.last_page;
+        this.pageStore++;
     })
   }
 
