@@ -3,6 +3,8 @@ import { FormGroup } from '@angular/forms';
 import { CrudServices } from '../../../../../shared/services/crud.service';
 import { finalize } from 'rxjs/operators';
 import { LocalModel } from '../../../../../shared/interfaces/local';
+import { BasicSelect } from 'src/app/shared/interfaces/basic-select';
+import { BrandModel } from 'src/app/shared/interfaces/brand';
 
 @Component({
   selector: 'app-info-optional-tab',
@@ -12,6 +14,10 @@ import { LocalModel } from '../../../../../shared/interfaces/local';
 export class InfoOptionalTabComponent implements OnInit {
   
   @Input() form:FormGroup;
+  originalList:BasicSelect[] = [
+    { label: 'Si', value: 1 },
+    { label: 'No', value: 0 }
+  ];
   rowList:LocalModel[] = [];
   columnList:LocalModel[] = [];
   sectionList:LocalModel[] = [];
@@ -26,6 +32,10 @@ export class InfoOptionalTabComponent implements OnInit {
   pageColumn: number = 1;
   lastPageColumn:number;
   termColumn: string = '';
+  brandsList:BrandModel[] = [];
+  pageBrand:number = 1;
+  termBrand:string = '';
+  lastPageBrand:number;
 
   constructor(
     private _crudSvc: CrudServices,
@@ -33,7 +43,8 @@ export class InfoOptionalTabComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSections();
-    if(this.form.get('id_section').value) this.onChangeSection([])
+    this.getBrands();
+    if(this.form.get('shelf_id').value) this.onChangeSection([])
   }
 
   //------------------------------------------------------------------------
@@ -50,7 +61,7 @@ export class InfoOptionalTabComponent implements OnInit {
 
     if( this.lastPageSection && ((this.lastPageSection < this.pageSection) && !this.termSection) ) return
 
-    this._crudSvc.getRequest(`/local/sections/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/inventory/distribution-local/shelves/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
       const { data } = res;   
       (!this.termSection) ? this.sectionList = [...this.sectionList,  ...data.data] : this.sectionList = data.data;
       this.lastPageSection = data.last_page;
@@ -58,6 +69,21 @@ export class InfoOptionalTabComponent implements OnInit {
     })
   }
 
+  public getBrands():void {
+    const query = [
+      `?page=${this.pageBrand}`,
+      `&term=${this.termBrand}`
+    ].join('');
+    
+    if( this.lastPageBrand && ((this.lastPageBrand < this.pageBrand) && !this.termBrand) ) return
+
+    this._crudSvc.getRequest(`/inventory/distribution-local/shelves/index${query}`).subscribe((res: any) => {
+        const { data } = res;
+        (!this.termBrand) ? this.brandsList = [...this.brandsList,  ...data.data] : this.brandsList = data.data;
+        this.lastPageBrand = data.last_page;
+        this.pageBrand++;
+    })
+  }
 
   public getRows():void {
     this.loading = true;
@@ -72,7 +98,7 @@ export class InfoOptionalTabComponent implements OnInit {
 
     if( this.lastPageRow && ((this.lastPageRow < this.pageRow) && !this.termRow) ) return
 
-    this._crudSvc.postRequest(`/local/sections/getRowsSelect${query}`,{ id_section: this.form.get('id_section').value })
+    this._crudSvc.postRequest(`/inventory/distribution-local/shelves/getRowsSelect${query}`,{ shelf_id: this.form.get('shelf_id').value })
     .pipe(finalize( () => this.loading = false))
     .subscribe((res: any) => {
       const { data } = res;   
@@ -95,7 +121,7 @@ export class InfoOptionalTabComponent implements OnInit {
 
     if( this.lastPageColumn && ((this.lastPageColumn < this.pageColumn) && !this.termColumn) ) return
 
-    this._crudSvc.postRequest(`/local/sections/getColumnsSelect${query}`, { id_section: this.form.get('id_section').value })
+    this._crudSvc.postRequest(`/inventory/distribution-local/shelves/getColumnsSelect${query}`, { shelf_id: this.form.get('shelf_id').value })
     .pipe(finalize( () => this.loading = false))
     .subscribe((res: any) => {
       const { data } = res;   
@@ -104,9 +130,27 @@ export class InfoOptionalTabComponent implements OnInit {
       this.pageColumn++;
     })
   }
+
   //------------------------------------------------------------------------
   //-------------------------------EVENTS-----------------------------------
   //------------------------------------------------------------------------
+
+  public onSearchBrand(event:string){
+
+    if(event.length > 3) {
+      this.termBrand = event;
+      this.getBrands();
+      this.setPage();
+    }
+
+    if(!event.length && this.termBrand) {
+      this.setPage();
+      this.termBrand = '';
+      this.brandsList = []
+      this.getBrands();
+    }  
+  }
+
   public onSearchSection(event:string){
 
     if(event.length > 3) {
@@ -171,6 +215,6 @@ export class InfoOptionalTabComponent implements OnInit {
   private setPage = ():number => this.pageSection = 1; 
   private setPageRow = ():number => this.pageRow = 1; 
   private setPageColumn= ():number => this.pageColumn = 1; 
-  private validateSectionField = ():boolean => !!this.form.get('id_section').value; 
+  private validateSectionField = ():boolean => !!this.form.get('shelf_id').value; 
   private resetVariables = ():void => { this.columnList = []; this.rowList = []; }; 
 }

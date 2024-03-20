@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SubcategoryModel } from '../../../../../shared/interfaces/subcategory';
 import { CategoryModel } from '../../../../../shared/interfaces/category';
 import { FormGroup, UntypedFormGroup } from '@angular/forms';
 import { CrudServices } from '../../../../../shared/services/crud.service';
@@ -17,14 +16,9 @@ export class FieldsCategoriesComponent implements OnInit {
   loading:boolean = false;
   loadingCategory: boolean;
   categoriesList:CategoryModel[] = [];
-  subcategoriesList:SubcategoryModel[] = [];
   pageCategory:number = 1;
   termCategory:string = '';
   lastPageCategory:number;
-  
-  pageSubcategory:number = 1;
-  termSubcategory:string = '';
-  lastPageSubcategory:number;
 
   categoriesListAdd: Array<any> = [];
   categoriesForm: Array<any> = [];
@@ -45,33 +39,11 @@ export class FieldsCategoriesComponent implements OnInit {
 
     arr.forEach(element => {
       this.categoriesForm.push({
-        category_id: element?.category_id, 
-        sub_category_id: element?.sub_category_id || null
+        category_id: element?.category_id
       })
     });
     this.form.patchValue({ categories: this.categoriesForm })
     
-  }
-
-
-  public getSubcategories():void {
-    this.loading = true;
-    const query = [
-      `?page=${this.pageSubcategory}`,
-      `&term=${this.termSubcategory}`,
-      `&category=${((this.form.get('category').value?.id)) ?? ''}`,
-    ].join('');
-    
-    if(this.lastPageSubcategory && ((this.lastPageSubcategory < this.pageSubcategory) && !this.termSubcategory) ) return
-
-    this._crudSvc.getRequest(`/subcategories/index${query}`)
-    .pipe(finalize( () => this.loading = false))
-    .subscribe((res: any) => {
-        const { data } = res;
-        (!this.termSubcategory) ? this.subcategoriesList = [...this.subcategoriesList,  ...data.data] : this.subcategoriesList = data.data;
-        this.lastPageSubcategory = data.last_page;
-        this.pageSubcategory++;
-    })
   }
 
   public getCategories():void {
@@ -83,7 +55,7 @@ export class FieldsCategoriesComponent implements OnInit {
     
     if( this.lastPageCategory && ((this.lastPageCategory < this.pageCategory) && !this.termCategory) ) return
 
-    this._crudSvc.getRequest(`/categories/index${query}`).pipe(finalize( () => this.loadingCategory = false))
+    this._crudSvc.getRequest(`/inventory/categories/index${query}`).pipe(finalize( () => this.loadingCategory = false))
     .subscribe((res: any) => {
         const { data } = res;
         (!this.termCategory) ? this.categoriesList = [...this.categoriesList,  ...data.data] : this.categoriesList = data.data;
@@ -111,34 +83,11 @@ export class FieldsCategoriesComponent implements OnInit {
     }  
   }
 
-  public onSearchSubcategory(event:string){
-
-    if(event?.length > 3) {
-      this.termSubcategory = event;
-      this.getSubcategories();
-      this.setPageSubcategories();
-    }
-
-    if(!event?.length && this.termSubcategory) {
-      this.setPageSubcategories();
-      this.termSubcategory = '';
-      this.subcategoriesList = []
-      this.getSubcategories();
-    }  
-  }
-
-  public onChangeCategory(category:CategoryModel):void{
-    this.setPageSubcategories()
-    this.subcategoriesList = []
-    this.getSubcategories();
-  }
-
-
   public onClickAddCategoryItem():void {
-    const { id:category_id, name:name_category } = this.form.get('category').value, subcategory = this.form.get('subcategory').value,sub_category_id = subcategory?.id, name_subcategory = subcategory?.name;
+    const { id:category_id, name:name_category } = this.form.get('category').value;
     
-    this.categoriesListAdd.push({category_id, name_category, sub_category_id,name_subcategory})
-    this.categoriesForm.push({category_id:category_id, sub_category_id:sub_category_id || null})
+    this.categoriesListAdd.push({category_id, name_category})
+    this.categoriesForm.push({category_id:category_id})
     this.form.patchValue({ categories: this.categoriesForm })
     this.setForm()
   }
@@ -153,9 +102,7 @@ export class FieldsCategoriesComponent implements OnInit {
   //------------------------AUXILIAR FUNCTIONS------------------------------
   //------------------------------------------------------------------------
   private setPageCategories = ():number => this.pageCategory = 1; 
-  private setPageSubcategories = ():number => this.pageSubcategory = 1; 
   public validatorFieldCategory = ():boolean => !this.form.get('category').value; 
-  public validatorFieldSubcategory = ():boolean => !this.form.get('subcategory').value; 
-  public setForm = ():void => {this.form.patchValue({category:null, subcategory:null}); this.subcategoriesList = []} 
+  public setForm = ():void => {this.form.patchValue({category:null})} 
   
 }

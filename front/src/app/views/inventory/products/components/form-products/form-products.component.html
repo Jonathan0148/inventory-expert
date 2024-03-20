@@ -1,10 +1,10 @@
 <div class="page-header has-tab">
     <div class="d-md-flex m-b-15 align-items-center justify-content-between">
         <div class="media align-items-center m-b-15">
-            <nz-avatar nzShape="square" [nzSize]="70" nzSrc=""></nz-avatar>
+            <nz-avatar nzShape="square" [nzSize]="70" [nzSrc]="avatarUrl"></nz-avatar>
             <div class="m-l-15">
                 <h4 class="m-b-0">{{ form.get('name').value ?? 'Nombre Producto' }}</h4>
-                <p class="text-muted m-b-0">{{ 'products.code' | translate  }}: #{{ form.get('code').value }}</p>
+                <p class="text-muted m-b-0">{{ 'products.reference' | translate  }}: #{{ form.get('reference').value }}</p>
             </div>
         </div>
         <div class="m-b-15">
@@ -24,8 +24,27 @@
         <nz-tab nzTitle="{{ 'products.infoBasic' | translate }}">
             <nz-card>
                 <div class="row">
-
-                    <div class="col-12">
+                    <div class="col-6">
+                        <nz-form-item>
+                            <nz-form-label>{{ 'products.store' | translate }}</nz-form-label>
+                            <nz-form-control>
+                                <nz-select class="w-100" nzPlaceHolder="{{ 'brand.store' | translate }}" nzAllowClear formControlName="store_id" [nzDisabled]="isDetail">
+                                    <nz-option *ngFor="let option of storesList" [nzValue]="option.id" [nzLabel]="option.store_name"></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div class="col-6">
+                        <nz-form-item>
+                            <nz-form-label nzFor="reference" nzRequired>{{ 'products.reference' | translate }}:</nz-form-label>
+                            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}" >
+                                <input nz-input formControlName="reference" type="text">
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
                         <nz-form-item>
                             <nz-form-label nzFor="name" nzRequired>{{ 'products.name' | translate }}:</nz-form-label>
                             <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}" >
@@ -33,20 +52,19 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
                         <nz-form-item>
-                            <nz-form-label nzFor="reference" nzRequired>{{ 'products.reference' | translate }}:</nz-form-label>
-                            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
-                                <nz-input-group [nzPrefix]="pricePrefixReference">
-                                    <input nz-input formControlName="reference" type="text">
-                                </nz-input-group>
-                                <ng-template #pricePrefixReference>
-                                    <span>#</span>
-                                </ng-template>
+                            <nz-form-label nzFor="measurement_unit" nzRequired>{{ 'products.measurementUnit' | translate }}:</nz-form-label>
+                            <nz-form-control nzErrorTip="Please input this field!">
+                                <nz-select formControlName="measurement_unit" class="w-100" (ngModelChange)="measurementUnitValue($event)">
+                                    <nz-option *ngFor="let item of measurementUnitList" [nzLabel]="item?.label" [nzValue]="item?.value"></nz-option>
+                                </nz-select>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div class="col-12">
+                </div>
+                <div class="row" *ngIf="isAmount">
+                    <div class="col-6">
                         <nz-form-item>
                             <nz-form-label nzFor="stock" nzRequired>{{ 'products.stock' | translate }}:</nz-form-label>
                             <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
@@ -56,55 +74,49 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
                         <nz-form-item>
                             <nz-form-label nzFor="stockMin" nzRequired>{{ 'products.stockMin' | translate }}:</nz-form-label>
                             <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
                                 <nz-input-group>
-                                    <input nz-input formControlName="stockMin" type="number">
+                                    <input nz-input formControlName="stock_min" type="number">
                                 </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div class="col-12">
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <nz-form-item>
+                            <nz-form-label nzFor="cost" nzRequired>{{ 'products.cost' | translate }}:</nz-form-label>
+                            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                                <nz-input-group [nzPrefix]="pricePrefix">
+                                    <input nz-input formControlName="cost" type="text" currencyMask>
+                                </nz-input-group>
+                                <ng-template #pricePrefix>
+                                    <span>$</span>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div class="col-6">
+                        <nz-form-item>
+                            <nz-form-label nzFor="price" nzRequired>{{ 'products.price' | translate }}:</nz-form-label>
+                            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
+                                <nz-input-group [nzPrefix]="pricePrefix">
+                                    <input nz-input formControlName="price" type="text" currencyMask>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
                         <nz-form-item>
                             <nz-form-label nzFor="status" nzRequired>{{ 'products.status' | translate }}:</nz-form-label>
                             <nz-form-control nzErrorTip="Please input this field!">
                                 <nz-select formControlName="status" class="w-100">
                                     <nz-option *ngFor="let item of statusList" [nzLabel]="item?.label" [nzValue]="item?.value"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div class="col-12">
-                        <nz-form-item>
-                            <nz-form-label nzFor="original" >{{ 'products.original' | translate }}:</nz-form-label>
-                            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
-                                <nz-select formControlName="original" class="w-100" nzPlaceHolder="{{ 'products.original' | translate }}" nzAllowClear >
-                                    <nz-option *ngFor="let option of originalList" [nzValue]="option.value" [nzLabel]="option.label" ></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div class="col-12">
-                        <nz-form-item>
-                            <nz-form-label nzFor="tax">{{ 'products.tax' | translate }}:</nz-form-label>
-                            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
-                                <nz-input-group [nzPrefix]="taxPrefix">
-                                    <input nz-input formControlName="tax" type="number" max="100" min="0">
-                                </nz-input-group>
-                                <ng-template #taxPrefix>
-                                    <span>%</span>
-                                </ng-template>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div class="col-12">
-                        <nz-form-item>
-                            <nz-form-label nzFor="id_brand" >{{ 'products.brands' | translate }}:</nz-form-label>
-                            <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}">
-                                <nz-select formControlName="id_brand" class="w-100" nzPlaceHolder="{{ 'products.brands' | translate }}" nzAllowClear [nzDropdownRender]="renderTemplate" (nzScrollToBottom)="getBrands()" (nzOnSearch)="onSearchBrand($event)"  nzShowSearch nzServerSearch >
-                                    <nz-option *ngFor="let option of brandsList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
@@ -119,8 +131,8 @@
         <nz-tab nzTitle="{{ 'products.descriptionTab' | translate }}">
             <app-description-product-tab [form]="form"></app-description-product-tab>
         </nz-tab>   
-        <nz-tab nzTitle="{{ 'products.images' | translate }}" nzDisabled>
-            <app-images-product-tab [form]="form"></app-images-product-tab>
+        <nz-tab nzTitle="{{ 'products.images' | translate }}">
+            <app-images-product-tab [form]="form" (images)="receiveImages($event)" [setImagesUrl]="setImagesUrl" [id]="id"></app-images-product-tab>
         </nz-tab>
     </nz-tabset>  
 </form>  

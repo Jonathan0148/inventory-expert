@@ -19,4 +19,5 @@ export interface ProductModel {
     discount?:number;
     amount?:number;
     description?:string;
+    images?:any;
 }

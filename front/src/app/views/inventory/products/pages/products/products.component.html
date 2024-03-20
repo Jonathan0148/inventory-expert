@@ -15,7 +15,7 @@
                 <i nz-icon nzType="import" theme="outline"></i>
             </button>
             <app-export-button class="m-l-5" [path]="'/products/exportExcel'" [type]="'excel'" [nameFile]="'Listado Productos'"></app-export-button>
-            <a nz-button nzType="primary" [routerLink]="['/','inventario','productos','crear']"  class="m-l-5">
+            <a nz-button nzType="primary" [routerLink]="['/','inventario','productos','crear']"  class="m-l-5" [disabled]="!hasAdminModule">
                 <i nz-icon nzType="plus-circle" theme="outline"></i>
                 <span>{{ 'products.add' | translate }}</span>
             </a>
@@ -23,13 +23,13 @@
         <div class="col-12">
             <nz-collapse nzGhost [nzBordered]="false">
                 <nz-collapse-panel [nzHeader]="titleFilter" [nzActive]="false" >
-                        <app-filters (filters)="onFilterChange($event)" [selectedStatus]="selectedStatus" [selectedCategory]="selectedCategory" [selectedSubcategory]="selectedSubcategory" ></app-filters>
+                        <app-filters (filters)="onFilterChange($event)" [selectedStatus]="selectedStatus" [selectedCategory]="selectedCategory"></app-filters>
                 </nz-collapse-panel>
               </nz-collapse>
         </div>
     </div>
 
-    <app-list-products [productsList]="productsList" [orderColumn]="orderColumn" [loading]="loading" [isModal]="isModal"></app-list-products>
+    <app-list-products [productsList]="productsList" [orderColumn]="orderColumn" [loading]="loading" [isModal]="isModal" [hasAdminModule]="hasAdminModule"></app-list-products>
     
     <div class="row">
         <div class="col-12 mt-4 d-flex justify-content-end">

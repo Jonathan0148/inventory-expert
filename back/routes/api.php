@@ -9,6 +9,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\inventory\BrandController;
 use App\Http\Controllers\inventory\CategoryController;
 use App\Http\Controllers\inventory\ColumnController;
+use App\Http\Controllers\inventory\ProductController;
 use App\Http\Controllers\inventory\RowController;
 use App\Http\Controllers\inventory\ShelveController;
 use App\Http\Controllers\settings\RoleController;
@@ -112,6 +113,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
                 Route::post('edit/{id}', 'edit');
                 Route::delete('destroy/{id}', 'destroy');
             });
+        });
+
+        Route::controller(ProductController::class)->prefix('products')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::post('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
+            Route::get('getReference', 'getReference');
         });
     });
 

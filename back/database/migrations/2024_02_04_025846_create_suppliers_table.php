@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('address', 100)->comment('Dirección');
             $table->integer('state')->default(1)->comment('Estado del proveedor: 0: Si se corta relación con proveedor 1: Si el proveedor esta activo 2: Si el proveedor esta retirado');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

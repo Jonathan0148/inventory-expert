@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('number_of_users_active')->comment('Cantidad de usuarios activos permitidos');
             $table->integer('number_of_users')->comment('Cantidad de usuarios permitidos');
             $table->timestamps();
+            $table->softDeletes()->comment('Fecha de borrado lógico');
         });
     }
 

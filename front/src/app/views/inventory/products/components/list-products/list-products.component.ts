@@ -10,11 +10,11 @@ import { ProductsDetailService } from '../../../../accounting/sales/services/pro
   styleUrls: ['./list-products.component.scss']
 })
 export class ListProductsComponent implements OnInit {
-
   @Input() productsList:ProductModel[]; 
   @Input() orderColumn:any;
   @Input() loading:boolean; 
   @Input() isModal:boolean; 
+  @Input() hasAdminModule:boolean;
    
   constructor(
     private nzMessageService: NzMessageService,
@@ -30,7 +30,7 @@ export class ListProductsComponent implements OnInit {
 
   confirm(id:number): void {
 
-    this._crudSvc.deleteRequest(`/products/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/inventory/products/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })
