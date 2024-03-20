@@ -34,15 +34,7 @@ const routes: Routes = [
         title: 'Categorías'
     },
     loadChildren: () => import('../../views/inventory/categories/categories.module').then(m => m.CategoriesModule),
-  },
-  {
-    path: 'subcategorias',
-    canActivate: [ NoAuthGuard ],
-    data: {
-        title: 'Subcategorías'
-    },
-    loadChildren: () => import('../../views/inventory/subcategories/subcategories.module').then(m => m.SubcategoriesModule),
-  },
+  }
 ];
 
 @NgModule({

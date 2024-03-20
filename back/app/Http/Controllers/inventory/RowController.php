@@ -5,11 +5,10 @@ namespace App\Http\Controllers\inventory;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
-use App\Models\inventory\Category;
+use App\Models\inventory\Row;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Auth;
 
-class CategoryController extends Controller
+class RowController extends Controller
 {
     /**
      * Muestra muchos registros.
@@ -22,18 +21,16 @@ class CategoryController extends Controller
         $page = $request->get('page') ? $request->get('page') : 1;
         $limit = $request->get('limit') ? $request->get('limit') : 10;
         $term = $request->get('term');
+        $shelf_id = $request->get('shelf_id');
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
         });
 
-        $data = Category::select('categories.*', 'stores.store_name as storeName')
-        ->join('stores', 'categories.store_id', '=', 'stores.id')
-        ->where('store_id', Auth::user()->store_id)
+        $data = Row::where('shelf_id', $shelf_id)
         ->where(function ($query) use ($term) {
-            $query->where('categories.name', 'like', "%$term%");
-            $query->orWhere('categories.description', 'like', "%$term%");
-        })->orderBy('categories.id', 'DESC')->paginate($limit);
+            $query->where('name', 'like', "%$term%");
+        })->orderBy('id', 'DESC')->paginate($limit);
 
         return ResponseHelper::Get($data);
     }
@@ -48,12 +45,11 @@ class CategoryController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'store_id' => 'required',
-                'name' => 'nullable',
-                'description' => 'required'
+                'shelf_id' => 'required',
+                'name' => 'required'
             ]);
             
-            $data = Category::create($validatedData);
+            $data = Row::create($validatedData);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
         } catch (\Throwable $th) {
@@ -69,7 +65,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $data = Category::find($id);
+        $data = Row::find($id);
         
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
@@ -86,16 +82,15 @@ class CategoryController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $data = Category::find($id);
+        $data = Row::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
         try {
             $data->update([
-                'store_id' => $request->input('store_id'),
-                'name' => $request->input('name'),
-                'description' => $request->input('description')
+                'shelf_id' => $request->input('shelf_id'),
+                'name' => $request->input('name')
             ]);
 
             return  ResponseHelper::CreateOrUpdate($data, 'Información actualizada correctamente',);
@@ -112,7 +107,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $data = Category::find($id);
+        $data = Row::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);

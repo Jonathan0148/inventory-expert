@@ -41,7 +41,7 @@ export class BrandComponent implements OnInit {
   modules = this.cookieSvc.get('modules') ? JSON.parse(this.cookieSvc.get('modules')) : []; 
   
   constructor(
-    private _crudSvc:CrudServices ,
+    private _crudSvc:CrudServices,
     private cookieSvc: CookieService
   ){}
 

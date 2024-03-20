@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter, OnDestroy } from '@angu
 import { finalize } from 'rxjs/operators';
 import { Validators, UntypedFormGroup, FormBuilder } from '@angular/forms';
 import { CrudServices } from '../../../../../shared/services/crud.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LocalModel } from '../../../../../shared/interfaces/local';
 import { RowsService } from '../../services/rows.service';
 import { Subscription } from 'rxjs';
@@ -13,37 +13,45 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./form-rows.component.scss']
 })
 export class FormRowsComponent implements OnInit, OnDestroy {
-
-  @Input() id:number;
+  id:number;
   @Input() section:any;
   
   listSubscribers: Subscription[] = [];
   idRow:number | boolean;
   form: UntypedFormGroup;
   loading:boolean;
+  isDetail: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private _crudSvc:CrudServices,
     private _rowSvc:RowsService,
-    private router:Router 
-  ) { }
+    private router:Router,
+    private activatedRoute: ActivatedRoute
+  ) { 
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params.id ?? '';
+      if(this.id) {
+        this.isDetail = !!this.router.url
+          .split("/")
+          .find((a) => a === 'detalle');
+      }
+    });
+  }
   
   ngOnInit(): void {
     this.form = this.fb.group({
         name: [ null, [ Validators.required ] ],
-        code: [ null, [ Validators.required] ],
-        id_section: [ this.id, [ Validators.required] ],
+        shelf_id: [ this.id, [ Validators.required] ],
     });
 
     this.listenObserver();
-    this.getCount();
   }
   
   public submit(): void {
     this.loading = true;
 
-    let path = this.idRow ? `/local/rows/update/${this.idRow}` : `/local/rows/create`;
+    let path = this.idRow ? `/inventory/distribution-local/rows/edit/${this.idRow}` : `/inventory/distribution-local/rows/create`;
     
     this._crudSvc.postRequest(path, this.form.value)
     .pipe(finalize( () => this.loading = false))
@@ -52,7 +60,6 @@ export class FormRowsComponent implements OnInit, OnDestroy {
       if (success) {
         this._rowSvc.setListRow$(this.form.value);
         this.setForm();
-        this.getCount();
       }
     })
   }
@@ -60,7 +67,7 @@ export class FormRowsComponent implements OnInit, OnDestroy {
   private setForm(){
     this.idRow = null;
     this.form.reset()
-    this.form.patchValue({id_section: this.id})
+    this.form.patchValue({shelf_id: this.id})
   }
 
   private listenObserver = () => {
@@ -79,10 +86,4 @@ export class FormRowsComponent implements OnInit, OnDestroy {
   //------------------------------------------------------------------------
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
-  private getCount():void {
-    this._crudSvc.getRequest(`/local/rows/getCount`).subscribe((res: any) => {
-      const { data } = res;
-      this.form.patchValue({ code: (data?.id ?? 0) + 1 })
-    })
-  }
 }

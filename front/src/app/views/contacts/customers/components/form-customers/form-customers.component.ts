@@ -1,8 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CrudServices } from 'src/app/shared/services/crud.service';
 import { finalize } from 'rxjs/operators';
+import { StatesService } from 'src/app/views/settings/locals/services/states.service';
+import { StoreModel } from 'src/app/shared/interfaces/store';
+import { TypeDocumentsService } from 'src/app/views/settings/users/services/type-documents.service';
 
 @Component({
   selector: 'app-form-customers',
@@ -10,39 +13,56 @@ import { finalize } from 'rxjs/operators';
   styleUrls: ['./form-customers.component.scss']
 })
 export class FormCustomersComponent implements OnInit {
-  @Input() id:number;
-
+  id: number;
   form: FormGroup;
+  statusList = this._statusSvC.get();
   loading:boolean;
-  typeDocumentsList:any;
+  typeDocumentsList = this._typeDocumentsSvC.get();
   typePersonsList:any;
+  storesList: StoreModel[] = [];
+  pageStore: number = 1;
+  termStore: string = '';
+  lastPageStore: number;
+  isDetail: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private _crudSvc:CrudServices,
-    private router:Router 
-  ) { }
+    private router:Router,
+    private _statusSvC:StatesService,
+    private _typeDocumentsSvC: TypeDocumentsService,
+    private activatedRoute: ActivatedRoute
+  ) { 
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params.id ?? '';
+      if(this.id) {
+        this.getCustomer();
+        this.isDetail = !!this.router.url
+          .split("/")
+          .find((a) => a === 'detalle');
+      }
+    });
+  }
   
   ngOnInit(): void {
     this.form = this.fb.group({
-        full_name: [ null, [ Validators.required, Validators.maxLength(255), Validators.minLength(5)] ],
-        email: [ null, [ Validators.required] ],
-        id_type_document: [ null, [ Validators.required] ],
+        store_id: [ 1, [ Validators.required] ],
+        full_name: [ null, [ Validators.required, Validators.maxLength(255)] ],
+        type_document: [ null, [ Validators.required] ],
         document: [ null, [ Validators.required, Validators.maxLength(20)] ],
-        id_type_person: [ null, [ Validators.required] ],
-        cellphone: [ null, [ Validators.required, Validators.maxLength(10)] ],
-        address: [ null, [ Validators.required] ]
+        cell_phone: [ null, [ Validators.required, Validators.maxLength(10)] ],
+        email: [ null, [ Validators.required, Validators.email] ],
+        state: [ null, [ Validators.required] ]
     });
     
     if(this.id) this.getCustomer()
-    this.getTypeDocuments();
-    this.getTypePersons();
+    this.getStores();
   }
   
   public submit(): void {
     this.loading = true;
 
-    let path = this.id ? `/customers/update/${this.id}` : `/customers/create`;
+    let path = this.id ? `/contacts/customers/edit/${this.id}` : `/contacts/customers/create`;
     
     this._crudSvc.postRequest(path, this.form.value)
     .pipe(finalize( () => this.loading = false))
@@ -53,27 +73,31 @@ export class FormCustomersComponent implements OnInit {
       }
     })
   }
+
   //------------------------------------------------------------------------
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
+
   public getCustomer(){
-    this._crudSvc.getRequest(`/customers/show/${this.id}`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/contacts/customers/show/${this.id}`).subscribe((res: any) => {
       const { data } = res;
       this.form.patchValue(data);
     })
   }
 
-  private getTypeDocuments():void {
-    this._crudSvc.getRequest(`/users/getTypeDocuments`).subscribe((res: any) => {
+  public getStores():void {
+    const query = [
+      `?page=${this.pageStore}`,
+      `&term=${this.termStore}`
+    ].join('');
+    
+    if( this.lastPageStore && ((this.lastPageStore < this.pageStore) && !this.termStore) ) return
+    
+    this._crudSvc.getRequest(`/settings/stores/availableLocals${query}`).subscribe((res: any) => {
         const { data } = res;
-        this.typeDocumentsList = data;
-    })
-  }
-
-  private getTypePersons():void {
-    this._crudSvc.getRequest(`/customers/getTypePersons`).subscribe((res: any) => {
-        const { data } = res;
-        this.typePersonsList = data;
+        (!this.termStore) ? this.storesList = [...this.storesList,  ...data.data] : this.storesList = data.data;
+        this.lastPageStore = data.last_page;
+        this.pageStore++;
     })
   }
 }

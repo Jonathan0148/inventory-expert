@@ -1,77 +1,109 @@
 <form nz-form [formGroup]="form" (ngSubmit)="submit()" [nzLayout]="'vertical'" >
     <div class="row">
-        <div class="col-lg-6 col-sm-6 col-12">
+        <div class="col-6">
             <nz-form-item>
-                <nz-form-label>{{ 'providers.name' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'providers.store' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'providers.name' | translate }}" formControlName="full_name" maxlength="150" >
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'brand.store' | translate }}" nzAllowClear formControlName="store_id" [nzDisabled]="isDetail">
+                        <nz-option *ngFor="let option of storesList" [nzValue]="option.id" [nzLabel]="option.store_name"></nz-option>
+                    </nz-select>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div class="col-lg-6 col-sm-6 col-12">
+        <div class="col-6">
             <nz-form-item>
-                <nz-form-label>{{ 'providers.email' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'providers.businessName' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'providers.email' | translate }}" formControlName="email" type="email" maxlength="150" >
+                    <input nz-input placeholder="{{ 'providers.businessName' | translate }}" formControlName="business_name" maxlength="255" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6 col-sm-6 col-12">
+        <div class="col-6">
             <nz-form-item>
                 <nz-form-label>{{ 'providers.nit' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'providers.nit' | translate }}" formControlName="nit" maxlength="50" >
+                    <input nz-input placeholder="{{ 'providers.nit' | translate }}" formControlName="nit" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div class="col-lg-3 col-sm-6 col-12">
+        <div class="col-6">
             <nz-form-item>
-                <nz-form-label>{{ 'providers.cellphone' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'providers.cellPhone' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'providers.cellphone' | translate }}" formControlName="cellphone" type="number" maxlength="10">
+                    <input nz-input placeholder="{{ 'providers.cellPhone' | translate }}" formControlName="cell_phone" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div class="col-lg-3 col-sm-6 col-12">
+    </div>
+    <div class="row">
+        <div class="col-6">
             <nz-form-item>
                 <nz-form-label>{{ 'providers.landline' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'providers.landline' | translate }}" formControlName="landline" type="number" maxlength="100">
+                    <input nz-input placeholder="{{ 'providers.landline' | translate }}" formControlName="landline" [readonly]="isDetail">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-6">
+            <nz-form-item>
+                <nz-form-label>{{ 'providers.email' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'providers.email' | translate }}" formControlName="email" type="email"  maxlength="255" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6 col-sm-6 col-12">
+        <div class="col-6">
+            <nz-form-item>
+                <nz-form-label>{{ 'providers.country' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'providers.country' | translate }}" formControlName="country" [readonly]="isDetail">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-6">
             <nz-form-item>
                 <nz-form-label>{{ 'providers.department' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'providers.department' | translate }}" formControlName="department" maxlength="150">
+                    <input nz-input placeholder="{{ 'providers.department' | translate }}" formControlName="department" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div class="col-lg-6 col-sm-6 col-12">
+    </div>
+    <div class="row">
+        <div class="col-6">
             <nz-form-item>
                 <nz-form-label>{{ 'providers.city' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <input nz-input placeholder="{{ 'providers.city' | translate }}" formControlName="city" maxlength="150">
+                    <input nz-input placeholder="{{ 'providers.city' | translate }}" formControlName="city" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
+        <div class="col-6">
             <nz-form-item>
                 <nz-form-label>{{ 'providers.address' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <textarea nz-input placeholder="{{ 'providers.address' | translate }}" [nzAutosize]="{ minRows: 2 }" formControlName="address" maxlength="150"></textarea>
+                    <input nz-input placeholder="{{ 'providers.address' | translate }}" formControlName="address" [readonly]="isDetail">
                 </nz-form-control>
             </nz-form-item>
         </div>
     </div>
     <div class="row">
+        <div class="col-6">
+            <nz-form-item>
+                <nz-form-label>{{ 'providers.state' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'locals.state' | translate }}" nzAllowClear formControlName="state" [nzDisabled]="isDetail">
+                        <nz-option *ngFor="let option of statusList" [nzValue]="option.value" [nzLabel]="option.label" ></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div class="row" *ngIf="!isDetail">
         <div class="col-md-12 text-right">
             <nz-form-item>
                 <nz-form-control>

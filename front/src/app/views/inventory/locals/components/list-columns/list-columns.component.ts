@@ -5,6 +5,7 @@ import { finalize } from 'rxjs/operators';
 import { LocalModel } from '../../../../../shared/interfaces/local';
 import { Subscription } from 'rxjs';
 import { ColumnsService } from '../../services/columns.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-columns',
@@ -24,9 +25,6 @@ export class ListColumnsComponent implements OnInit {
           compare: (a: LocalModel, b: LocalModel) => a.id - b.id,
       },
       {
-          title: 'Código',
-      },
-      {
           title: 'Nombre',
       },
       {
@@ -36,17 +34,29 @@ export class ListColumnsComponent implements OnInit {
   page: number = 1;
   totalItems:number;
   limit:number;
+  isDetail: boolean = false;
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private nzMessageService: NzMessageService,
     private _crudSvc:CrudServices,
-    private _columnSvc:ColumnsService
+    private _columnSvc:ColumnsService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) 
-  {}
+  {
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params.id ?? '';
+      this.isDetail = !!this.router.url
+        .split("/")
+        .find((a) => a === 'detalle');
+    });
+  }
 
   ngOnInit(): void {
     this.listenObserver();
     this.getColumns();
+    
   }
 
   cancel(): void {
@@ -54,7 +64,7 @@ export class ListColumnsComponent implements OnInit {
   }
 
   confirm(id:number): void {
-    this._crudSvc.deleteRequest(`/local/columns/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/inventory/distribution-local/columns/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })
@@ -81,12 +91,12 @@ export class ListColumnsComponent implements OnInit {
     this.loading = true;
 
     const body = {
-      sectionId: this.id,
+      shelf_id: this.id,
       page:this.page,
       limit:this.limit,
     };
 
-    this._crudSvc.postRequest(`/local/columns/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+    this._crudSvc.postRequest(`/inventory/distribution-local/columns/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
       const { data } = res; 
       this.columnsLists = data.data;
       this.totalItems = data.total;

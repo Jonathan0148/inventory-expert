@@ -9,11 +9,11 @@ import { LocalModel } from '../../../../../shared/interfaces/local';
   styleUrls: ['./list-locals.component.scss']
 })
 export class ListLocalsComponent implements OnInit {
-
   @Input() sectionsList:LocalModel[];
   @Input() orderColumn:any;
   @Input() displayData:any;
   @Input() loading:boolean; 
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private nzMessageService: NzMessageService,
@@ -28,7 +28,7 @@ export class ListLocalsComponent implements OnInit {
   }
 
   confirm(id:number): void {
-    this._crudSvc.deleteRequest(`/local/sections/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/inventory/distribution-local/shelves/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })

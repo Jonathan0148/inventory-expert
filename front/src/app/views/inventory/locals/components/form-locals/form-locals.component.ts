@@ -3,6 +3,7 @@ import { finalize } from 'rxjs/operators';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CrudServices } from '../../../../../shared/services/crud.service';
+import { StoreModel } from 'src/app/shared/interfaces/store';
 
 @Component({
   selector: 'app-form-locals',
@@ -10,19 +11,33 @@ import { CrudServices } from '../../../../../shared/services/crud.service';
   styleUrls: ['./form-locals.component.scss']
 })
 export class FormLocalsComponent implements OnInit, OnChanges {
-
-  @Input() id:number;
+  id: number;
   @Input() section:any;
   @Output() isEditEmit = new EventEmitter<boolean>();
   
   form: FormGroup;
   loading:boolean;
+  storesList: StoreModel[] = [];
+  pageStore: number = 1;
+  termStore: string = '';
+  lastPageStore: number;
+  isDetail: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private _crudSvc:CrudServices,
-    private router:Router 
-  ) { }
+    private router:Router,
+    private activatedRoute: ActivatedRoute
+  ) { 
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params.id ?? '';
+      if(this.id) {
+        this.isDetail = !!this.router.url
+          .split("/")
+          .find((a) => a === 'detalle');
+      }
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes?.section.currentValue) this.setSectionForm()
@@ -30,17 +45,17 @@ export class FormLocalsComponent implements OnInit, OnChanges {
   
   ngOnInit(): void {
     this.form = this.fb.group({
-        name: [ null, [ Validators.required ] ],
-        code: [ null, [ Validators.required] ],
+      store_id: [ 1, [ Validators.required ] ],
+      name: [ null, [ Validators.required ] ],
+      description: [ null, [ ] ]
     });
-
-    if(!this.id) this.getCount();
+    this.getStores();
   }
   
   public submit(): void {
     this.loading = true;
 
-    let path = this.id ? `/local/sections/update/${this.id}` : `/local/sections/create`;
+    let path = this.id ? `/inventory/distribution-local/shelves/edit/${this.id}` : `/inventory/distribution-local/shelves/create`;
     
     this._crudSvc.postRequest(path, this.form.value)
     .pipe(finalize( () => this.loading = false))
@@ -58,10 +73,20 @@ export class FormLocalsComponent implements OnInit, OnChanges {
   //------------------------------------------------------------------------
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
-  private getCount():void {
-    this._crudSvc.getRequest(`/local/sections/getCount`).subscribe((res: any) => {
-      const { data } = res;
-      this.form.patchValue({ code: (data?.id ?? 0) + 1 })
+
+  public getStores():void {
+    const query = [
+      `?page=${this.pageStore}`,
+      `&term=${this.termStore}`
+    ].join('');
+    
+    if( this.lastPageStore && ((this.lastPageStore < this.pageStore) && !this.termStore) ) return
+    
+    this._crudSvc.getRequest(`/settings/stores/availableLocals${query}`).subscribe((res: any) => {
+        const { data } = res;
+        (!this.termStore) ? this.storesList = [...this.storesList,  ...data.data] : this.storesList = data.data;
+        this.lastPageStore = data.last_page;
+        this.pageStore++;
     })
   }
 }

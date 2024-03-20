@@ -5,11 +5,13 @@ namespace App\Http\Controllers\inventory;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
-use App\Models\inventory\Category;
+use App\Models\inventory\Shelve;
+use App\Models\inventory\Column;
+use App\Models\inventory\Row;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
-class CategoryController extends Controller
+class ShelveController extends Controller
 {
     /**
      * Muestra muchos registros.
@@ -27,13 +29,13 @@ class CategoryController extends Controller
             return $page;
         });
 
-        $data = Category::select('categories.*', 'stores.store_name as storeName')
-        ->join('stores', 'categories.store_id', '=', 'stores.id')
+        $data = Shelve::select('shelves.*', 'stores.store_name as storeName')
+        ->join('stores', 'shelves.store_id', '=', 'stores.id')
         ->where('store_id', Auth::user()->store_id)
         ->where(function ($query) use ($term) {
-            $query->where('categories.name', 'like', "%$term%");
-            $query->orWhere('categories.description', 'like', "%$term%");
-        })->orderBy('categories.id', 'DESC')->paginate($limit);
+            $query->where('shelves.name', 'like', "%$term%");
+            $query->orWhere('shelves.description', 'like', "%$term%");
+        })->orderBy('shelves.id', 'DESC')->paginate($limit);
 
         return ResponseHelper::Get($data);
     }
@@ -49,11 +51,11 @@ class CategoryController extends Controller
         try {
             $validatedData = $request->validate([
                 'store_id' => 'required',
-                'name' => 'nullable',
-                'description' => 'required'
+                'name' => 'required',
+                'description' => 'nullable'
             ]);
             
-            $data = Category::create($validatedData);
+            $data = Shelve::create($validatedData);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
         } catch (\Throwable $th) {
@@ -69,7 +71,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $data = Category::find($id);
+        $data = Shelve::find($id);
         
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
@@ -86,7 +88,7 @@ class CategoryController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $data = Category::find($id);
+        $data = Shelve::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
@@ -112,7 +114,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $data = Category::find($id);
+        $data = Shelve::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
@@ -121,5 +123,55 @@ class CategoryController extends Controller
         $data->delete();
 
         return ResponseHelper::Delete('Información eliminada correctamente');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getColumnsSelect(Request $request)
+    {
+        $data = [];
+        $page = $request->get('page') ? $request->get('page') : 1;
+        $limit = $request->get('limit') ? $request->get('limit') : 10;
+        $term = $request->get('term');
+        $shelf_id = $request->get('shelf_id');
+
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
+        $data = Column::where('shelf_id', $shelf_id)
+        ->where(function ($query) use ($term) {
+            $query->where('name', 'like', "%$term%");
+        })->orderBy('id', 'DESC')->paginate($limit);
+
+        return ResponseHelper::Get($data);
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getRowsSelect(Request $request)
+    {
+        $data = [];
+        $page = $request->get('page') ? $request->get('page') : 1;
+        $limit = $request->get('limit') ? $request->get('limit') : 10;
+        $term = $request->get('term');
+        $column_id = $request->get('column_id');
+
+        Paginator::currentPageResolver(function () use ($page) {
+            return $page;
+        });
+
+        $data = Row::where('column_id', $column_id)
+        ->where(function ($query) use ($term) {
+            $query->where('name', 'like', "%$term%");
+        })->orderBy('id', 'DESC')->paginate($limit);
+
+        return ResponseHelper::Get($data);
     }
 }

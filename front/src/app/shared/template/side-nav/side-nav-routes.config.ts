@@ -36,60 +36,60 @@ export const ROUTES: SideNavInterface[] = [
             }
         ]
     },
-    // {
-    //     path: '',
-    //     title: 'Contactos',
-    //     iconType: 'nzIcon',
-    //     iconTheme: 'outline',
-    //     icon: 'team',
-    //     submenu: [
-    //         {
-    //             path: '/contactos/clientes',
-    //             code: 17,
-    //             title: 'Clientes',
-    //             iconType: 'nzIcon',
-    //             icon: 'contacts',
-    //             iconTheme: 'outline',
-    //             submenu: []
-    //         },
-    //         {
-    //             path: '/contactos/proveedores',
-    //             code: 20,
-    //             title: 'Proveedores',
-    //             iconType: 'nzIcon',
-    //             icon: 'team',
-    //             iconTheme: 'outline',
-    //             submenu: []
-    //         },
-    //     ]
-    // },
-    // {
-    //     path: '',
-    //     title: 'Contabilidad',
-    //     iconType: 'nzIcon',
-    //     iconTheme: 'outline',
-    //     icon: 'bank',
-    //     submenu: [
-    //         {
-    //             path: '/contabilidad/gastos',
-    //             code: 19,
-    //             title: 'Gastos',
-    //             iconType: 'nzIcon',
-    //             icon: 'solution',
-    //             iconTheme: 'outline',
-    //             submenu: []
-    //         }, 
-    //         {
-    //             path: '/contabilidad/ventas',
-    //             code: 18,
-    //             title: 'Ventas',
-    //             iconType: 'nzIcon',
-    //             icon: 'shopping',
-    //             iconTheme: 'outline',
-    //             submenu: []
-    //         },
-    //     ]
-    // },
+    {
+        path: '',
+        title: 'Contactos',
+        iconType: 'nzIcon',
+        iconTheme: 'outline',
+        icon: 'team',
+        submenu: [
+            {
+                path: '/contactos/clientes',
+                code: 17,
+                title: 'Clientes',
+                iconType: 'nzIcon',
+                icon: 'contacts',
+                iconTheme: 'outline',
+                submenu: []
+            },
+            {
+                path: '/contactos/proveedores',
+                code: 20,
+                title: 'Proveedores',
+                iconType: 'nzIcon',
+                icon: 'team',
+                iconTheme: 'outline',
+                submenu: []
+            },
+        ]
+    },
+    {
+        path: '',
+        title: 'Contabilidad',
+        iconType: 'nzIcon',
+        iconTheme: 'outline',
+        icon: 'bank',
+        submenu: [
+            {
+                path: '/contabilidad/gastos',
+                code: 19,
+                title: 'Gastos',
+                iconType: 'nzIcon',
+                icon: 'solution',
+                iconTheme: 'outline',
+                submenu: []
+            }, 
+            // {
+            //     path: '/contabilidad/ventas',
+            //     code: 18,
+            //     title: 'Ventas',
+            //     iconType: 'nzIcon',
+            //     icon: 'shopping',
+            //     iconTheme: 'outline',
+            //     submenu: []
+            // },
+        ]
+    },
     {
         path: '',
         title: 'Inventario',
@@ -106,15 +106,15 @@ export const ROUTES: SideNavInterface[] = [
                 iconTheme: 'outline',
                 submenu: []
             },
-            // {
-            //     path: '/inventario/local',
-            //     code: 13,
-            //     title: 'Distribución del Local',
-            //     iconType: 'nzIcon',
-            //     icon: 'appstore',
-            //     iconTheme: 'outline',
-            //     submenu: []
-            // },
+            {
+                path: '/inventario/local',
+                code: 13,
+                title: 'Distribución del Local',
+                iconType: 'nzIcon',
+                icon: 'appstore',
+                iconTheme: 'outline',
+                submenu: []
+            },
             {
                 path: '/inventario/marcas',
                 code: 14,
