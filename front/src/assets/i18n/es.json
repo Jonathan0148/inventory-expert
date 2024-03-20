@@ -129,7 +129,8 @@
     },
     "products":{
         "code":"Código",
-        "infoBasic":"Información básica",
+        "infoBasic":"Información Básica",
+        "store":"Tienda | Local",
         "name":"Nombre",
         "reference":"Referencia",
         "stock":"Cantidad disponible",
@@ -146,7 +147,7 @@
         "sections":"Sección",
         "column":"Columna",
         "row":"Fila",
-        "descriptionTab":"Descripción producto",
+        "descriptionTab":"Descripción Producto",
         "images":"Imagenes",
         "description":"Descripción",
         "applications":"Aplicaciones",
@@ -155,9 +156,9 @@
         "sales":"Ventas",
         "stockAvailable":"Cantidad disponible",
         "overview":"Resumen",
-        "subcategory":"Subcategorías",
         "import": "Importar datos",
-        "selectFile": "Seleccione un archivo"
+        "selectFile": "Seleccione un archivo",
+        "measurementUnit":"Unidad de medida"
     },
     "role":{
         "admin":"Administrador",
@@ -262,12 +263,6 @@
         "editTitle":"Editar Gasto",
         "description":"Descripción",
         "value":"Valor"
-    },
-    "subcategories":{
-        "title":"Subcategorías",
-        "add":"Agregar Subcategoría",
-        "addTitle":"Agregar Subcategoría",
-        "editTitle":"Editar Subcategoría"
     },
     "bails":{
         "add":"Agregar Abono",

@@ -1,17 +1,14 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { CategoryModel } from 'src/app/shared/interfaces/category';
-import { BasicSelect } from '../../../../../shared/interfaces/basic-select';
 import { CrudServices } from '../../../../../shared/services/crud.service';
 import { finalize } from 'rxjs/operators';
 import { ProductModel } from '../../../../../shared/interfaces/product';
-import { BrandModel } from '../../../../../shared/interfaces/brand';
 import { StatusModel } from '../../../../../shared/interfaces/status';
 import { StatusService } from '../../services/status.service';
-import { SubcategoryModel } from '../../../../../shared/interfaces/subcategory';
+import { StoreModel } from 'src/app/shared/interfaces/store';
+import { MeasurementUnitService } from 'src/app/views/settings/users/services/measurement-unit.service';
 
 @Component({
   selector: 'app-form-products',
@@ -20,7 +17,6 @@ import { SubcategoryModel } from '../../../../../shared/interfaces/subcategory';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormProductsComponent implements OnInit {
-
   @Input() id:number;
   @Input() isDetailForm:boolean;
   @Input() product:ProductModel;
@@ -29,17 +25,18 @@ export class FormProductsComponent implements OnInit {
   isEdit: boolean = false;
 
   form: FormGroup;
-  brandsList:BrandModel[] = [];
   statusList:StatusModel[] = this._statusSvc.get();
-  originalList:BasicSelect[] = [
-    { label: 'Si', value: 1 },
-    { label: 'No', value: 0 }
-  ];
 
   loading: boolean;
-  pageBrand:number = 1;
-  termBrand:string = '';
-  lastPageBrand:number;
+  storesList: StoreModel[] = [];
+  pageStore: number = 1;
+  termStore: string = '';
+  lastPageStore: number;
+  isAmount: boolean = false;
+  isDetail: boolean = false;
+  measurementUnitList = this._measurementUnitSvC.get();
+  avatarUrl: string = "";
+  setImagesUrl: any;
 
   constructor(
     private modalService: NzModalService, 
@@ -47,7 +44,8 @@ export class FormProductsComponent implements OnInit {
     private _statusSvc: StatusService,
     private _crudSvc: CrudServices,
     private activatedRoute: ActivatedRoute,
-    private router:Router
+    private router:Router,
+    private _measurementUnitSvC: MeasurementUnitService,
     ) {
     this.activatedRoute.params.subscribe((params) => {
       this.id = params.id ?? '';
@@ -55,38 +53,40 @@ export class FormProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      this.form = this.fb.group({
-          name: [ null , [ Validators.required ] ],
-          code: [ null , [ ] ],
-          reference: [ null , [ Validators.required ] ],
-          stock: [ 0 , [ Validators.required ] ],
-          original: [ null , [ ] ],
-          tax: [ 0 , [ Validators.max(100), Validators.min(0) ] ],
-          price: [ 0 , [ Validators.required ] ],
-          category: [ null , [ ] ],
-          subcategory: [ null , [ ] ],
-          id_brand: [ null , [ ] ],
-          status: [ null , [ Validators.required ] ],
-          applications: [ null , [ ] ],
-          categories: [ null , [ ] ],
-          id_column: [ null , [ ] ],
-          id_row: [ null , [  ] ],
-          id_section: [ null , [  ] ],
-          stockMin: [ 0 , [ Validators.required ] ],
-          cost: [ 0 , [ Validators.required ] ],
-          discount: [ 0, [ Validators.max(100), Validators.min(0) ] ],
-          description: [ null , [ Validators.required ] ],
-      });
+    this.getStores();
+    this.form = this.fb.group({
+        store_id: [ 1, [ Validators.required ] ],
+        brand_id: [ null, [ ] ],
+        shelf_id: [ null, [ ] ],
+        row_id: [ null, [ ] ],
+        column_id: [ null, [ ] ],
+        reference: [ null, [ Validators.required ] ],
+        name: [ null, [ Validators.required ] ],
+        description: [ null, [ ] ],
+        applications: [ null , [ ] ],
+        measurement_unit: [ null, [ Validators.required ] ],
+        stock: [ 0, [ ] ],
+        stock_min: [ 0, [ ] ],
+        cost: [ 0 , [ ] ],
+        price: [ 0 , [  ] ],
+        is_original: [ null , [ ] ],
+        tax: [ 0 , [  ] ],
+        discount: [ 0, [  ] ],
+        images: [ {} , [ ] ],
+        barcode: [ null , [ ] ],
+        category: [ null , [ ] ],
+        categories: [ null , [ ] ],
+        status: [ null , [ Validators.required ] ],
+    });
 
-      if(!this.isDetailForm) this.getCount();
-      if(this.id) this.setProductForm()
-      this.getBrands()
+    if(!this.isDetailForm) this.getReference();
+    if(this.id) this.setProductForm()
   }
 
   submitForm(): void {
     this.loading = true;
-    let path = this.id ? `/products/update/${this.id}` : `/products/create`;
-  
+    let path = this.id ? `/inventory/products/edit/${this.id}` : `/inventory/products/create`;
+    
     this._crudSvc.postRequest(path, this.form.value)
     .pipe(finalize( () => this.loading = false))
     .subscribe((res: any) => {
@@ -114,50 +114,55 @@ export class FormProductsComponent implements OnInit {
   //------------------------------------------------------------------------
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
-  private getCount():void {
-    this._crudSvc.getRequest(`/products/getCount`).subscribe((res: any) => {
+
+  private getReference():void {
+    this._crudSvc.getRequest(`/inventory/products/getReference`).subscribe((res: any) => {
       const { data } = res;
-     this.form.patchValue({ code: (data?.id ?? 0) + 1 })
+      this.form.patchValue({ reference: data })
     })
   }
 
-  public getBrands():void {
+  public getStores():void {
     const query = [
-      `?page=${this.pageBrand}`,
-      `&term=${this.termBrand}`
+      `?page=${this.pageStore}`,
+      `&term=${this.termStore}`
     ].join('');
     
-    if( this.lastPageBrand && ((this.lastPageBrand < this.pageBrand) && !this.termBrand) ) return
-
-    this._crudSvc.getRequest(`/brands/index${query}`).subscribe((res: any) => {
+    if( this.lastPageStore && ((this.lastPageStore < this.pageStore) && !this.termStore) ) return
+    
+    this._crudSvc.getRequest(`/settings/stores/availableLocals${query}`).subscribe((res: any) => {
         const { data } = res;
-        (!this.termBrand) ? this.brandsList = [...this.brandsList,  ...data.data] : this.brandsList = data.data;
-        this.lastPageBrand = data.last_page;
-        this.pageBrand++;
+        (!this.termStore) ? this.storesList = [...this.storesList,  ...data.data] : this.storesList = data.data;
+        this.lastPageStore = data.last_page;
+        this.pageStore++;
     })
   }
+
   //------------------------------------------------------------------------
   //-------------------------------EVENTS-----------------------------------
   //------------------------------------------------------------------------
-  public onSearchBrand(event:string){
 
-    if(event.length > 3) {
-      this.termBrand = event;
-      this.getBrands();
-      this.setPage();
+  public measurementUnitValue(event:number){
+    if (event==0){
+      this.isAmount = true;
+    }else{
+      this.isAmount = false;
     }
-
-    if(!event.length && this.termBrand) {
-      this.setPage();
-      this.termBrand = '';
-      this.brandsList = []
-      this.getBrands();
-    }  
   }
 
   //------------------------------------------------------------------------
   //------------------------AUXILIAR FUNCTIONS------------------------------
   //------------------------------------------------------------------------
-  private setPage = ():number => this.pageBrand = 1; 
-  private setProductForm = ():void => this.form.patchValue(this.product);
+  
+  private setProductForm = (): void => {
+    this.form.patchValue(this.product);
+    this.avatarUrl = this.product?.images[0]?.response?.url;
+    this.setImagesUrl = this.product?.images;
+  };  
+  
+  receiveImages(images: any) {
+    console.log(images);
+    this.avatarUrl = images[0]?.response?.url;
+    this.form.patchValue({images: images});
+  }
 }

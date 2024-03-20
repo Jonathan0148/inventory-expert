@@ -25,6 +25,18 @@ class FileController extends Controller
             $url = url('/storage/uploads/' . $nuevoNombre);
             
             return response()->json(['url' => $url, 'message' => 'Archivo guardado correctamente']);
+        }else if ($request->hasFile('file')){
+            $archivo = $request->file('file');
+            $nombreOriginal = $archivo->getClientOriginalName();
+            $extension = $archivo->getClientOriginalExtension();
+
+            $nuevoNombre = md5(uniqid() . time()) . '.' . $extension;
+
+            $archivo->storeAs('public/uploads', $nuevoNombre);
+
+            $url = url('/storage/uploads/' . $nuevoNombre);
+            
+            return response()->json(['url' => $url, 'message' => 'Archivo guardado correctamente']);
         }
 
         return response()->json(['error' => 'No se adjuntó ningún archivo'], 400);

@@ -98,20 +98,20 @@ export const ROUTES: SideNavInterface[] = [
         icon: 'book',
         submenu: [
             {
-                path: '/inventario/categorias',
-                code: 15,
-                title: 'Categorías',
-                iconType: 'nzIcon',
-                icon: 'tags',
-                iconTheme: 'outline',
-                submenu: []
-            },
-            {
                 path: '/inventario/local',
                 code: 13,
                 title: 'Distribución del Local',
                 iconType: 'nzIcon',
                 icon: 'appstore',
+                iconTheme: 'outline',
+                submenu: []
+            },
+            {
+                path: '/inventario/categorias',
+                code: 15,
+                title: 'Categorías',
+                iconType: 'nzIcon',
+                icon: 'tags',
                 iconTheme: 'outline',
                 submenu: []
             },
@@ -124,15 +124,15 @@ export const ROUTES: SideNavInterface[] = [
                 iconTheme: 'outline',
                 submenu: []
             },
-            // {
-            //     path: '/inventario/productos',
-            //     code: 16,
-            //     title: 'Productos',
-            //     iconType: 'nzIcon',
-            //     icon: 'shop',
-            //     iconTheme: 'outline',
-            //     submenu: []
-            // }
+            {
+                path: '/inventario/productos',
+                code: 16,
+                title: 'Productos',
+                iconType: 'nzIcon',
+                icon: 'shop',
+                iconTheme: 'outline',
+                submenu: []
+            }
         ]
     },
 ]    

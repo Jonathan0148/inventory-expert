@@ -1,13 +1,13 @@
 <div class="page-header has-tab" *ngIf="!isEdit">
     <div class="d-md-flex m-b-15 align-items-center justify-content-between">
         <div class="media align-items-center m-b-15">
-            <nz-avatar nzShape="square" [nzSize]="70" nzSrc=""></nz-avatar>
+            <nz-avatar nzShape="square" [nzSize]="70" [nzSrc]="avatarUrl"></nz-avatar>
             <div class="m-l-15">
                 <h4 class="m-b-0">{{ product?.name }}</h4>
-                <p class="text-muted m-b-0">{{ 'products.code' | translate  }}: #{{ product?.code }}</p>
+                <p class="text-muted m-b-0">{{ 'products.reference' | translate  }}: #{{ product?.reference }}</p>
             </div>
         </div>
-        <div class="m-b-15">
+        <div class="m-b-15" *ngIf="hasAdminModule">
             <button nz-button nzType="primary" *ngIf="!isEdit" (click)="edit()">
                 <i nz-icon nzType="edit" theme="outline"></i>
                 <span>{{ 'global.edit' | translate }}</span>
@@ -63,7 +63,7 @@
                         <td>{{ 'products.category' | translate }}:</td>
                         <td>  
                             <ng-container *ngFor="let item of product?.categories; let i = index">
-                                <nz-tag nzColor="default" >{{ item.name_category }} <ng-container *ngIf="item?.name_subcategory" > / {{ item.name_subcategory }}</ng-container> </nz-tag>
+                                <nz-tag nzColor="default" >{{ item.name_category }}</nz-tag>
                             </ng-container> 
                         </td>
                     </tr>
@@ -128,15 +128,13 @@
             <div [innerHTML]="product?.description"></div>
         </nz-card>    
     </nz-tab>
-    <nz-tab nzTitle="{{ 'products.images' | translate }}" nzDisabled>
+    <nz-tab nzTitle="{{ 'products.images' | translate }}">
         <nz-card>
-            <div class="row">
-                <div *ngFor="let item of fileList" class="col-md-3">
-                    <img class="img-fluid" [src]="item.url == null ? 'assets/images/others/local-image.jpg' : item.url" [alt]="item.name">
-                </div>
+            <div class="image-container">
+                <img *ngFor="let imageUrl of product?.images" class="img-fluid" [src]="imageUrl?.response?.url" [alt]="">
             </div>
         </nz-card>
-    </nz-tab>
+    </nz-tab>    
 </nz-tabset>
 
 <ng-container *ngIf="isEdit">

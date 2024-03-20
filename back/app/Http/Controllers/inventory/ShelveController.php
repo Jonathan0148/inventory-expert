@@ -161,13 +161,13 @@ class ShelveController extends Controller
         $page = $request->get('page') ? $request->get('page') : 1;
         $limit = $request->get('limit') ? $request->get('limit') : 10;
         $term = $request->get('term');
-        $column_id = $request->get('column_id');
+        $shelf_id = $request->get('shelf_id');
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
         });
 
-        $data = Row::where('column_id', $column_id)
+        $data = Row::where('shelf_id', $shelf_id)
         ->where(function ($query) use ($term) {
             $query->where('name', 'like', "%$term%");
         })->orderBy('id', 'DESC')->paginate($limit);
