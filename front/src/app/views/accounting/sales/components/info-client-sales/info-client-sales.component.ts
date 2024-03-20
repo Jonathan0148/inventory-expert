@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { CrudServices } from '../../../../../shared/services/crud.service';
-import { TypeDocumentModel } from '../../../../../shared/interfaces/type-document';
-import { TypePersonModel } from '../../../../../shared/interfaces/type-person';
 import { finalize } from 'rxjs/operators';
+import { TypeDocumentsService } from 'src/app/views/settings/users/services/type-documents.service';
 
 @Component({
   selector: 'app-info-client-sales',
@@ -13,36 +12,21 @@ import { finalize } from 'rxjs/operators';
 export class InfoClientSalesComponent implements OnInit {
 
   @Input() form:UntypedFormGroup;
-  typeDocumentsList: TypeDocumentModel[];  
-  typePersonsList:TypePersonModel[];
+  typeDocumentsList = this._typeDocumentsSvC.get();
   isClient:boolean = false;
   loading:boolean;
 
   constructor(
     private _crudSvc:CrudServices,
+    private _typeDocumentsSvC: TypeDocumentsService,
   ) { }
 
   ngOnInit(): void {
-    this.getTypeDocuments();    
-    this.getTypePersons();
   }
 
   //------------------------------------------------------------------------
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
-  private getTypeDocuments():void {
-    this._crudSvc.getRequest(`/users/getTypeDocuments`).subscribe((res: any) => {
-        const { data } = res;
-        this.typeDocumentsList = data;
-    })
-  }
-
-  private getTypePersons():void {
-    this._crudSvc.getRequest(`/customers/getTypePersons`).subscribe((res: any) => {
-        const { data } = res;
-        this.typePersonsList = data;
-    })
-  }
 
   //------------------------------------------------------------------------
   //-------------------------------EVENTS-----------------------------------
@@ -58,7 +42,7 @@ export class InfoClientSalesComponent implements OnInit {
 
     let data = {
       document:event,
-      type_document:this.form.get('id_type_document').value,
+      type_document:this.form.get('type_document').value,
     }
 
      this._crudSvc.postRequest(`/customers/getForDocuments`, data)
@@ -73,6 +57,6 @@ export class InfoClientSalesComponent implements OnInit {
   }
 
   private resetFields() {
-    this.form.patchValue({ cellphone:null, email:null, id_type_document:1, full_name:null, client_exists:false })
+    this.form.patchValue({ cell_phone:null, email:null, type_document:0, full_name:null, client_exists:false, state:1 })
   }
 }

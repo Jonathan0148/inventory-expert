@@ -15,7 +15,7 @@ return new class extends Migration
             $table->comment('Balance de las ventas');
             $table->increments('id');
             $table->integer('sale_id')->unsigned()->comment('ID de la venta');
-            $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
+            $table->foreign('sale_id')->references('id')->on('sales_refactor')->onDelete('cascade');
             $table->float('value')->comment('Valor del abono');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');

@@ -230,4 +230,28 @@ class ProductController extends Controller
         
         return $adjective . ' ' . $noun;
     }
+
+    public function consultAvailability($id)
+    {
+        $data = Product::select('products.*','brands.name as brand', 'shelves.name as section', 'rows.name as row', 'columns.name as column')
+        ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
+        ->leftjoin('shelves', 'products.shelf_id', '=', 'shelves.id')
+        ->leftjoin('rows', 'products.row_id', '=', 'rows.id')
+        ->leftjoin('columns', 'products.column_id', '=', 'columns.id')
+        ->with(['categories' => function ($query) { 
+            $query->select('categories.id as category_id','categories.name as name_category');
+        }])
+        ->withSum('sales_detail','amount')
+        ->find($id);
+
+        if (!$data) {
+            return ResponseHelper::NoExits('No existe un producto con el id '.  $id);
+        }
+
+        if(@$data->stock){
+            return ResponseHelper::Get($data);
+        }
+
+        return ResponseHelper::NoExits("El producto $data->reference no tiene unidades disponibles");
+    }
 }

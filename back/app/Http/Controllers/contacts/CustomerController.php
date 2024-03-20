@@ -133,4 +133,17 @@ class CustomerController extends Controller
 
         return ResponseHelper::Delete('Información eliminada correctamente');
     }
+
+    public function getForDocuments(Request $request)
+    {
+        $document = @$request->document;
+        $type_document =@ $request->type_document;
+        
+        
+        $data = Customer::select('full_name','type_document','document','cell_phone','email','id as id_customer')->where(['document' => $document,'type_document' => $type_document])->first();
+        
+        if($data) $data['client_exists'] = true;
+
+        return ResponseHelper::Get($data);
+    }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sales', function (Blueprint $table) {
+        Schema::create('sales_refactor', function (Blueprint $table) {
             $table->comment('Ventas del local o tienda');
             $table->increments('id');
             $table->integer('store_id')->unsigned()->comment('ID de la tienda')->default(1);

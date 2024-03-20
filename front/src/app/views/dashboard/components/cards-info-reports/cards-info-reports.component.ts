@@ -26,14 +26,14 @@ export class CardsInfoReportsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    // this.loading = true;
-    // this.getSalesTotal()
-    // this.getCountSales()
-    // this.getCountProducts()
-    // this.getValueProducts()
-    // this.getCountClients()
-    // this.getCountUsers()
-    // this.listenObserver();
+    this.loading = true;
+    this.getSalesTotal()
+    this.getCountSales()
+    this.getCountProducts()
+    this.getValueProducts()
+    this.getCountClients()
+    this.getCountUsers()
+    this.listenObserver();
   }
 
   private getSalesTotal(): void {

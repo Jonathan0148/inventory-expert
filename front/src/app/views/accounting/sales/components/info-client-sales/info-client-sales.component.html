@@ -6,10 +6,10 @@
         </div>
         <div class="col-sm-4 col-12">
             <nz-form-item>
-                <nz-form-label>{{ 'sales.typeDocument' | translate }}</nz-form-label>
+                <nz-form-label>{{ 'customers.typeDocument' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'sales.typeDocument' | translate }}" nzAllowClear formControlName="id_type_document">
-                        <nz-option *ngFor="let option of typeDocumentsList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'customers.typeDocument' | translate }}" nzAllowClear formControlName="type_document">
+                        <nz-option *ngFor="let option of typeDocumentsList" [nzValue]="option.value" [nzLabel]="option.label" ></nz-option>
                     </nz-select>
                 </nz-form-control>
             </nz-form-item>
@@ -32,19 +32,9 @@
         </div>
         <div class="col-sm-4 col-12">
             <nz-form-item>
-                <nz-form-label>{{ 'sales.typePerson' | translate }}</nz-form-label>
-                <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'sales.typePerson' | translate }}" nzAllowClear formControlName="id_type_person" [nzDisabled]="isClient">
-                        <nz-option *ngFor="let option of typePersonsList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
-                    </nz-select>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div class="col-sm-4 col-12">
-            <nz-form-item>
                 <nz-form-label>{{ 'sales.phone' | translate }}</nz-form-label>
                 <nz-form-control >
-                    <input nz-input placeholder="{{ 'sales.phone' | translate }}" type="text" formControlName="cellphone" [readonly]="isClient">
+                    <input nz-input placeholder="{{ 'sales.phone' | translate }}" type="text" formControlName="cell_phone" [readonly]="isClient">
                 </nz-form-control>
             </nz-form-item>
         </div>

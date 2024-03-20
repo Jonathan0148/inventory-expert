@@ -160,12 +160,6 @@ export class ProductsComponent implements OnInit {
           title: 'Nombre',
         },
         {
-          title: 'Marcas',
-        },
-        {
-          title: 'Aplicaciones',
-        },
-        {
           title: 'Precio',
         },
         {

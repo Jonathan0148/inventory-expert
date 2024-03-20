@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\accounting\BailController;
 use App\Http\Controllers\accounting\ExpenseController;
+use App\Http\Controllers\accounting\SaleController;
 use App\Http\Controllers\settings\StoreController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\contacts\CustomerController;
 use App\Http\Controllers\contacts\SupplierController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\inventory\BrandController;
 use App\Http\Controllers\inventory\CategoryController;
@@ -12,6 +15,7 @@ use App\Http\Controllers\inventory\ColumnController;
 use App\Http\Controllers\inventory\ProductController;
 use App\Http\Controllers\inventory\RowController;
 use App\Http\Controllers\inventory\ShelveController;
+use App\Http\Controllers\reports\ReportController;
 use App\Http\Controllers\settings\RoleController;
 use App\Http\Controllers\settings\UserController;
 use Illuminate\Support\Facades\Route;
@@ -151,5 +155,73 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('edit/{id}', 'edit');
             Route::delete('destroy/{id}', 'destroy');
         });
+    });
+
+    Route::controller(BailController::class)->prefix('bails')->group(function (){
+        Route::post('index', 'index');
+        Route::post('create', 'create');
+        Route::get('show/{id}', 'show');
+        Route::post('update/{id}', 'update');
+        Route::delete('destroy/{id}', 'destroy');
+    });
+
+    Route::controller(SaleController::class)->prefix('sales')->group(function (){
+        Route::post('index', 'index');
+        Route::post('create', 'create');
+        Route::get('show/{id}', 'show');
+        Route::post('update/{id}', 'update');
+        Route::delete('destroy/{id}', 'destroy');
+        Route::get('getPaymentMethods', 'getPaymentMethods');
+        Route::get('getCount', 'getCount');
+        Route::delete('destroyDetail/{id}', 'destroyDetail');
+        Route::get('downloadInvoice/{id}', 'downloadInvoice');
+        Route::get('exportExcel', 'exportExcel');
+        Route::get('transformDateSales', 'transformDateSales');
+    });
+
+    Route::controller(ProductController::class)->prefix('products')->group(function (){
+        Route::get('index', 'index');
+        Route::post('create', 'create');
+        Route::get('show/{id}', 'show');
+        Route::post('update/{id}', 'update');
+        Route::delete('destroy/{id}', 'destroy');
+        Route::get('consultAvailability/{id}', 'consultAvailability');
+        Route::get('getCount', 'getCount');
+        Route::get('getForReference/{reference}', 'getForReference');
+        Route::get('exportExcel', 'exportExcel');
+        Route::post('importExcel', 'importExcel');
+    });
+
+    Route::controller(CustomerController::class)->prefix('customers')->group(function (){
+        Route::get('index', 'index');
+        Route::post('create', 'create');
+        Route::get('show/{id}', 'show');
+        Route::post('update/{id}', 'update');
+        Route::delete('destroy/{id}', 'destroy');
+        Route::get('getTypePersons', 'getTypePersons');
+        Route::post('getForDocuments', 'getForDocuments');
+        Route::get('exportExcel', 'exportExcel');
+    });
+
+    Route::controller(ReportController::class)->prefix('reports')->group(function (){
+        Route::post('closingDayling', 'closingDayling');
+        Route::post('exportClosing', 'exportClosing');
+    });
+
+    Route::controller(DashboardController::class)->prefix('dashboard')->group(function (){
+        Route::post('getSales', 'getSales');
+        Route::post('getCountSales', 'getCountSales');
+        Route::get('getCountProducts', 'getCountProducts');
+        Route::post('getValueProducts', 'getValueProducts');
+        Route::get('getTopProducts', 'getTopProducts');
+        Route::post('getCountClients', 'getCountClients');
+        Route::get('getCountUsers', 'getCountUsers');
+        Route::get('getRecentSales', 'getRecentSales');
+        Route::get('getTopClients', 'getTopClients');
+        Route::get('getTopDebtors', 'getTopDebtors');
+        Route::get('getTopInvoices', 'getTopInvoices');
+        Route::post('getActivityProducts', 'getActivityProducts');
+        Route::post('getActivitySales', 'getActivitySales');
+        Route::post('getActivityOrders', 'getActivityOrders');
     });
 });
