@@ -5,6 +5,7 @@ import { LocalModel } from '../../../../../shared/interfaces/local';
 import { finalize } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { RowsService } from '../../services/rows.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-rows',
@@ -19,28 +20,36 @@ export class ListRowsComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   orderColumn = [
     {
-          title: 'ID',
-          compare: (a: LocalModel, b: LocalModel) => a.id - b.id,
-      },
-      {
-          title: 'Código',
-      },
-      {
-          title: 'Nombre',
-      },
-      {
-          title: ''
-      }
+      title: 'ID',
+      compare: (a: LocalModel, b: LocalModel) => a.id - b.id,
+    },
+    {
+      title: 'Nombre',
+    },
+    {
+      title: ''
+    }
   ]
   page: number = 1;
   totalItems:number;
   limit: number = 10;
+  isDetail: boolean = false;
+  @Input() hasAdminModule:boolean;
   
   constructor(
     private nzMessageService: NzMessageService,
     private _crudSvc:CrudServices,
-    private _rowSvc:RowsService
-  ) {}
+    private _rowSvc:RowsService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params.id ?? '';
+      this.isDetail = !!this.router.url
+        .split("/")
+        .find((a) => a === 'detalle');
+    });
+  }
 
   ngOnInit(): void {
     this.listenObserver();
@@ -52,7 +61,7 @@ export class ListRowsComponent implements OnInit, OnDestroy {
   }
 
   confirm(id:number): void {
-    this._crudSvc.deleteRequest(`/local/rows/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/inventory/distribution-local/rows/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })
@@ -77,12 +86,12 @@ export class ListRowsComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     const body = {
-      sectionId: this.id,
+      shelf_id: this.id,
       page:this.page,
       limit:this.limit,
     };
     
-    this._crudSvc.postRequest(`/local/rows/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+    this._crudSvc.postRequest(`/inventory/distribution-local/rows/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
       const { data } = res;      
       this.rowsLists = data.data;
       this.totalItems = data.total;

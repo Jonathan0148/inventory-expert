@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\inventory;
+namespace App\Http\Controllers\accounting;
 
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
-use App\Models\inventory\Category;
+use App\Models\accounting\Expense;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
-class CategoryController extends Controller
+class ExpenseController extends Controller
 {
     /**
      * Muestra muchos registros.
@@ -27,13 +27,12 @@ class CategoryController extends Controller
             return $page;
         });
 
-        $data = Category::select('categories.*', 'stores.store_name as storeName')
-        ->join('stores', 'categories.store_id', '=', 'stores.id')
+        $data = Expense::select('expenses.*', 'stores.store_name as storeName')
+        ->join('stores', 'expenses.store_id', '=', 'stores.id')
         ->where('store_id', Auth::user()->store_id)
         ->where(function ($query) use ($term) {
-            $query->where('categories.name', 'like', "%$term%");
-            $query->orWhere('categories.description', 'like', "%$term%");
-        })->orderBy('categories.id', 'DESC')->paginate($limit);
+            $query->orWhere('expenses.description', 'like', "%$term%");
+        })->orderBy('expenses.id', 'DESC')->paginate($limit);
 
         return ResponseHelper::Get($data);
     }
@@ -49,11 +48,11 @@ class CategoryController extends Controller
         try {
             $validatedData = $request->validate([
                 'store_id' => 'required',
-                'name' => 'nullable',
-                'description' => 'required'
+                'description' => 'required',
+                'value' => 'required'
             ]);
             
-            $data = Category::create($validatedData);
+            $data = Expense::create($validatedData);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
         } catch (\Throwable $th) {
@@ -69,7 +68,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $data = Category::find($id);
+        $data = Expense::find($id);
         
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
@@ -86,7 +85,7 @@ class CategoryController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $data = Category::find($id);
+        $data = Expense::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
@@ -94,8 +93,8 @@ class CategoryController extends Controller
         try {
             $data->update([
                 'store_id' => $request->input('store_id'),
-                'name' => $request->input('name'),
-                'description' => $request->input('description')
+                'description' => $request->input('description'),
+                'value' => $request->input('value')
             ]);
 
             return  ResponseHelper::CreateOrUpdate($data, 'Información actualizada correctamente',);
@@ -112,7 +111,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $data = Category::find($id);
+        $data = Expense::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);

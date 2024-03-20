@@ -10,14 +10,12 @@
     <tbody>
         <tr *ngFor="let item of sortTable.data;  let i = index">
             <td>#{{item.id}}</td>
-            <td>{{ item.code }}</td>
             <td>{{ item.name}}</td>
             <td class="text-md-right">
-                <a class="m-r-5 btn-warning" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.edit' | translate }}" (click)="onClickEditRow(item)">
+                <a class="m-r-5 btn-warning" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.edit' | translate }}" (click)="onClickEditRow(item)" [disabled]="!hasAdminModule || isDetail">
                     <span nz-icon nzType="edit" nzTheme="outline"></span>
                 </a>
-                <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm"
-                (nzOnConfirm)="confirm(item.id)" (nzOnCancel)="cancel()">
+                <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm" (nzOnConfirm)="confirm(item.id)" (nzOnCancel)="cancel()" [disabled]="!hasAdminModule || isDetail">
                     <i nz-icon nzType="delete" theme="outline"></i>
                 </button>
             </td>

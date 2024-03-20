@@ -17,7 +17,7 @@
                 <a class="m-r-5 btn-primary" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.detail' | translate }}" [routerLink]="['/', 'inventario', 'marcas', 'detalle', item.id]">
                     <span nz-icon nzType="eye" nzTheme="outline"></span>
                 </a>
-                <a class="m-r-5 btn-warning" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.edit' | translate }}" [routerLink]="['/', 'inventario', 'marcas','editar', item.id]"  [disabled]="!hasAdminModule">
+                <a class="m-r-5 btn-warning" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.edit' | translate }}" [routerLink]="['/', 'inventario', 'marcas','editar', item.id]" [disabled]="!hasAdminModule">
                     <span nz-icon nzType="edit" nzTheme="outline"></span>
                 </a>
                 <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm" (nzOnConfirm)="confirm(item.id)" (nzOnCancel)="cancel()" [disabled]="!hasAdminModule">

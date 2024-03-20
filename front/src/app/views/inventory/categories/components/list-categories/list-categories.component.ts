@@ -11,7 +11,6 @@ import { CategoryModel } from '../../../../../shared/interfaces/category';
 export class ListCategoriesComponent implements OnInit {
   @Input() categoriesList:CategoryModel[];
   @Input() orderColumn:any;
-  @Input() displayData:any;
   @Input() loading:boolean; 
   @Input() hasAdminModule:boolean;
 

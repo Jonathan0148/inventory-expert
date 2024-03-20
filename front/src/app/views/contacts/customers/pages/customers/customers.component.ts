@@ -3,6 +3,7 @@ import { CustomerModel } from 'src/app/shared/interfaces/customer';
 import { CrudServices } from 'src/app/shared/services/crud.service';
 import { finalize } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-customers',
@@ -20,22 +21,22 @@ export class CustomersComponent implements OnInit {
           priority: false
       },
       {
+        title: 'Nombre Completo',
+      },
+      {
         title: 'Documento',
-      },
-      {
-          title: 'Nombre',
-      },
-      {
-        title: 'Tipo de Persona',
-      },
-      {
-        title: 'Celular',
       },
       {
         title: 'Correo Electrónico',
       },
       {
-          title: ''
+        title: 'Local',
+      },
+      {
+        title: 'Estado'
+      },
+      {
+        title: ''
       }
   ]
   page: number = 1;
@@ -43,19 +44,24 @@ export class CustomersComponent implements OnInit {
   term:string = '';
   totalItems:number;
   customersList:CustomerModel[];
+  hasAdminModule: boolean = false;
+  modules = this.cookieSvc.get('modules') ? JSON.parse(this.cookieSvc.get('modules')) : []; 
   
   constructor( 
-    private _crudSvc:CrudServices
+    private _crudSvc:CrudServices,
+    private cookieSvc: CookieService
     ){}
 
   ngOnInit(): void {
     this.getCustomers();
     this.listenObserver();
+    this.setHasAdmin();
   }
 
   // ---------------------------------------------------------------------
   // ----------------------------GET DATA---------------------------------
   // ---------------------------------------------------------------------
+
   private getCustomers():void {
     this.loading = true;
 
@@ -65,7 +71,7 @@ export class CustomersComponent implements OnInit {
       `&limit=${this.limit}`
     ].join('');
 
-    this._crudSvc.getRequest(`/customers/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/contacts/customers/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
         const { data } = res;
         this.customersList = data.data;
         this.totalItems = data.total;
@@ -75,6 +81,7 @@ export class CustomersComponent implements OnInit {
   // ---------------------------------------------------------------------
   // ------------------------PAGINATION AND FILTERS-----------------------
   // ---------------------------------------------------------------------
+
   public search(): void {
       this.term = this.searchInput;
       this.getCustomers()
@@ -96,5 +103,14 @@ export class CustomersComponent implements OnInit {
     });
 
     this.listSubscribers = [observer1$];
+  }
+
+  private setHasAdmin(){
+    const hasAdminModule = this.modules.find((module) => module.code === 17);
+    if (hasAdminModule.has_admin) this.hasAdminModule = true;
+  }
+
+  ngOnDestroy(): void {
+    this.listSubscribers.map(a => a.unsubscribe());
   }
 }

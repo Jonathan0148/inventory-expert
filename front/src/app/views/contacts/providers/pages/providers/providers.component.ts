@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { ProviderModel } from 'src/app/shared/interfaces/provider';
 import { CrudServices } from 'src/app/shared/services/crud.service';
 import { finalize } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-providers',
@@ -20,16 +21,19 @@ export class ProvidersComponent implements OnInit {
           priority: false
       },
       {
-        title: 'Nombre',
+        title: 'Nombre Proveedor',
       },
       {
         title: 'NIT',
       },
       {
-        title: 'Teléfono fijo',
+        title: 'Correo Electrónico',
       },
       {
-        title: 'Correo Electrónico',
+        title: 'Local',
+      },
+      {
+        title: 'Estado'
       },
       {
         title: ''
@@ -40,19 +44,24 @@ export class ProvidersComponent implements OnInit {
   term:string = '';
   totalItems:number;
   providersList:ProviderModel[];
+  hasAdminModule: boolean = false;
+  modules = this.cookieSvc.get('modules') ? JSON.parse(this.cookieSvc.get('modules')) : []; 
   
   constructor( 
-    private _crudSvc:CrudServices
+    private _crudSvc:CrudServices,
+    private cookieSvc: CookieService
     ){}
 
   ngOnInit(): void {
     this.getProviders();
     this.listenObserver();
+    this.setHasAdmin();
   }
 
   // ---------------------------------------------------------------------
   // ----------------------------GET DATA---------------------------------
   // ---------------------------------------------------------------------
+
   private getProviders():void {
     this.loading = true;
 
@@ -62,7 +71,7 @@ export class ProvidersComponent implements OnInit {
       `&limit=${this.limit}`
     ].join('');
 
-    this._crudSvc.getRequest(`/providers/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/contacts/providers/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
         const { data } = res;
         this.providersList = data.data;
         this.totalItems = data.total;
@@ -72,6 +81,7 @@ export class ProvidersComponent implements OnInit {
   // ---------------------------------------------------------------------
   // ------------------------PAGINATION AND FILTERS-----------------------
   // ---------------------------------------------------------------------
+
   public search(): void {
       this.term = this.searchInput;
       this.getProviders()
@@ -93,5 +103,14 @@ export class ProvidersComponent implements OnInit {
     });
 
     this.listSubscribers = [observer1$];
+  }
+
+  private setHasAdmin(){
+    const hasAdminModule = this.modules.find((module) => module.code === 20);
+    if (hasAdminModule.has_admin) this.hasAdminModule = true;
+  }
+
+  ngOnDestroy(): void {
+    this.listSubscribers.map(a => a.unsubscribe());
   }
 }

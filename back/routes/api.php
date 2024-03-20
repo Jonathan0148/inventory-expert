@@ -1,10 +1,16 @@
 <?php
 
+use App\Http\Controllers\accounting\ExpenseController;
 use App\Http\Controllers\settings\StoreController;
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\contacts\CustomerController;
+use App\Http\Controllers\contacts\SupplierController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\inventory\BrandController;
 use App\Http\Controllers\inventory\CategoryController;
+use App\Http\Controllers\inventory\ColumnController;
+use App\Http\Controllers\inventory\RowController;
+use App\Http\Controllers\inventory\ShelveController;
 use App\Http\Controllers\settings\RoleController;
 use App\Http\Controllers\settings\UserController;
 use Illuminate\Support\Facades\Route;
@@ -74,6 +80,61 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         });
 
         Route::controller(BrandController::class)->prefix('brands')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::post('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
+        });
+
+        Route::prefix('distribution-local')->group(function (){
+            Route::controller(ShelveController::class)->prefix('shelves')->group(function (){
+                Route::get('index', 'index');
+                Route::post('create', 'create');
+                Route::get('show/{id}', 'show');
+                Route::post('edit/{id}', 'edit');
+                Route::delete('destroy/{id}', 'destroy');
+                Route::post('getRowsSelect', 'getRowsSelect');
+                Route::post('getColumnsSelect', 'getColumnsSelect');
+    
+            });
+            Route::controller(ColumnController::class)->prefix('columns')->group(function (){
+                Route::post('index', 'index');
+                Route::post('create', 'create');
+                Route::get('show/{id}', 'show');
+                Route::post('edit/{id}', 'edit');
+                Route::delete('destroy/{id}', 'destroy');
+            });
+            Route::controller(RowController::class)->prefix('rows')->group(function (){
+                Route::post('index', 'index');
+                Route::post('create', 'create');
+                Route::get('show/{id}', 'show');
+                Route::post('edit/{id}', 'edit');
+                Route::delete('destroy/{id}', 'destroy');
+            });
+        });
+    });
+
+    Route::prefix('contacts')->group(function() {
+        Route::controller(SupplierController::class)->prefix('providers')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::post('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
+        });
+
+        Route::controller(CustomerController::class)->prefix('customers')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::post('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
+        });
+    });
+
+    Route::prefix('accounting')->group(function() {
+        Route::controller(ExpenseController::class)->prefix('expenses')->group(function () {
             Route::get('index', 'index');
             Route::post('create', 'create');
             Route::get('show/{id}', 'show');

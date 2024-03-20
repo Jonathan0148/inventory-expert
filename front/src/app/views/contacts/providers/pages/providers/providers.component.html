@@ -14,18 +14,14 @@
         </div>
         <div class="col-lg-5 text-right">
             <app-export-button [path]="'/providers/exportExcel'" [type]="'excel'" [nameFile]="'Listado Proveedores'"></app-export-button>
-            <a nz-button nzType="primary" [routerLink]="['/','contactos','proveedores','crear']" class="m-l-5">
+            <a nz-button nzType="primary" [routerLink]="['/','contactos','proveedores','crear']" class="m-l-5" [disabled]="!hasAdminModule">
                 <i nz-icon nzType="plus-circle" theme="outline"></i>
                 <span>{{ 'providers.add' | translate }}</span>
-            </a>
-            <a nz-button nzType="primary" [routerLink]="['/','contabilidad','ordenes']" class="m-l-5">
-                <i nz-icon nzType="file-search" nzTheme="outline"></i>
-                <span>{{ 'providers.invoices' | translate }}</span>
             </a>
         </div>
     </div>
     
-    <app-list-providers [providersList]="providersList" [orderColumn]="orderColumn" [loading]="loading"></app-list-providers>
+    <app-list-providers [providersList]="providersList" [orderColumn]="orderColumn" [loading]="loading" [hasAdminModule]="hasAdminModule"></app-list-providers>
     
     <div class="row">
         <div class="col-12 mt-4 d-flex justify-content-end">

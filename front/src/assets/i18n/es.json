@@ -101,27 +101,30 @@
         "addTitle":"Agregar Cliente",
         "editTitle":"Editar Cliente",
         "infoBasic":"Información básica",
-        "name":"Nombre",
-        "email":"Correo Electrónico",
+        "store":"Tienda | Local",
+        "fullName":"Nombre",
         "typeDocument":"Tipo de Documento",
         "document":"Documento",
-        "typePerson":"Tipo de Persona",
-        "cellphone":"Celular",
-        "address":"Dirección"
+        "cellPhone":"Celular",
+        "email":"Correo Electrónico",
+        "state":"Estado"
     },
     "providers":{
         "add":"Agregar Proveedor",
         "addTitle":"Agregar Proveedor",
         "editTitle":"Editar Proveedor",
         "infoBasic":"Información básica",
+        "store":"Tienda | Local",
+        "businessName":"Nombre",
         "nit":"Nit",
-        "name":"Nombre",
+        "cellPhone":"Celular",
         "landline":"Teléfono fijo",
-        "cellphone":"Celular",
         "email":"Correo electrónico",
+        "country":"País",
         "department":"Departamento",
         "city":"Ciudad",
         "address":"Dirección",
+        "state":"Estado",
         "invoices":"Facturas"
     },
     "products":{
@@ -168,7 +171,7 @@
         "add":"Agregar Marca",
         "addTitle":"Agregar Marca",
         "editTitle":"Editar Marca",
-        "store":"Nombre tienda",
+        "store":"Tienda | Local",
         "name":"Nombre",
         "description":"Descripción"
     },
@@ -176,7 +179,7 @@
         "add":"Agregar Local",
         "addTitle":"Agregar Local",
         "editTitle":"Editar Local",
-        "storeName":"Nombre tienda",
+        "storeName":"Tienda | Local",
         "nit":"NIT",
         "cellPhone":"Teléfono celular",
         "landline":"Teléfono fijo",
@@ -233,7 +236,10 @@
         "editTitle":"Editar Sección",
         "section":"Sección",
         "row":"Filas",
-        "column":"Columnas"
+        "column":"Columnas",
+        "name":"Nombre",
+        "description":"Descripción",
+        "store":"Tienda | Local"
     },
     "modules":{
         "title":"Modulos",
@@ -245,7 +251,7 @@
         "add":"Agregar Categoría",
         "addTitle":"Agregar Categoría",
         "editTitle":"Editar Categoría",
-        "store":"Nombre tienda",
+        "store":"Tienda | Local",
         "name":"Nombre",
         "description":"Descripción"
     },

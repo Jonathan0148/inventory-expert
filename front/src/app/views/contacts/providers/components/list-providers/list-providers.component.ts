@@ -11,7 +11,8 @@ import { CrudServices } from 'src/app/shared/services/crud.service';
 export class ListProvidersComponent implements OnInit {
   @Input() providersList:ProviderModel[]; 
   @Input() orderColumn:any;
-  @Input() loading:boolean;  
+  @Input() loading:boolean;
+  @Input() hasAdminModule:boolean;  
 
   constructor(
     private nzMessageService: NzMessageService,
@@ -27,7 +28,7 @@ export class ListProvidersComponent implements OnInit {
   }
 
   confirm(id:number): void {
-    this._crudSvc.deleteRequest(`/providers/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/contacts/providers/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })

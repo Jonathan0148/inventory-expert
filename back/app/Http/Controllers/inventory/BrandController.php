@@ -31,9 +31,9 @@ class BrandController extends Controller
         ->join('stores', 'brands.store_id', '=', 'stores.id')
         ->where('store_id', Auth::user()->store_id)
         ->where(function ($query) use ($term) {
-            $query->where('name', 'like', "%$term%");
-            $query->orWhere('description', 'like', "%$term%");
-        })->orderBy('id', 'DESC')->paginate($limit);
+            $query->where('brands.name', 'like', "%$term%");
+            $query->orWhere('brands.description', 'like', "%$term%");
+        })->orderBy('brands.id', 'DESC')->paginate($limit);
 
         return ResponseHelper::Get($data);
     }

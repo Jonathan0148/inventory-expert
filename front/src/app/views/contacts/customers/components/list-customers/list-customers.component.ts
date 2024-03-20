@@ -12,6 +12,7 @@ export class ListCustomersComponent implements OnInit {
   @Input() customersList:CustomerModel[]; 
   @Input() orderColumn:any;
   @Input() loading:boolean;  
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private nzMessageService: NzMessageService,
@@ -27,7 +28,7 @@ export class ListCustomersComponent implements OnInit {
   }
 
   confirm(id:number): void {
-    this._crudSvc.deleteRequest(`/customers/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/contacts/customers/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })

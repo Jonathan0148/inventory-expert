@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('rows', function (Blueprint $table) {
             $table->comment('Filas de las columnas');
             $table->increments('id');
-            $table->integer('column_id')->unsigned()->comment('ID de la columna donde se encuentra');
-            $table->foreign('column_id')->references('id')->on('columns')->onDelete('cascade');
+            $table->integer('shelf_id')->unsigned()->comment('ID del estante donde se encuentra');
+            $table->foreign('shelf_id')->references('id')->on('shelves')->onDelete('cascade');
             $table->string('name', 40)->comment('Nombre');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');

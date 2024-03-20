@@ -13,12 +13,15 @@
             <td>{{ item.description }}</td>
             <td>{{ item.value | currency:'USD': 'symbol':'1.0-0'  }}</td>
             <td>{{ item.created_at | date:'d/M/yy, h:mm a' }}</td>
+            <td>{{ item.storeName}}</td>
             <td class="text-md-right">
-                <a class="m-r-5 btn-warning" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.edit' | translate }}" [routerLink]="['/', 'contabilidad', 'gastos','editar', item.id]" >
+                <a class="m-r-5 btn-primary" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.detail' | translate }}" [routerLink]="['/', 'contabilidad', 'gastos', 'detalle', item.id]">
+                    <span nz-icon nzType="eye" nzTheme="outline"></span>
+                </a>
+                <a class="m-r-5 btn-warning" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.edit' | translate }}" [routerLink]="['/', 'contabilidad', 'gastos','editar', item.id]"  [disabled]="!hasAdminModule">
                     <span nz-icon nzType="edit" nzTheme="outline"></span>
                 </a>
-                <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm"
-                (nzOnConfirm)="confirm(item.id)" (nzOnCancel)="cancel()">
+                <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm" (nzOnConfirm)="confirm(item.id)" (nzOnCancel)="cancel()"  [disabled]="!hasAdminModule">
                     <i nz-icon nzType="delete" theme="outline"></i>
                 </button>
             </td>
