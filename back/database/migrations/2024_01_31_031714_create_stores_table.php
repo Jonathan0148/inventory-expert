@@ -15,6 +15,7 @@ return new class extends Migration
             $table->comment('Tiendas o locales que tiene el cliente');
             $table->increments('id');
             $table->string('store_name', 100)->comment('Nombre de la tienda');
+            $table->text('slogan')->comment('Descripción de la tienda');
             $table->string('nit', 100)->comment('Nit de la tienda');
             $table->string('cell_phone', 20)->comment('Celular');
             $table->string('landline', 40)->nullable()->comment('Teléfono fijo');

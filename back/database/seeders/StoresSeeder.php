@@ -17,15 +17,16 @@ class StoresSeeder extends Seeder
         $data = [
             [
                 "id" => 1,
-                "store_name" => "Nómbre",
-                "nit" => "Número NIT",
-                "cell_phone" => "Celular",
-                "landline" => "Teléfono fijo",
-                "email" => "Correo electrónico",
+                "store_name" => "Supermercado La Familia",
+                "slogan" => "¡Calidad y ahorro para tu hogar!",
+                "nit" => "900.123.456-7",
+                "cell_phone" => "+573001234567",
+                "landline" => "+5712345678",
+                "email" => "info@superfamilia.com",
                 "country" => "Colombia",
-                "department" => "Bogotá DC",
-                "city" => "Bogotá DC",
-                "address" => "Dirección",
+                "department" => "Cundinamarca",
+                "city" => "Bogotá",
+                "address" => "Carrera 12 #34-56",
                 "state" => 1
             ]
         ];

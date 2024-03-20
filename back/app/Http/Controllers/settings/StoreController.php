@@ -65,7 +65,8 @@ class StoreController extends Controller
                 'department' => 'required',
                 'city' => 'required',
                 'address' => 'required',
-                'state' => 'required'
+                'state' => 'required',
+                'slogan' => 'required'
             ]);
 
             $validateLicense = License::first();
@@ -138,7 +139,8 @@ class StoreController extends Controller
                 'department' => $request->input('department'),
                 'city' => $request->input('city'),
                 'address' => $request->input('address'),
-                'state' => $request->input('state')
+                'state' => $request->input('state'),
+                'slogan' => $request->input('slogan'),
             ]);
 
             return  ResponseHelper::CreateOrUpdate($data, 'Información actualizada correctamente',);

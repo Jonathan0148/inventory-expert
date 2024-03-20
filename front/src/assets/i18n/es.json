@@ -189,7 +189,8 @@
         "department":"Departamento",
         "city":"Ciudad",
         "address":"Dirección",
-        "state":"Estado"
+        "state":"Estado",
+        "slogan":"Eslogan"
     },
     "orders":{
         "add":"Agregar Factura",

@@ -46,7 +46,8 @@ export class FormLocalsComponent implements OnInit {
         department: [ null, [ Validators.required ] ],
         city: [ null, [ Validators.required ] ],
         address: [ null, [ Validators.required ] ],
-        state: [ null, [ Validators.required ] ]
+        state: [ null, [ Validators.required ] ],
+        slogan: [ null, [ Validators.required ] ]
     });
     if(this.id) this.getLocal()
   }
