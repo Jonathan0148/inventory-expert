@@ -152,13 +152,16 @@
         "description":"Descripción",
         "applications":"Aplicaciones",
         "add":"Agregar Producto",
+        "addTitle":"Agregar Producto",
+        "editTitle":"Editar Producto",
         "barcode":"Código de barras",
         "sales":"Ventas",
         "stockAvailable":"Cantidad disponible",
         "overview":"Resumen",
         "import": "Importar datos",
         "selectFile": "Seleccione un archivo",
-        "measurementUnit":"Unidad de medida"
+        "measurementUnit":"Unidad de medida",
+        "generate":"Generar"
     },
     "role":{
         "admin":"Administrador",

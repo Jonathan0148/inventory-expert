@@ -34,13 +34,18 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div class="col-6">
+                    <div class="col-5">
                         <nz-form-item>
                             <nz-form-label nzFor="reference" nzRequired>{{ 'products.reference' | translate }}:</nz-form-label>
                             <nz-form-control nzErrorTip="{{ 'errors.required' | translate }}" >
                                 <input nz-input formControlName="reference" type="text">
                             </nz-form-control>
                         </nz-form-item>
+                    </div>
+                    <div class="col-1 mt-4">
+                        <a class="m-r-5 btn-primary" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'products.generate' | translate }}" (click)="getReference()">
+                            <span nz-icon nzType="plus-square" nzTheme="outline"></span>
+                        </a>
                     </div>
                 </div>
                 <div class="row">

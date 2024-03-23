@@ -77,7 +77,7 @@ export class InfoOptionalTabComponent implements OnInit {
     
     if( this.lastPageBrand && ((this.lastPageBrand < this.pageBrand) && !this.termBrand) ) return
 
-    this._crudSvc.getRequest(`/inventory/distribution-local/shelves/index${query}`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/inventory/brands/index${query}`).subscribe((res: any) => {
         const { data } = res;
         (!this.termBrand) ? this.brandsList = [...this.brandsList,  ...data.data] : this.brandsList = data.data;
         this.lastPageBrand = data.last_page;
