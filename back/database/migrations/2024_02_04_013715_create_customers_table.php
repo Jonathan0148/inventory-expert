@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('document', 30)->nullable()->unique()->comment('Número de documento');
             $table->string('cell_phone', 20)->nullable()->comment('Número de celular');
             $table->string('email', 100)->nullable()->comment('Número de celular');
-            $table->boolean('state')->defult(1)->comment('Estado del cliente: 0: Si el cliente esta inactivo 1: Si el cliente esta activo 2: Si el cliente esta pendiente');
+            $table->integer('state')->default(1)->comment('Estado del cliente: 0: Si el cliente esta inactivo 1: Si el cliente esta activo 2: Si el cliente esta pendiente');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });
