@@ -60,7 +60,7 @@ export class FormProductsComponent implements OnInit {
         shelf_id: [ null, [ ] ],
         row_id: [ null, [ ] ],
         column_id: [ null, [ ] ],
-        reference: [ null, [ Validators.required ] ],
+        reference: [ null, [ Validators.required, Validators.maxLength(25) ] ],
         name: [ null, [ Validators.required ] ],
         description: [ null, [ ] ],
         applications: [ null , [ ] ],
@@ -79,7 +79,6 @@ export class FormProductsComponent implements OnInit {
         status: [ null , [ Validators.required ] ],
     });
 
-    if(!this.isDetailForm) this.getReference();
     if(this.id) this.setProductForm()
   }
 
@@ -115,7 +114,7 @@ export class FormProductsComponent implements OnInit {
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
 
-  private getReference():void {
+  public getReference():void {
     this._crudSvc.getRequest(`/inventory/products/getReference`).subscribe((res: any) => {
       const { data } = res;
       this.form.patchValue({ reference: data })

@@ -1,1 +1,11 @@
-<app-detail-products></app-detail-products>
+<nz-page-header class="site-page-header" nzBackIcon>
+    <nz-page-header-title>
+      <ng-container>{{ (isDetail ? 'global.detail' : (id ? 'products.editTitle' : 'products.addTitle')) | translate }}</ng-container>
+    </nz-page-header-title>
+</nz-page-header>
+
+<div class="container mt-3">
+    <nz-card>
+        <app-detail-products></app-detail-products>
+    </nz-card>
+</div>

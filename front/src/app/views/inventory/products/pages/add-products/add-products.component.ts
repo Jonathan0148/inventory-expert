@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-products',
@@ -11,8 +7,20 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./add-products.component.scss']
 })
 export class AddProductsComponent implements OnInit {
+  id: number;
+  isDetail: boolean = false;
 
-  constructor() { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params.id ?? '';
+      this.isDetail = !!this.router.url
+        .split("/")
+        .find((a) => a === 'detalle');
+    });
+  }
 
   ngOnInit(): void {}
 

@@ -49,8 +49,8 @@ class BrandController extends Controller
         try {
             $validatedData = $request->validate([
                 'store_id' => 'required',
-                'name' => 'nullable',
-                'description' => 'required'
+                'name' => 'required',
+                'description' => 'nullable'
             ]);
             
             $data = Brand::create($validatedData);

@@ -29,6 +29,9 @@ export class ProductsComponent implements OnInit {
       priority: false
     },
     {
+      title: 'Imagen',
+    },
+    {
       title: 'Referencia',
     },
     {
@@ -38,7 +41,7 @@ export class ProductsComponent implements OnInit {
       title: 'Categorías',
     },
     {
-      title: 'Precio',
+      title: 'Precio Venta',
     },
     {
       title: 'Stock'
@@ -166,7 +169,7 @@ export class ProductsComponent implements OnInit {
           title: 'Aplicaciones',
         },
         {
-          title: 'Precio',
+          title: 'Precio Venta',
         },
         {
           title: 'Stock'

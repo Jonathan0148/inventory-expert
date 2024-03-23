@@ -41,7 +41,7 @@ export class FormCategoriesComponent implements OnInit {
     this.form = this.fb.group({
         store_id: [ 1, [ Validators.required ] ],
         name: [ null, [ Validators.required ] ],
-        description: [ null, [ Validators.required] ]
+        description: [ null, [ ] ]
     });
     
     if(this.id) this.getCategory();

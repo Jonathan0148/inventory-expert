@@ -40,7 +40,7 @@ class ProductController extends Controller
             return $page;
         });
 
-        $data = Product::select('products.*', 'stores.store_name as storeName', 'brands.name as brand')
+        $data = Product::where($sql)->select('products.*', 'stores.store_name as storeName', 'brands.name as brand')
         ->join('stores', 'products.store_id', '=', 'stores.id')
         ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
         ->where('products.store_id', Auth::user()->store_id)
@@ -74,7 +74,14 @@ class ProductController extends Controller
         try {
             $price = $request->input('price');
             $discount = $request->input('discount');
-            $price_total = $price - ($price * $discount / 100) ;
+            $tax = $request->input('tax');
+            $price_total = $price - ($price * $discount / 100) + ($price * $tax / 100);
+
+            $product = Product::where('reference', $request->input('reference'))->first();
+
+            if ($product) {
+                return ResponseHelper::NoExits('Ya existe un producto con esta referencia');
+            }
 
             $data = Product::create([
                 'store_id' => $request->input('store_id'),
@@ -92,7 +99,7 @@ class ProductController extends Controller
                 'cost' => $request->input('cost'),
                 'price'=> $price,
                 'is_original' => $request->input('is_original'),
-                'tax' => $request->input('tax'),
+                'tax' => $tax,
                 'discount' => $discount,
                 'price_total' => $price_total,
                 'status' => $request->input('status'),
@@ -150,7 +157,8 @@ class ProductController extends Controller
         try {
             $price = $request->input('price');
             $discount = $request->input('discount');
-            $price_total = $price - ($price * $discount / 100);
+            $tax = $request->input('tax');
+            $price_total = $price - ($price * $discount / 100) + ($price * $tax / 100);
             
             $data->update([
                 'store_id' => $request->input('store_id'),
@@ -168,7 +176,7 @@ class ProductController extends Controller
                 'cost' => $request->input('cost'),
                 'price' => $price,
                 'is_original' => $request->input('is_original'),
-                'tax' => $request->input('tax'),
+                'tax' => $tax,
                 'discount' => $discount,
                 'price_total' => $price_total,
                 'status' => $request->input('status'),
@@ -205,29 +213,19 @@ class ProductController extends Controller
     }
 
     /**
-     * get id latest
+     * Genera una referencia aleatoria
      */
     public function getReference()
     {
-        $productName = $this->generateRandomProductName();
-        $cleanedProductName = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $productName));
-        $randomCode = Str::random(5);
-        $reference = substr($cleanedProductName, 0, 10) . $randomCode;
-        
-        return ResponseHelper::Get($reference);
-    }
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
 
-    /**
-     * generate random product name
-     */
-    private function generateRandomProductName()
-    {
-        $adjectives = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White', 'Purple', 'Orange'];
-        $nouns = ['Car', 'House', 'Book', 'Computer', 'Phone', 'Chair', 'Table', 'Shoe'];
-        
-        $adjective = $adjectives[array_rand($adjectives)];
-        $noun = $nouns[array_rand($nouns)];
-        
-        return $adjective . ' ' . $noun;
+        $length = 15;
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return ResponseHelper::Get($randomString);
     }
 }
