@@ -37,6 +37,7 @@ export class FormProductsComponent implements OnInit {
   measurementUnitList = this._measurementUnitSvC.get();
   avatarUrl: string = "";
   setImagesUrl: any;
+  basicLicense: boolean = false;
 
   constructor(
     private modalService: NzModalService, 
@@ -80,6 +81,7 @@ export class FormProductsComponent implements OnInit {
     });
 
     if(this.id) this.setProductForm()
+    this.validateLocal();
   }
 
   submitForm(): void {
@@ -163,5 +165,12 @@ export class FormProductsComponent implements OnInit {
     console.log(images);
     this.avatarUrl = images[0]?.response?.url;
     this.form.patchValue({images: images});
+  }
+
+  private validateLocal(){
+    this._crudSvc.getRequest(`/settings/stores/validateLocal`).subscribe((res: any) => {
+      const { data } = res;
+      if (data == 1) this.basicLicense = true; 
+    })
   }
 }

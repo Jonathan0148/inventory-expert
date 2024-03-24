@@ -120,7 +120,7 @@ export const ROUTES: SideNavInterface[] = [
                 code: 14,
                 title: 'Marcas',
                 iconType: 'nzIcon',
-                icon: 'tags',
+                icon: 'shopping',
                 iconTheme: 'outline',
                 submenu: []
             },
