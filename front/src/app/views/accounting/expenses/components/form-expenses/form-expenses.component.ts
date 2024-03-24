@@ -19,6 +19,7 @@ export class FormExpensesComponent implements OnInit {
   termStore: string = '';
   lastPageStore: number;
   isDetail: boolean = false;
+  basicLicense: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +47,7 @@ export class FormExpensesComponent implements OnInit {
     
     if(this.id) this.getExpense();
     this.getStores();
+    this.validateLocal();
   }
   
   public submit(): void {
@@ -86,6 +88,13 @@ export class FormExpensesComponent implements OnInit {
         (!this.termStore) ? this.storesList = [...this.storesList,  ...data.data] : this.storesList = data.data;
         this.lastPageStore = data.last_page;
         this.pageStore++;
+    })
+  }
+
+  private validateLocal(){
+    this._crudSvc.getRequest(`/settings/stores/validateLocal`).subscribe((res: any) => {
+      const { data } = res;
+      if (data == 1) this.basicLicense = true; 
     })
   }
 }

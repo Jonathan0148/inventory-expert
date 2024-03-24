@@ -196,4 +196,16 @@ class StoreController extends Controller
 
         return ResponseHelper::Get($data);
     }
+
+    /**
+     * Muestra muchos registros.
+     */
+    public function validateLocal()
+    {
+        $validateLicense = License::first();
+
+        if ($validateLicense) $validateLicense = $validateLicense->number_of_stores;
+
+        return ResponseHelper::Get($validateLicense);
+    }
 }

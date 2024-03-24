@@ -39,6 +39,7 @@ export class FormUsersComponent implements OnInit {
   loading = false;
   edit = false;
   isDetail: boolean = false;
+  basicLicense: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -78,6 +79,7 @@ export class FormUsersComponent implements OnInit {
     if(this.id) this.getUser()
     this.getStores();
     this.getRoles();
+    this.validateLocal();
   }
   
   public submit(): void {
@@ -220,5 +222,12 @@ export class FormUsersComponent implements OnInit {
       this.avatarUrl = avatarUrl;
       this.form.patchValue({ avatar: avatarUrl });
     });
+  }
+
+  private validateLocal(){
+    this._crudSvc.getRequest(`/settings/stores/validateLocal`).subscribe((res: any) => {
+      const { data } = res;
+      if (data == 1) this.basicLicense = true; 
+    })
   }
 }
