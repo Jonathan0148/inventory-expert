@@ -7,14 +7,6 @@
     </thead>
     <tbody>
         <tr *ngFor="let item of productsListTable.data;  let i=index">
-            <ng-container *ngIf="isModal">
-                <td>
-                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.add' | translate }}" class="btn-add" nz-popconfirm nzPopconfirmTitle="{{ 'global.addConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm"
-                    (nzOnConfirm)="confirmAdd(item.id)" (nzOnCancel)="cancel()" nzPopconfirmPlacement="left">
-                        <i nz-icon nzType="plus" theme="outline"></i>
-                    </button>
-                </td>
-            </ng-container>
             <td>#{{item.id}}</td>
             <td>
                 <nz-avatar [nzSize]="60" nzIcon="file-image" [nzSrc]="item.images[0]?.response?.url"></nz-avatar>
@@ -44,6 +36,13 @@
                             <i nz-icon nzType="delete" theme="outline"></i>
                         </button>
                     </div>
+                </td>
+            </ng-container>
+            <ng-container *ngIf="isModal">
+                <td>
+                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.add' | translate }}" class="btn-add" [nzBeforeConfirm]="beforeConfirm" (click)="confirmAdd(item.id)" (nzOnCancel)="cancel()">
+                        <i nz-icon nzType="plus" theme="outline"></i>
+                    </button>
                 </td>
             </ng-container>
         </tr>

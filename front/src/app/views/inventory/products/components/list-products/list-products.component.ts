@@ -3,6 +3,7 @@ import { ProductModel } from '../../../../../shared/interfaces/product';
 import { CrudServices } from '../../../../../shared/services/crud.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ProductsDetailService } from '../../../../accounting/sales/services/products-detail.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-list-products',
@@ -20,6 +21,7 @@ export class ListProductsComponent implements OnInit {
     private nzMessageService: NzMessageService,
     private _crudSvc:CrudServices,
     private _productDetailSvC:ProductsDetailService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {}
@@ -52,7 +54,6 @@ export class ListProductsComponent implements OnInit {
     });
   }
 
-
   confirmAdd(id:number): void {
     this._crudSvc.getRequest(`/inventory/products/consultAvailability/${id}`)
     .subscribe((res:any) => {
@@ -60,9 +61,8 @@ export class ListProductsComponent implements OnInit {
       if(success){
         this._productDetailSvC.setListProduct$(data);
         this.nzMessageService.success('Producto agregado correctamente');
+        this.modal.closeAll();
       }
     })
   }
-
-
 }
