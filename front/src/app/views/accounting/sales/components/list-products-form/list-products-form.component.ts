@@ -7,6 +7,8 @@ import { ProductsDetailService } from '../../services/products-detail.service';
 import { CrudServices } from '../../../../../shared/services/crud.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { ModalSearchProductsComponent } from '../modal-search-products/modal-search-products.component';
+import { Subscription } from 'rxjs';
+import { ValidationsForm } from '../../validations/validations-form';
 
 @Component({
   selector: 'app-list-products-form',
@@ -17,6 +19,7 @@ export class ListProductsFormComponent implements OnInit {
   @Input() form:UntypedFormGroup;
   @Input() products:UntypedFormArray;
   productList:ProductModel[] = [];
+  subscription: Subscription;
 
   constructor(
     private _notificationSvC:NotificationsService,    
@@ -28,6 +31,7 @@ export class ListProductsFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.listenObserver();
   }
 
   public onChangeAmount(indexProduct:number){
@@ -61,6 +65,22 @@ export class ListProductsFormComponent implements OnInit {
     });
   }
 
+  private addProductsForm(product: ProductModel):void {          
+    const lessonForm = this.fb.group({
+      product_id: [product?.id],
+      reference: [product?.reference],
+      name: [product.name],
+      amount: [product?.amount ?? 1],
+      stock: [product?.stock],
+      price:[product?.price],
+      subtotal:[(product?.amount ?? 1) * product?.price],
+    },   
+    {
+      validator: ValidationsForm.match('stock', 'amount', 'no-same')
+    });      
+    this.products.push(lessonForm);  
+}
+
   public onClikOpenModal(tplFooter: TemplateRef<{}>):void {
     this._modalSvC.create({
       nzTitle: 'Buscar Productos',
@@ -70,4 +90,18 @@ export class ListProductsFormComponent implements OnInit {
       nzFooter: tplFooter
     });
   }
+  
+  private listenObserver = () => {
+    this.subscription = this._productDetailSvC.productLists$.subscribe((res) => {
+      if(!this.validateExistsForMultiple(res.id)){
+        this.addProductsForm(res);
+        this._productDetailSvC.setChangePrice$(true);
+        return 
+      }
+      this.showNotificationExists();
+    });
+  }
+
+  private validateExistsForMultiple = (id:number) => (this.products.value.filter(e => e.product_id == id)).length;
+  private showNotificationExists = () => this._notificationSvC.info('Atención','Ya se ha agregado ese producto a la venta','top');
 }

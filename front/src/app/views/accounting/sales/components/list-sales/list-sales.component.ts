@@ -10,7 +10,6 @@ import { CrudServices } from '../../../../../shared/services/crud.service';
   styleUrls: ['./list-sales.component.scss']
 })
 export class ListSalesComponent implements OnInit {
-
   @Input() salesList:SalesModel[]; 
   @Input() orderColumn:any;
   @Input() loading:boolean;  
@@ -47,5 +46,4 @@ export class ListSalesComponent implements OnInit {
       }, 1000);
     });
   }
-
 }
