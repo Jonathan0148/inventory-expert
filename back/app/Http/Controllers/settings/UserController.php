@@ -51,6 +51,7 @@ class UserController extends Controller
             ->select('users.id', 'users.avatar', DB::raw('concat(users.names, " ", users.surnames) as fullName'),'users.email', 'users.state', 'roles.name as nameRol', 'roles.is_super', 'stores.store_name as nameStore')
             ->join('roles', 'users.role_id', '=', 'roles.id')
             ->join('stores', 'users.store_id', '=', 'stores.id')
+            ->where('store_id', Auth::user()->store_id)
             ->where(function ($query) use ($term) {
                 $query->where('users.names', 'like', "%$term%");
                 $query->orWhere('users.surnames', 'like', "%$term%");
