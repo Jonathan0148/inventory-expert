@@ -20,20 +20,19 @@ class SaleController extends Controller
     public function index(Request $request)
     {
         $data = [];
-        $page = $request->get('page') ? $request->get('page') : 1;
-        $limit = $request->get('limit') ? $request->get('limit') : 10;
-        $term = $request->get('term');
+        $page = $request->input('page') ? $request->input('page') : 1;
+        $limit = $request->input('limit') ? $request->input('limit') : 10;
+        $term = $request->input('term');
+        $type = $request->input('type');
+        $date = $request->input('date');
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
         });
 
-        $data = Sale::select('sales.*', 'sales.store_name as storeName')
-        ->join('sales', 'expenses.store_id', '=', 'sales.id')
-        ->where('store_id', Auth::user()->store_id)
-        ->where(function ($query) use ($term) {
-            $query->orWhere('sales.reference', 'like', "%$term%");
-        })->orderBy('sales.id', 'DESC')->paginate($limit);
+        $sale = $this->getSaleBypagination($term);
+        if ($date && $type) $sale = $this->getSaleWithFilters($type, $date, $sale);
+        $data = $sale->orderBy('id', 'DESC')->paginate($limit);
 
         return ResponseHelper::Get($data);
     }
@@ -121,6 +120,27 @@ class SaleController extends Controller
         $data->delete();
 
         return ResponseHelper::Delete('Información eliminada correctamente');
+    }
+
+    private function getSaleBypagination($term)
+    {
+        return Sale::select('sales.*')
+            ->with(['customer' => function ($query) {
+                $query->select('id', 'full_name', 'type_document', 'document');
+            }, 'paymentMethod:id,name'])
+            ->where(function ($query) use ($term) {
+                $query->where('reference', 'like', "%$term%");
+                $query->orWhere('state', 'like', "%$term%");
+            });
+    }
+
+    private function getSaleWithFilters(String $type, $date, $expense)
+    {
+        if ($type == 'month') {
+            $rangeDates = $this->getMonthAndYear($date);
+            return $expense->whereMonth('sales.date', $rangeDates['month'])->whereYear('sales.date', $rangeDates['year']);
+        }
+        return $expense->whereDate('sales.date', $date);
     }
 
     /**

@@ -156,7 +156,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         });
 
         Route::controller(SaleController::class)->prefix('sales')->group(function () {
-            Route::get('index', 'index');
+            Route::post('index', 'index');
             Route::post('create', 'create');
             Route::get('show/{id}', 'show');
             Route::post('edit/{id}', 'edit');
