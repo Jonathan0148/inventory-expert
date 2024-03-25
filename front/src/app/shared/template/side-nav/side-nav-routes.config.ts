@@ -79,15 +79,15 @@ export const ROUTES: SideNavInterface[] = [
                 iconTheme: 'outline',
                 submenu: []
             }, 
-            // {
-            //     path: '/contabilidad/ventas',
-            //     code: 18,
-            //     title: 'Ventas',
-            //     iconType: 'nzIcon',
-            //     icon: 'shopping',
-            //     iconTheme: 'outline',
-            //     submenu: []
-            // },
+            {
+                path: '/contabilidad/ventas',
+                code: 18,
+                title: 'Ventas',
+                iconType: 'nzIcon',
+                icon: 'shopping',
+                iconTheme: 'outline',
+                submenu: []
+            },
         ]
     },
     {

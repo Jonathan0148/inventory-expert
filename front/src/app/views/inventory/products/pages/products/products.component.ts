@@ -149,24 +149,18 @@ export class ProductsComponent implements OnInit {
     if(this.isModal){
       this.orderColumn = [
         {
-          title: ''
-        },
-        {
           title: 'ID',
           compare: (a: ProductModel, b: ProductModel) => a.id - b.id,
           priority: false
+        },
+        {
+          title: 'Imagen',
         },
         {
           title: 'Referencia',
         },
         {
           title: 'Nombre',
-        },
-        {
-          title: 'Marcas',
-        },
-        {
-          title: 'Aplicaciones',
         },
         {
           title: 'Precio Venta',
@@ -177,6 +171,9 @@ export class ProductsComponent implements OnInit {
         {
           title: 'Estado'
         },
+        {
+          title: ''
+        }
       ]
     }
   }

@@ -32,7 +32,6 @@ export class FormProductsComponent implements OnInit {
   pageStore: number = 1;
   termStore: string = '';
   lastPageStore: number;
-  isAmount: boolean = false;
   isDetail: boolean = false;
   measurementUnitList = this._measurementUnitSvC.get();
   avatarUrl: string = "";
@@ -66,12 +65,12 @@ export class FormProductsComponent implements OnInit {
         description: [ null, [ ] ],
         applications: [ null , [ ] ],
         measurement_unit: [ null, [ Validators.required ] ],
-        stock: [ 0, [ ] ],
-        stock_min: [ 0, [ ] ],
-        cost: [ 0 , [ ] ],
-        price: [ 0 , [  ] ],
+        stock: [ null, [ Validators.required ] ],
+        stock_min: [ null, [ Validators.required ] ],
+        cost: [ null, [ Validators.required ] ],
+        price: [ null, [ Validators.required ] ],
         is_original: [ null , [ ] ],
-        tax: [ 0 , [  ] ],
+        tax: [ 0, [  ] ],
         discount: [ 0, [  ] ],
         images: [ {} , [ ] ],
         barcode: [ null , [ ] ],
@@ -142,14 +141,6 @@ export class FormProductsComponent implements OnInit {
   //------------------------------------------------------------------------
   //-------------------------------EVENTS-----------------------------------
   //------------------------------------------------------------------------
-
-  public measurementUnitValue(event:number){
-    if (event==0){
-      this.isAmount = true;
-    }else{
-      this.isAmount = false;
-    }
-  }
 
   //------------------------------------------------------------------------
   //------------------------AUXILIAR FUNCTIONS------------------------------

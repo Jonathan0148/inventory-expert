@@ -1,14 +1,10 @@
 import { Component, Input, OnInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { Validators, FormBuilder, UntypedFormGroup, UntypedFormArray, AbstractControl, UntypedFormBuilder } from '@angular/forms';
+import { Validators, UntypedFormGroup, UntypedFormArray, UntypedFormBuilder } from '@angular/forms';
 import { CrudServices } from '../../../../../shared/services/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { StatusModel } from '../../../../../shared/interfaces/status';
-import { StatusService } from '../../services/status.service';
 import { ValidationsForm } from '../../validations/validations-form';
-import { ProductModel } from '../../../../../shared/interfaces/product';
 import { OnExit } from 'src/app/shared/guards/form-exit.guard';
-import { NotificationsService } from 'src/app/shared/services/notifications.service';
 import { ModalService } from '../../../../../shared/services/modal.service';
 
 @Component({
@@ -45,17 +41,14 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   ngOnInit(): void {
     this.form = this.fb.group({
       date: [ this.date, [ Validators.required ] ],
-      cellphone: [ null, [ Validators.required ] ],
-      email: [ null, [ Validators.required ] ],
-      id_type_document:[ 1, [  Validators.required ]],
-      id_type_person:[ 1, [ Validators.required ]],
+      type_document:[ 1, [  Validators.required ]],
       document:[null, [ Validators.required ]],
       full_name:[null, [ Validators.required ]],
       client_exists:[ !!this.id, [ ]],
       id_customer:[null, [ ]],
       reference:[null, Validators.required],
       status:[null, [ Validators.required ]],
-      id_payment_method: [ null, [ Validators.required ] ],
+      payment_method: [ null, [ Validators.required ] ],
       total:[0, [  ]],
       tax: [ 0, [ Validators.required, Validators.max(100), Validators.min(0)] ],
       subtotal:[0, [  ]],
@@ -108,7 +101,7 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   }
 
   public getReference(){
-    this._crudSvc.getRequest(`/sales/getCount`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/accounting/sales/getReference`).subscribe((res: any) => {
         const { data } = res;
         this.form.patchValue({ reference: (data?.id ?? 0) + 1 })
     })

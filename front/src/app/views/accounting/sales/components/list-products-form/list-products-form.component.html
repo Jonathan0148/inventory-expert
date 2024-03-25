@@ -1,6 +1,16 @@
 <form [formGroup]="form">
     <nz-card>
-        <h3>{{ 'sales.productList' | translate }}</h3>
+        <div class="row mb-4">
+            <div class="col-12 col-sm-8">
+                <h4>{{ 'sales.productList' | translate }}</h4>
+            </div>
+            <div class="col-12 col-sm-4">
+                <button nz-button nzType="text" nzBlock class="w-100" type="button" (click)="onClikOpenModal(footer)">
+                    <i nz-icon nzType="appstore-add" theme="outline"></i>
+                    {{ 'sales.searchProduct' | translate }}
+                </button>
+            </div>
+        </div>
         <nz-table nzTemplateMode>
             <thead>
                 <tr>
@@ -55,4 +65,8 @@
 <ng-template #errorsPassword let-control>
     <ng-container *ngIf="control.hasError('required')">Campo requerido</ng-container>
     <ng-container *ngIf="control.hasError('no-same')">No hay suficientes unidades disponibles</ng-container>
+</ng-template>
+
+<ng-template #footer>
+
 </ng-template>

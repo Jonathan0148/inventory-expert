@@ -1,10 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormArray } from '@angular/forms';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder } from '@angular/forms';
 import { ProductModel } from '../../../../../shared/interfaces/product';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NotificationsService } from '../../../../../shared/services/notifications.service';
 import { ProductsDetailService } from '../../services/products-detail.service';
 import { CrudServices } from '../../../../../shared/services/crud.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { ModalSearchProductsComponent } from '../modal-search-products/modal-search-products.component';
 
 @Component({
   selector: 'app-list-products-form',
@@ -21,6 +23,8 @@ export class ListProductsFormComponent implements OnInit {
     private nzMessageService: NzMessageService,
     private _productDetailSvC:ProductsDetailService,
     private _crudSvc:CrudServices,
+    private _modalSvC: NzModalService,
+    private fb: UntypedFormBuilder,
   ) { }
 
   ngOnInit(): void {
@@ -57,4 +61,13 @@ export class ListProductsFormComponent implements OnInit {
     });
   }
 
+  public onClikOpenModal(tplFooter: TemplateRef<{}>):void {
+    this._modalSvC.create({
+      nzTitle: 'Buscar Productos',
+      nzContent: ModalSearchProductsComponent,
+      nzClosable: true,
+      nzWidth: '85%',
+      nzFooter: tplFooter
+    });
+  }
 }
