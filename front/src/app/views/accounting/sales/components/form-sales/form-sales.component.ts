@@ -41,7 +41,7 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   ngOnInit(): void {
     this.form = this.fb.group({
       date: [ this.date, [ Validators.required ] ],
-      type_document:[ 1, [  Validators.required ]],
+      type_document:[ 0, [  Validators.required ]],
       document:[null, [ Validators.required ]],
       full_name:[null, [ Validators.required ]],
       client_exists:[ !!this.id, [ ]],
