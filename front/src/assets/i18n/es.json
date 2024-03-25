@@ -205,6 +205,7 @@
         "dueDate":"Fecha de vencimiento"
     },
     "sales":{
+        "searchProduct":"Agregar Productos",
         "add":"Agregar Venta",
         "addTitle":"Agregar Venta",
         "addSail":"Adicionar abono",
@@ -215,7 +216,7 @@
         "detailsPayment":"Detalles del pago",
         "paymentMethod":"Método de pago",
         "status":"Estado venta",
-        "infoClient":"Información cliente",
+        "infoClient":"Cliente",
         "typeDocument":"Tipo de documento",
         "document":"Documento",
         "name":"Nombre",

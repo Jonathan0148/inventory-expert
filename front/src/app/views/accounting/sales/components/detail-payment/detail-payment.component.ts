@@ -36,7 +36,7 @@ export class DetailPaymentComponent implements OnInit, OnDestroy {
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
   private getPaymentMethods():void {
-    this._crudSvc.getRequest(`/sales/getPaymentMethods`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/accounting/sales/getPaymentMethods`).subscribe((res: any) => {
         const { data } = res;
         this.paymentMethodList = data;
     })
@@ -81,5 +81,4 @@ export class DetailPaymentComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.listSubscribers.map(a => a.unsubscribe());
   }
-
 }

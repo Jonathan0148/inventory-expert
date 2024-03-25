@@ -76,7 +76,7 @@ export class SalesComponent implements OnInit {
     };
     
 
-    this._crudSvc.postRequest(`/sales/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+    this._crudSvc.postRequest(`/accounting/sales/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
         const { data } = res;
         this.salesList = data.data;
         this.totalItems = data.total;

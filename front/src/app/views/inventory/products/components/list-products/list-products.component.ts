@@ -54,7 +54,7 @@ export class ListProductsComponent implements OnInit {
 
 
   confirmAdd(id:number): void {
-    this._crudSvc.getRequest(`/products/consultAvailability/${id}`)
+    this._crudSvc.getRequest(`/inventory/products/consultAvailability/${id}`)
     .subscribe((res:any) => {
       const { success, data } = res; 
       if(success){
