@@ -58,6 +58,6 @@ export class InfoClientSalesComponent implements OnInit {
   }
 
   private resetFields() {
-    this.form.patchValue({ type_document:1, full_name:null, client_exists:false })
+    this.form.patchValue({ type_document:0, full_name:null, client_exists:false })
   }
 }
