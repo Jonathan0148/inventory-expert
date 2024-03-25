@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\accounting\ExpenseController;
+use App\Http\Controllers\accounting\SaleController;
 use App\Http\Controllers\settings\StoreController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\contacts\CustomerController;
@@ -123,6 +124,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('edit/{id}', 'edit');
             Route::delete('destroy/{id}', 'destroy');
             Route::get('getReference', 'getReference');
+            Route::get('consultAvailability/{id}', 'consultAvailability');
         });
     });
 
@@ -151,6 +153,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('show/{id}', 'show');
             Route::post('edit/{id}', 'edit');
             Route::delete('destroy/{id}', 'destroy');
+        });
+
+        Route::controller(SaleController::class)->prefix('sales')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::post('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
+            Route::get('getReference', 'getReference');
+            Route::get('getPaymentMethods', 'getPaymentMethods');
         });
     });
 });

@@ -2,6 +2,7 @@
 
 namespace App\Models\inventory;
 
+use App\Models\accounting\SaleDetail;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -15,5 +16,10 @@ class Product extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'products_categories')->withPivot('product_id');
+    }
+
+    public function sales_detail()
+    {
+        return $this->hasMany(SaleDetail::class);
     }
 }
