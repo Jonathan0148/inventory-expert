@@ -20,7 +20,7 @@ class FileController extends Controller
 
             $nuevoNombre = md5(uniqid() . time()) . '.' . $extension;
 
-            $archivo->storeAs('public/uploads', $nuevoNombre);
+            $archivo->storeAs('uploads', $nuevoNombre);
 
             $url = url('/storage/uploads/' . $nuevoNombre);
             
@@ -32,7 +32,7 @@ class FileController extends Controller
 
             $nuevoNombre = md5(uniqid() . time()) . '.' . $extension;
 
-            $archivo->storeAs('public/uploads', $nuevoNombre);
+            $archivo->storeAs('uploads', $nuevoNombre);
 
             $url = url('/storage/uploads/' . $nuevoNombre);
             

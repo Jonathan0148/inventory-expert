@@ -153,7 +153,6 @@ export class FormProductsComponent implements OnInit {
   };  
   
   receiveImages(images: any) {
-    console.log(images);
     this.avatarUrl = images[0]?.response?.url;
     this.form.patchValue({images: images});
   }
