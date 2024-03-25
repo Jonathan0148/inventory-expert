@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('name', 50)->comment('Nombre');
             $table->text('description')->nullable()->comment('Descripción');
             $table->text('applications')->nullable()->comment('Aplicaciones');
-            $table->integer('measurement_unit')->defult(0)->comment('Unidad de medida del producto: - 0: Si es por cantidad - 1: Si es por libra - 2: Si es por kilo - 3: Si es por longitud');
+            $table->integer('measurement_unit')->defult(0)->comment('Unidad de medida del producto: - 0: Si es por cantidad - 1: Si es por libra');
             $table->integer('stock')->nullable()->comment('Cantidad de productos');
             $table->integer('stock_min')->nullable()->defult(5)->comment('Cantidad de productos minimo para alerta');
             $table->float('cost')->nullable()->defult(0)->comment('Costo del producto');

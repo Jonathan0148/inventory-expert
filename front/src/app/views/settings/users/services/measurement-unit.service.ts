@@ -7,8 +7,7 @@ import { StatusModel } from '../../../../shared/interfaces/status';
 export class MeasurementUnitService {
   measurementUnitList:StatusModel[] = [
     { label: 'Cantidad', value: 0 },
-    { label: 'Libra', value: 1 },
-    { label: 'Kilo', value: 2 },
+    { label: 'Libra', value: 1 }
   ];
 
   constructor() { }
