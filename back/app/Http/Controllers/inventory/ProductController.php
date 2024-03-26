@@ -72,17 +72,17 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         try {
-            $price = $request->input('price');
-            $discount = $request->input('discount');
-            $tax = $request->input('tax');
-            $price_total = $price - ($price * $discount / 100) + ($price * $tax / 100);
-
             $product = Product::where('reference', $request->input('reference'))->first();
 
             if ($product) {
                 return ResponseHelper::NoExits('Ya existe un producto con esta referencia');
             }
 
+            $price = $request->input('price');
+            $discount = $request->input('discount');
+            $tax = $request->input('tax');
+            $price_total = $price - ($price * $discount / 100) + ($price * $tax / 100);
+            $status = $this->newStatusProduct($request->input('stock'), $request->input('stock_min'));
             $data = Product::create([
                 'store_id' => $request->input('store_id'),
                 'brand_id' => $request->input('brand_id'),
@@ -102,7 +102,7 @@ class ProductController extends Controller
                 'tax' => $tax,
                 'discount' => $discount,
                 'price_total' => $price_total,
-                'status' => $request->input('status'),
+                'status' => $status,
                 'images' => $request->input('images'),
                 'barcode' => $request->input('barcode')
             ]);
@@ -160,6 +160,7 @@ class ProductController extends Controller
             $tax = $request->input('tax');
             $price_total = $price - ($price * $discount / 100) + ($price * $tax / 100);
             
+            $status = $this->newStatusProduct($request->input('stock'), $request->input('stock_min'));
             $data->update([
                 'store_id' => $request->input('store_id'),
                 'brand_id' => $request->input('brand_id'),
@@ -179,7 +180,7 @@ class ProductController extends Controller
                 'tax' => $tax,
                 'discount' => $discount,
                 'price_total' => $price_total,
-                'status' => $request->input('status'),
+                'status' => $status,
                 'images' => $request->input('images'),
                 'barcode' => $request->input('barcode')
             ]);
@@ -220,7 +221,7 @@ class ProductController extends Controller
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
 
-        $length = 15;
+        $length = 10;
 
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, strlen($characters) - 1)];
@@ -253,6 +254,18 @@ class ProductController extends Controller
             return ResponseHelper::Get($data);
         }
 
-        return ResponseHelper::NoExits("El producto $data->reference no tiene unidades disponibles");
+        return ResponseHelper::NoExits("El producto $data->name no tiene unidades disponibles");
+    }
+
+    private function newStatusProduct(Int $stock, Int $minStock): string
+    {
+        $newStatus = 'in-stock';
+        if ($minStock >= $stock) {
+            $newStatus = 'low-stock';
+        }
+        if ($stock == 0) {
+            $newStatus = 'out-stock';
+        }
+        return $newStatus;
     }
 }

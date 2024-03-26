@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\accounting\BailController;
 use App\Http\Controllers\accounting\ExpenseController;
 use App\Http\Controllers\accounting\SaleController;
 use App\Http\Controllers\settings\StoreController;
@@ -143,6 +144,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('show/{id}', 'show');
             Route::post('edit/{id}', 'edit');
             Route::delete('destroy/{id}', 'destroy');
+            Route::post('getForDocuments', 'getForDocuments');
         });
     });
 
@@ -163,6 +165,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::delete('destroy/{id}', 'destroy');
             Route::get('getReference', 'getReference');
             Route::get('getPaymentMethods', 'getPaymentMethods');
+        });
+
+        Route::controller(BailController::class)->prefix('bails')->group(function () {
+            Route::post('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::post('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
         });
     });
 });

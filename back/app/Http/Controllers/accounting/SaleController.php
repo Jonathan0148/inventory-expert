@@ -5,8 +5,13 @@ namespace App\Http\Controllers\accounting;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\accounting\Bail;
 use App\Models\accounting\PaymentMethod;
 use App\Models\accounting\Sale;
+use App\Models\accounting\SaleDetail;
+use App\Models\contacts\Customer;
+use App\Models\inventory\Product;
+use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,14 +50,33 @@ class SaleController extends Controller
      */
     public function create(Request $request)
     {
+        $product = Sale::where('reference', $request->input('reference'))->first();
+        if ($product) {
+            return ResponseHelper::NoExits('Ya existe una venta con esta referencia');
+        }
+
         try {
-            $validatedData = $request->validate([
-                'store_id' => 'required',
-                'description' => 'required',
-                'value' => 'required'
+            $products = @$request->productsForm;
+            $status = @$request->status;
+            $customer = ($request->input('document') && $request->input('full_name')) ? ((!$request->client_exists) ? $this->createClientForSale($request->all()) : $request->customer_id) : null;
+    
+            $data = Sale::create([
+                'store_id' => $request->input('store_id'),
+                'customer_id' => $customer,
+                'payment_type_id' => $request->input('payment_type_id'),
+                'date' => Carbon::parse($request->input('date'))->toDateTimeString(),
+                'reference' => $request->input('reference'),
+                'status' => $status,
+                'total_bails' => $request->input('bail'),
+                'subtotal' => $request->input('subtotal'),
+                'tax' => $request->input('tax'),
+                'total' => $request->input('total'),
+                'observations' => $request->input('observations'),
             ]);
             
-            $data = Sale::create($validatedData);
+            if ($status == 2) $this->createBail(@$request->all(), $data);
+    
+            $this->createSalesDetail($products, $data->id);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
         } catch (\Throwable $th) {
@@ -68,10 +92,14 @@ class SaleController extends Controller
      */
     public function show($id)
     {
-        $data = Sale::find($id);
-        
+        $data = Sale::with(['details' => function ($query) {
+            $query->with(['product' => function ($query) {
+                $query->select('name', 'id', 'images', 'stock', 'price_total as price');
+            }]);
+        }, 'customer', 'paymentMethod:id,name'])->find($id);
+
         if (!$data) {
-            return ResponseHelper::NoExits('No existe información con el id '.  $id);
+            return ResponseHelper::NoExits('No existe una venta con el id ' .  $id);
         }
         return ResponseHelper::Get($data);
     }
@@ -90,12 +118,22 @@ class SaleController extends Controller
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
+
+        $products = @$request->productsForm;
+        $status = @$request->status;
+        $customer = ($request->input('document')) ? ((!$request->client_exists) ? $this->createClientForSale($request->all()) : $request->customer_id) : null;
+        
         try {
             $data->update([
-                'store_id' => $request->input('store_id'),
-                'description' => $request->input('description'),
-                'value' => $request->input('value')
+                'customer_id' => $customer,
+                'payment_type_id' => $request->input('payment_type_id'),
+                'status' => $status,
+                'subtotal' => $request->input('subtotal'),
+                'tax' => $request->input('tax'),
+                'total' => $request->input('total'),
             ]);
+
+            $this->updateSalesDetail($products, $data->id);
 
             return  ResponseHelper::CreateOrUpdate($data, 'Información actualizada correctamente',);
         } catch (\Throwable $th) {
@@ -117,6 +155,8 @@ class SaleController extends Controller
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
 
+        $this->returnStockProducts($id);
+
         $data->delete();
 
         return ResponseHelper::Delete('Información eliminada correctamente');
@@ -130,7 +170,7 @@ class SaleController extends Controller
             }, 'paymentMethod:id,name'])
             ->where(function ($query) use ($term) {
                 $query->where('reference', 'like', "%$term%");
-                $query->orWhere('state', 'like', "%$term%");
+                $query->orWhere('status', 'like', "%$term%");
             });
     }
 
@@ -143,15 +183,20 @@ class SaleController extends Controller
         return $expense->whereDate('sales.date', $date);
     }
 
-    /**
-     * Genera una referencia aleatoria
-     */
+    private function getMonthAndYear($date)
+    {
+        $parseDate = Carbon::parse($date);
+        $arr['month'] = $parseDate->format('m');
+        $arr['year'] = $parseDate->format('Y');
+        return $arr;
+    }
+
     public function getReference()
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
 
-        $length = 15;
+        $length = 10;
 
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, strlen($characters) - 1)];
@@ -160,13 +205,99 @@ class SaleController extends Controller
         return ResponseHelper::Get($randomString);
     }
 
-    /**
-     * Get payment method all
-     */
     public function getPaymentMethods()
     {
         $paymentMethods = PaymentMethod::all();
 
         return ResponseHelper::Get($paymentMethods);
     } 
+
+    private function createClientForSale(array $customer): Int
+    {
+        $customerNew = Customer::create([
+            'type_document' => @$customer['type_document'],
+            'document' => @$customer['document'],
+            'full_name' => @$customer['full_name'],
+            'cell_phone' => @$customer['cell_phone']
+        ]);
+
+        return $customerNew->id;
+    }
+
+    private function createBail(array $req, Sale $sale)
+    {
+        Bail::create([
+            'sale_id' => $sale->id,
+            'payment_type_id' => @$req['payment_type_id'],
+            'price' => @$req['bail'],
+        ]); 
+    }
+
+    private function createSalesDetail(array $products, int $saleId)
+    {
+        foreach ($products as $product){
+            SaleDetail::create([
+                'sale_id' => $saleId,
+                'product_id' => $product['product_id'],
+                'amount' => $product['amount'],
+                'price' => $product['price']
+            ]);
+
+            $productFind = Product::find($product['product_id']);
+            $stock = $productFind['stock'] - $product['amount'];
+            $status = $this->newStatusProduct($stock, $productFind->stock_min);
+            $productFind->update(['stock' => $stock, 'status' => $status ]);
+        }
+    }
+
+    private function newStatusProduct(Int $stock, Int $minStock): string
+    {
+        $newStatus = 'in-stock';
+        if ($minStock >= $stock) {
+            $newStatus = 'low-stock';
+        }
+        if ($stock == 0) {
+            $newStatus = 'out-stock';
+        }
+        return $newStatus;
+    }
+
+    private function returnStockProducts(int $saleId)
+    {
+        $products = SaleDetail::where('sale_id', $saleId)->get();
+
+        foreach ($products as $product){
+            $productFind = Product::find($product['product_id']);
+            $stock = $productFind['stock'] + $product['amount'];
+            $status = $this->newStatusProduct($stock, $productFind->stock_min);
+            $productFind->update(['stock' => $stock, 'status' => $status ]);
+        }
+    }
+
+    private function updateSalesDetail(array $productsCreate, int $saleId)
+    {
+        $productsUpdate = SaleDetail::where('sale_id', $saleId)->get();
+        foreach ($productsUpdate as $productUpdate){
+            $productFindUpdate = Product::find($productUpdate['product_id']);
+            $stock = $productFindUpdate['stock'] + $productUpdate['amount'];
+            $status = $this->newStatusProduct($stock, $productFindUpdate->stock_min);
+            $productFindUpdate->update(['stock' => $stock, 'status' => $status ]);
+
+            $productUpdate->delete();
+        }
+
+        foreach ($productsCreate as $product){
+            SaleDetail::create([
+                'sale_id' => $saleId,
+                'product_id' => $product['product_id'],
+                'amount' => $product['amount'],
+                'price' => $product['price']
+            ]);
+
+            $productFind = Product::find($product['product_id']);
+            $stock = $productFind['stock'] - $product['amount'];
+            $status = $this->newStatusProduct($stock, $productFind->stock_min);
+            $productFind->update(['stock' => $stock, 'status' => $status ]);
+        }
+    }
 }

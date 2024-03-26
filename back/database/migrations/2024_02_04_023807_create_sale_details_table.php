@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
             $table->integer('product_id')->unsigned()->comment('ID del producto');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->float('quantity')->comment('Cantidad de producto');
-            $table->float('value')->comment('Valor del producto');
+            $table->float('amount')->comment('Cantidad de producto');
+            $table->float('price')->comment('Valor del producto');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });

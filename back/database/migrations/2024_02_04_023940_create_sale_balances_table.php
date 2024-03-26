@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sale_balances', function (Blueprint $table) {
+        Schema::create('bails', function (Blueprint $table) {
             $table->comment('Balance de las ventas');
             $table->increments('id');
             $table->integer('sale_id')->unsigned()->comment('ID de la venta');
             $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
-            $table->float('value')->comment('Valor del abono');
+            $table->integer('payment_type_id')->unsigned()->comment('ID del tipo de pago');
+            $table->foreign('payment_type_id')->references('id')->on('payment_methods')->onDelete('cascade');
+            $table->float('price')->comment('Valor del abono');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });
