@@ -16,32 +16,32 @@ export class SalesComponent implements OnInit {
   loading: boolean = false;
   limit: number = 10;
   orderColumn = [
-      {
-          title: 'ID',
-          compare: (a: SalesModel, b: SalesModel) => a.id - b.id,
-          priority: false
-      },
-      {
-          title: 'Referencia',
-      },
-      {
-          title: 'Cliente',
-      },
-      {
-          title: 'Metodo pago',
-      },
-      {
-        title: 'Fecha',
-      },
-      {
-        title: 'Valor',
-      },
-      {
-        title: 'Estado'
-      },
-      {
-          title: ''
-      }
+    {
+      title: 'ID',
+      compare: (a: SalesModel, b: SalesModel) => a.id - b.id,
+      priority: false
+    },
+    {
+      title: 'Referencia',
+    },
+    {
+      title: 'Cliente',
+    },
+    {
+      title: 'Metodo pago',
+    },
+    {
+      title: 'Fecha',
+    },
+    {
+      title: 'Valor',
+    },
+    {
+      title: 'Estado'
+    },
+    {
+      title: ''
+    }
   ]
   page: number = 1;
   searchInput: any;
@@ -74,7 +74,6 @@ export class SalesComponent implements OnInit {
       date:this.date,
       type:this.type,
     };
-    
 
     this._crudSvc.postRequest(`/accounting/sales/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
         const { data } = res;
@@ -82,9 +81,11 @@ export class SalesComponent implements OnInit {
         this.totalItems = data.total;
       })
   }
+
   // ---------------------------------------------------------------------
   // ------------------------PAGINATION AND FILTERS-----------------------
   // ---------------------------------------------------------------------
+
   public search(): void {
       this.term = this.searchInput;
       this.getSales()
@@ -117,5 +118,4 @@ export class SalesComponent implements OnInit {
   ngOnDestroy(): void {
     this.listSubscribers.map(a => a.unsubscribe());
   }
-  
 }

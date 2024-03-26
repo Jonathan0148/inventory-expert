@@ -46,7 +46,7 @@ export class InfoClientSalesComponent implements OnInit {
       type_document:this.form.get('type_document').value,
     }
 
-     this._crudSvc.postRequest(`/customers/getForDocuments`, data)
+     this._crudSvc.postRequest(`/contacts/customers/getForDocuments`, data)
      .pipe(finalize( () => this.loading = false))
      .subscribe((res: any) => {
       const { success,data } = res;
@@ -58,6 +58,6 @@ export class InfoClientSalesComponent implements OnInit {
   }
 
   private resetFields() {
-    this.form.patchValue({ type_document:0, full_name:null, client_exists:false })
+    this.form.patchValue({ type_document:0, full_name:null, cell_phone:null, client_exists:false })
   }
 }

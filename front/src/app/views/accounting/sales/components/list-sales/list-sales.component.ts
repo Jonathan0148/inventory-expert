@@ -29,7 +29,7 @@ export class ListSalesComponent implements OnInit {
 
   confirm(id:number): void {
 
-    this._crudSvc.deleteRequest(`/sales/destroy/${id}`)
+    this._crudSvc.deleteRequest(`/accounting/sales/destroy/${id}`)
     .subscribe(res => {
       this._crudSvc.requestEvent.emit('deleted')
     })

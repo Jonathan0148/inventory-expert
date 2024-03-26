@@ -120,7 +120,7 @@
                         <nz-form-item>
                             <nz-form-label nzFor="status" nzRequired>{{ 'products.status' | translate }}:</nz-form-label>
                             <nz-form-control nzErrorTip="Please input this field!">
-                                <nz-select formControlName="status" class="w-100">
+                                <nz-select formControlName="status" class="w-100" [nzDisabled]="true">
                                     <nz-option *ngFor="let item of statusList" [nzLabel]="item?.label" [nzValue]="item?.value"></nz-option>
                                 </nz-select>
                             </nz-form-control>

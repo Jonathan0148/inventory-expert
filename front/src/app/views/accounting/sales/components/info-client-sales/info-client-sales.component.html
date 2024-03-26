@@ -1,10 +1,11 @@
 <form [formGroup]="form">
     <div class="row">
-
-        <div class="col-12 mb-2">
+        <div class="col-12 mb-3">
             <h4 class="mt-1">{{ 'sales.infoClient' | translate }}</h4>
         </div>
-        <div class="col-sm-4 col-12">
+    </div>
+    <div class="row">
+        <div class="col-3">
             <nz-form-item>
                 <nz-form-label>{{ 'users.typeDocument' | translate }}</nz-form-label>
                 <nz-form-control>
@@ -14,7 +15,7 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div class="col-sm-4 col-12">
+        <div class="col-3">
             <nz-form-item>
                 <nz-form-label>{{ 'sales.document' | translate }}</nz-form-label>
                 <nz-form-control>
@@ -22,11 +23,19 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div class="col-sm-4 col-12">
+        <div class="col-3">
             <nz-form-item>
                 <nz-form-label>{{ 'sales.name' | translate }}</nz-form-label>
                 <nz-form-control>
                     <input nz-input placeholder="{{ 'sales.name' | translate }}" type="text" formControlName="full_name" [readonly]="isClient">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-3">
+            <nz-form-item>
+                <nz-form-label>{{ 'customers.cellPhone' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'customers.cellPhone' | translate }}" formControlName="cell_phone">
                 </nz-form-control>
             </nz-form-item>
         </div>

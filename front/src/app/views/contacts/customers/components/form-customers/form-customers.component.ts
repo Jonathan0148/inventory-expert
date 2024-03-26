@@ -51,8 +51,8 @@ export class FormCustomersComponent implements OnInit {
         full_name: [ null, [ Validators.required, Validators.maxLength(255)] ],
         type_document: [ null, [ Validators.required] ],
         document: [ null, [ Validators.required, Validators.maxLength(20)] ],
-        cell_phone: [ null, [ Validators.required, Validators.maxLength(10)] ],
-        email: [ null, [ Validators.required, Validators.email] ],
+        cell_phone: [ null, [ Validators.maxLength(10)] ],
+        email: [ null, [ Validators.email] ],
         state: [ null, [ Validators.required] ]
     });
     

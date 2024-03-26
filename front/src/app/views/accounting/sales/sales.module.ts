@@ -27,6 +27,7 @@ import { FilterComponent } from './components/filter/filter.component';
 import { ModalSearchProductsComponent } from './components/modal-search-products/modal-search-products.component';
 import { ProductsModule } from '../../inventory/products/products.module';
 import { ModalConfirmExitComponent } from './components/modal-confirm-exit/modal-confirm-exit.component';
+import { FormStoreComponent } from './components/form-store/form-store.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { ModalConfirmExitComponent } from './components/modal-confirm-exit/modal
     FormBailsComponent,
     FilterComponent,
     ModalSearchProductsComponent,
-    ModalConfirmExitComponent
+    ModalConfirmExitComponent,
+    FormStoreComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,10 @@
+<form [formGroup]="form">
+    <nz-form-item>
+        <nz-form-label>{{ 'brand.store' | translate }}</nz-form-label>
+        <nz-form-control>
+            <nz-select class="w-100" nzPlaceHolder="{{ 'brand.store' | translate }}" nzAllowClear formControlName="store_id" [nzDisabled]="basicLicense">
+                <nz-option *ngFor="let option of storesList" [nzValue]="option.id" [nzLabel]="option.store_name"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+</form>

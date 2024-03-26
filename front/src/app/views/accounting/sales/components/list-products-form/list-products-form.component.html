@@ -1,60 +1,60 @@
 <form [formGroup]="form">
-    <nz-card>
-        <div class="row mb-4">
-            <div class="col-12 col-sm-8">
-                <h4>{{ 'sales.productList' | translate }}</h4>
-            </div>
-            <div class="col-12 col-sm-4">
-                <button nz-button nzType="text" nzBlock class="w-100" type="button" (click)="onClikOpenModal(footer)">
-                    <i nz-icon nzType="appstore-add" theme="outline"></i>
-                    {{ 'sales.searchProduct' | translate }}
-                </button>
-            </div>
+    <div class="row mb-2">
+        <div class="col-12 col-sm-8">
+            <h4>{{ 'sales.productList' | translate }}</h4>
         </div>
-        <nz-table nzTemplateMode>
-            <thead>
-                <tr>
-                    <th>{{ 'products.reference' | translate }}</th>
-                    <th>{{ 'products.name' | translate }}</th>
-                    <th>{{ 'sales.amount' | translate }}</th>
-                    <th>{{ 'sales.unitValue' | translate }}</th>
-                    <th>{{ 'sales.subtotal' | translate }}</th>
-                    <th></th>
+        <div class="col-12 col-sm-4">
+            <button nz-button nzType="text" nzBlock class="w-100" type="button" (click)="onClikOpenModal(footer)">
+                <i nz-icon nzType="appstore-add" theme="outline"></i>
+                {{ 'sales.searchProduct' | translate }}
+            </button>
+        </div>
+    </div>
+    <nz-table nzTemplateMode>
+        <thead>
+            <tr>
+                <th>{{ 'products.image' | translate }}</th>
+                <th>{{ 'products.name' | translate }}</th>
+                <th>{{ 'sales.amount' | translate }}</th>
+                <th>{{ 'sales.unitValue' | translate }}</th>
+                <th>{{ 'sales.subtotal' | translate }}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container formArrayName="products" >
+                <tr *ngFor="let productsForm of products?.controls; let indexProduct = index">
+                    <ng-container [formGroup]="productsForm">
+                        <td>
+                            <nz-avatar [nzSize]="60" nzIcon="file-image" [nzSrc]="productsForm?.get('image')?.value"></nz-avatar>
+                        </td>
+                        <td>{{  productsForm?.get('name')?.value }}</td>
+                        <td style="vertical-align: middle;">
+                            <nz-form-control>
+                                <nz-input-group [nzErrorTip]="errorsPassword">
+                                    <input nz-input placeholder="{{ 'sales.amount' | translate }}" type="number" formControlName="amount"(change)="onChangeAmount(indexProduct)" >
+                                </nz-input-group>
+                            </nz-form-control>
+                        </td>
+                        <td style="vertical-align: middle;"> 
+                            <nz-form-control>
+                                <nz-input-group [nzPrefix]="pricePrefix">
+                                    <input nz-input placeholder="{{ 'sales.unitValue' | translate }}" type="text" formControlName="price" (ngModelChange)="onChangePrice()" currencyMask class="m-w-100">
+                                </nz-input-group>
+                            </nz-form-control>
+                        </td>
+                        <td>{{ (productsForm?.get('amount')?.value * productsForm?.get('price')?.value) | currency:'USD': 'symbol':'1.0-0'  }}</td>
+                        <td>
+                            <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm"
+                            (nzOnConfirm)="confirm(indexProduct, productsForm?.get('sale_id')?.value)" (nzOnCancel)="cancel()">
+                                <i nz-icon nzType="delete" theme="outline"></i>
+                            </button>
+                        </td>
+                    </ng-container>
                 </tr>
-            </thead>
-            <tbody>
-                <ng-container formArrayName="products" >
-                    <tr *ngFor="let productsForm of products?.controls; let indexProduct = index">
-                        <ng-container [formGroup]="productsForm">
-                                <td>#{{ productsForm?.get('reference')?.value }}</td>
-                                <td>{{  productsForm?.get('name')?.value }}</td>
-                                <td style="vertical-align: middle;">
-                                    <nz-form-control>
-                                        <nz-input-group [nzErrorTip]="errorsPassword">
-                                            <input nz-input placeholder="{{ 'sales.amount' | translate }}" type="number" formControlName="amount"(change)="onChangeAmount(indexProduct)" >
-                                        </nz-input-group>
-                                    </nz-form-control>
-                                </td>
-                                <td style="vertical-align: middle;"> 
-                                    <nz-form-control>
-                                        <nz-input-group [nzPrefix]="pricePrefix">
-                                            <input nz-input placeholder="{{ 'sales.unitValue' | translate }}" type="text" formControlName="price" (ngModelChange)="onChangePrice()" currencyMask class="m-w-100">
-                                        </nz-input-group>
-                                    </nz-form-control>
-                                </td>
-                                <td>{{ (productsForm?.get('amount')?.value * productsForm?.get('price')?.value) | currency:'USD': 'symbol':'1.0-0'  }}</td>
-                                <td>
-                                    <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm"
-                                    (nzOnConfirm)="confirm(indexProduct, productsForm?.get('sale_id')?.value)" (nzOnCancel)="cancel()">
-                                        <i nz-icon nzType="delete" theme="outline"></i>
-                                    </button>
-                                </td>
-                        </ng-container>
-                    </tr>
-                </ng-container>
-            </tbody>
-          </nz-table>
-    </nz-card>
+            </ng-container>
+        </tbody>
+    </nz-table>
 </form>
 
 <ng-template #pricePrefix>

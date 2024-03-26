@@ -18,20 +18,20 @@ export class ViewBailsComponent implements OnInit {
   loading: boolean = false;
   limit: number = 10;
   orderColumn = [
-      {
-          title: 'ID',
-          compare: (a: BailModel, b: BailModel) => a.id - b.id,
-          priority: false
-      },
-      {
-          title: 'Cantidad abonada',
-      },
-      {
-          title: 'Metodo de pago',
-      },
-      {
-        title: 'Fecha',
-      }
+    {
+      title: 'ID',
+      compare: (a: BailModel, b: BailModel) => a.id - b.id,
+      priority: false
+    },
+    {
+      title: 'Cantidad abonada',
+    },
+    {
+      title: 'Metodo de pago',
+    },
+    {
+      title: 'Fecha',
+    }
   ]
   page: number = 1;
   searchInput: any;
@@ -43,8 +43,7 @@ export class ViewBailsComponent implements OnInit {
   reference:string;
 
   constructor( 
-    private _crudSvc:CrudServices,
-    private _statusSvc: StatusService,    
+    private _crudSvc:CrudServices,   
     private activatedRoute: ActivatedRoute,
   ){
     this.activatedRoute.params.subscribe((params) => {
@@ -60,6 +59,7 @@ export class ViewBailsComponent implements OnInit {
   // ---------------------------------------------------------------------
   // ----------------------------GET DATA---------------------------------
   // ---------------------------------------------------------------------
+
   private getBails():void {
     this.loading = true;
 
@@ -70,18 +70,20 @@ export class ViewBailsComponent implements OnInit {
       sale: this.id,
     }
 
-    this._crudSvc.postRequest(`/bails/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
-        const { data, dataTwo } = res;
-        this.totalBails = dataTwo;
-        this.total =  data.data[0]?.sale.total;
-        this.reference =  data.data[0]?.sale.reference;
-        this.bailsList = data.data;
-        this.totalItems = data.total;
+    this._crudSvc.postRequest(`/accounting/bails/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+        const { data } = res;
+        this.totalBails = data.total_bails;
+        this.total =  data.sale.total;
+        this.reference =  data.sale.reference;
+        this.bailsList = data.bails.data;
+        this.totalItems = data.bails.total;
       })
   }
+
   // ---------------------------------------------------------------------
   // ------------------------PAGINATION AND FILTERS-----------------------
   // ---------------------------------------------------------------------
+
   public search(): void {
       this.term = this.searchInput;
       this.getBails()
@@ -108,5 +110,4 @@ export class ViewBailsComponent implements OnInit {
   ngOnDestroy(): void {
     this.listSubscribers.map(a => a.unsubscribe());
   }
-
 }

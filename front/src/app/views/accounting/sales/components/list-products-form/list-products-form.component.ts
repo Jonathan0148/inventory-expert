@@ -49,10 +49,6 @@ export class ListProductsFormComponent implements OnInit {
   }
 
   confirm(indexProduct:number,sale_id:number): void {
-    if(sale_id){
-      this._crudSvc.deleteRequest(`/sales/destroyDetail/${sale_id}`)
-      .subscribe(res => {})
-    }
    this.products.removeAt(indexProduct);
    this._productDetailSvC.setChangePrice$(true)
   }
@@ -65,9 +61,10 @@ export class ListProductsFormComponent implements OnInit {
     });
   }
 
-  private addProductsForm(product: ProductModel):void {          
+  private addProductsForm(product: ProductModel):void {
     const lessonForm = this.fb.group({
       product_id: [product?.id],
+      image: [product?.images[0]?.response?.url],
       reference: [product?.reference],
       name: [product.name],
       amount: [product?.amount ?? 1],
@@ -89,6 +86,10 @@ export class ListProductsFormComponent implements OnInit {
       nzWidth: '85%',
       nzFooter: tplFooter
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
   
   private listenObserver = () => {

@@ -5,7 +5,7 @@
             <nz-form-item>
                 <nz-form-label>{{ 'sales.paymentMethod' | translate }}</nz-form-label>
                 <nz-form-control>
-                    <nz-select class="w-100" nzPlaceHolder="{{ 'sales.paymentMethod' | translate }}" nzAllowClear formControlName="id_payment_method">
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'sales.paymentMethod' | translate }}" nzAllowClear formControlName="payment_type_id">
                         <nz-option *ngFor="let option of paymentMethodList" [nzValue]="option.id" [nzLabel]="option.name" ></nz-option>
                     </nz-select>
                 </nz-form-control>

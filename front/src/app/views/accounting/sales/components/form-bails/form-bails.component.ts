@@ -11,9 +11,8 @@ import { ValidationsForm } from '../../validations/validations-form';
   styleUrls: ['./form-bails.component.scss']
 })
 export class FormBailsComponent implements OnInit {
-
   @Input() id:number;
-  idBail:number;
+  bailId:number;
   form: UntypedFormGroup;
   loading:boolean;
   typeDocumentsList:any;
@@ -30,11 +29,11 @@ export class FormBailsComponent implements OnInit {
   
   ngOnInit(): void {
     this.form = this.fb.group({
-        id_payment_method: [ null, [ Validators.required ] ],
-        price: [ null, [ Validators.required] ],
-        total_bails: [ null, [] ],
-        total: [ null, [] ],
-        id_sale: [ this.id , [ Validators.required] ],
+      payment_type_id: [ null, [ Validators.required ] ],
+      price: [ null, [ Validators.required] ],
+      total_bails: [ null, [] ],
+      total: [ null, [] ],
+      sale_id: [ this.id , [ Validators.required] ],
     },
     {
       validator: ValidationsForm.bailsValidation('price', 'no-same')
@@ -47,7 +46,7 @@ export class FormBailsComponent implements OnInit {
   public submit(): void {
     this.loading = true;
 
-    let path = this.idBail ? `/bails/update/${this.idBail}` : `/bails/create`;
+    let path = this.bailId ? `/accounting/bails/update/${this.bailId}` : `/accounting/bails/create`;
     
     this._crudSvc.postRequest(path, this.form.value)
     .pipe(finalize( () => this.loading = false))
@@ -61,14 +60,16 @@ export class FormBailsComponent implements OnInit {
   //------------------------------------------------------------------------
   //-------------------------------GET DATA---------------------------------
   //------------------------------------------------------------------------
+
   public getSale(){
-    this._crudSvc.getRequest(`/sales/show/${this.id}`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/accounting/sales/show/${this.id}`).subscribe((res: any) => {
       const { data} = res;
       this.form.patchValue(data);
     })
   }
+
   private getPaymentMethods():void {
-    this._crudSvc.getRequest(`/sales/getPaymentMethods`).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/accounting/sales/getPaymentMethods`).subscribe((res: any) => {
         const { data } = res;
         this.paymentMethodList = data;
     })

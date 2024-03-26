@@ -13,13 +13,13 @@ import { ModalService } from '../../../../../shared/services/modal.service';
   styleUrls: ['./form-sales.component.scss']
 })
 export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
-
   id:number;
   
   date:Date = new Date();
   form: UntypedFormGroup;
   loading:boolean;
   typeDocumentsList: any;
+  hasSubmit: boolean = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -41,14 +41,16 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   ngOnInit(): void {
     this.form = this.fb.group({
       date: [ this.date, [ Validators.required ] ],
-      type_document:[ 0, [  Validators.required ]],
-      document:[null, [ Validators.required ]],
-      full_name:[null, [ Validators.required ]],
+      type_document:[ 0, [ ]],
+      document:[null, [ ]],
+      full_name:[null, [ ]],
+      cell_phone:[null, [ ]],
       client_exists:[ !!this.id, [ ]],
-      id_customer:[null, [ ]],
+      customer_id:[null, [ ]],
       reference:[null, Validators.required],
       status:[null, [ Validators.required ]],
-      payment_method: [ null, [ Validators.required ] ],
+      payment_type_id: [ null, [ Validators.required ] ],
+      store_id: [ 1, [ Validators.required ] ],
       total:[0, [  ]],
       tax: [ 0, [ Validators.required, Validators.max(100), Validators.min(0)] ],
       subtotal:[0, [  ]],
@@ -65,15 +67,16 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   }
   
   public submit(): void {
+    this.hasSubmit = true;
     this.loading = true;
 
-    let path = this.id ? `/sales/update/${this.id}` : `/sales/create`;
+    let path = this.id ? `/accounting/sales/edit/${this.id}` : `/accounting/sales/create`;
     
     const body = {
       productsForm: this.setInfoProducts(),
       ...this.form.value
     }
-
+    
     this._crudSvc.postRequest(path, body)
     .pipe(finalize( () => this.loading = false))
     .subscribe((res: any) => {
@@ -89,7 +92,7 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   //------------------------------------------------------------------------
   public getSale(){
     this.loading = true;
-    this._crudSvc.getRequest(`/sales/show/${this.id}`)
+    this._crudSvc.getRequest(`/accounting/sales/show/${this.id}`)
     .pipe(finalize( () => this.loading = false))
     .subscribe((res: any) => {
         const { data } = res;
@@ -103,7 +106,8 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   public getReference(){
     this._crudSvc.getRequest(`/accounting/sales/getReference`).subscribe((res: any) => {
         const { data } = res;
-        this.form.patchValue({ reference: (data?.id ?? 0) + 1 })
+        
+        this.form.patchValue({ reference: data })
     })
   }
   
@@ -142,7 +146,7 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
       const lessonForm = this.fb.group({
         sale_id: [detail?.id],
         product_id: [detail.product?.id],
-        reference: [detail.product?.reference],
+        image: [detail?.product?.images[0]?.response?.url],
         name: [detail.product.name],
         amount: [detail?.amount],
         stock: [ (this.id) ? (detail.product?.stock + detail?.amount) : detail.product?.stock],
@@ -152,7 +156,7 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
       {
         validator: ValidationsForm.match('stock', 'amount', 'no-same')
       });      
-      this.products.push(lessonForm);  
+      this.products.push(lessonForm);
     });         
   }
 
@@ -161,7 +165,7 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   // ------------------------------------------------------
 
   async onExit(){
-    if(this.form.touched && (this.form.dirty || this.products.length)){
+    if(this.form.touched && (this.form.dirty || this.products.length) && !this.hasSubmit){
       try {
         let res = await this._modalSvc.confirm(`Tienes cambios sin guardar`,`<p>Si abandonas esta página perderas tus cambios.<br> <strong>¿Estas
         seguro que quieres abandonar la página?<strong></p>`);

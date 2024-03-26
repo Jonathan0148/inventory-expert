@@ -61,7 +61,7 @@ export class FormProductsComponent implements OnInit {
         row_id: [ null, [ ] ],
         column_id: [ null, [ ] ],
         reference: [ null, [ Validators.required, Validators.maxLength(25) ] ],
-        name: [ null, [ Validators.required ] ],
+        name: [ null, [ Validators.required, Validators.maxLength(50) ] ],
         description: [ null, [ ] ],
         applications: [ null , [ ] ],
         measurement_unit: [ null, [ Validators.required ] ],
@@ -76,7 +76,7 @@ export class FormProductsComponent implements OnInit {
         barcode: [ null , [ ] ],
         category: [ null , [ ] ],
         categories: [ null , [ ] ],
-        status: [ null , [ Validators.required ] ],
+        status: [ 'in-stock' , [ Validators.required ] ],
     });
 
     if(this.id) this.setProductForm()

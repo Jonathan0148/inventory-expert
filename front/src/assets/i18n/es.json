@@ -161,7 +161,8 @@
         "import": "Importar datos",
         "selectFile": "Seleccione un archivo",
         "measurementUnit":"Unidad de medida",
-        "generate":"Generar"
+        "generate":"Generar",
+        "image":"Imagen"
     },
     "role":{
         "admin":"Administrador",
@@ -231,7 +232,7 @@
         "addProduct":"Agregar producto",
         "fertiliser":"Abono",
         "amount":"Cantidad",
-        "productList":"Lista de productos",
+        "productList":"Productos",
         "unitValue":"Valor Unitario",
         "dailyClosing":"Cierre diario"
     },
