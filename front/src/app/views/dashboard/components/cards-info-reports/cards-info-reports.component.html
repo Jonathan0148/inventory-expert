@@ -38,7 +38,7 @@
             <nz-card>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <p class="m-b-0">{{ 'dashboard.valueInventory' | translate  }}</p>
+                        <p class="m-b-0">{{ 'dashboard.costInventory' | translate  }}</p>
                         <h2 class="m-b-0">
                             <span>{{ totalProductsValue | currency:'USD': 'symbol':'1.0-0' }}</span>
                         </h2>
@@ -51,9 +51,9 @@
             <nz-card>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <p class="m-b-0">{{ 'dashboard.cilentsAll' | translate  }}</p>
+                        <p class="m-b-0">{{ 'dashboard.valueInventory' | translate  }}</p>
                         <h2 class="m-b-0">
-                            <span>{{ totalClientsCount }}</span>
+                            <span>{{ totalClientsCount | currency:'USD': 'symbol':'1.0-0' }}</span>
                         </h2>
                     </div>
                     <nz-avatar [nzSize]="50" nzIcon="bar-chart" class="ant-avatar-gold"></nz-avatar>

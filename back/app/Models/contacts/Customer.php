@@ -2,6 +2,7 @@
 
 namespace App\Models\contacts;
 
+use App\Models\accounting\Sale;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
@@ -11,5 +12,15 @@ class Customer extends Model
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class,'customer_id');
+    }
+
+    public function salesPending()
+    {
+        return $this->hasMany(Sale::class,'customer_id')->where('status', 2);
     }
 }

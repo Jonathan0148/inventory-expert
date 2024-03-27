@@ -26,14 +26,14 @@ export class CardsInfoReportsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    // this.loading = true;
-    // this.getSalesTotal()
-    // this.getCountSales()
-    // this.getCountProducts()
-    // this.getValueProducts()
-    // this.getCountClients()
-    // this.getCountUsers()
-    // this.listenObserver();
+    this.loading = true;
+    this.getSalesTotal()
+    this.getCountSales()
+    this.getCountProducts()
+    this.getValueProducts()
+    this.getCountClients()
+    this.getCountUsers()
+    this.listenObserver();
   }
 
   private getSalesTotal(): void {
@@ -65,7 +65,7 @@ export class CardsInfoReportsComponent implements OnInit, OnDestroy {
   }
 
   private getCountClients(): void {
-    this._crudSvc.postRequest(`/dashboard/getCountClients`, this.body).pipe(finalize( () => this.loading = false )).subscribe((res: any) => {
+    this._crudSvc.postRequest(`/dashboard/getPriceProducts`, this.body).pipe(finalize( () => this.loading = false )).subscribe((res: any) => {
       const { data } = res;
       this.totalClientsCount = data;
     })

@@ -20,7 +20,7 @@
                       <tr *ngFor="let item of productTable.data">
                           <td>
                               <div class="d-flex align-items-center cursor-pointer" [routerLink]="['/','inventario','productos','editar',item.id]" nz-tooltip="Ir al producto" nzTooltipPlacement="right">
-                                  <nz-avatar nzShape="square"  nzIcon="picture" [nzSrc]="item.avatar"></nz-avatar>
+                                  <nz-avatar nzShape="square"  nzIcon="picture" [nzSrc]="item.images[0]?.response?.url"></nz-avatar>
                                  <span class="m-l-10">{{item.name}}</span>
                               </div>
                           </td>
