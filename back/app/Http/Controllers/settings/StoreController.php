@@ -208,4 +208,11 @@ class StoreController extends Controller
 
         return ResponseHelper::Get($validateLicense);
     }
+
+    public function infoStore()
+    {
+        $data = Store::first();
+        
+        return ResponseHelper::Get($data);
+    }
 }

@@ -40,6 +40,10 @@ Route::controller(FileController::class)->group(function (){
     Route::post('upload-file', 'uploadFile');
 });
 
+Route::controller(StoreController::class)->group(function () {
+    Route::get('infoStore', 'infoStore');
+});
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::controller(AuthController::class)->group(function (){
         Route::get('logout', 'logout');

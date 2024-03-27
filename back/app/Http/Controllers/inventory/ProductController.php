@@ -292,14 +292,15 @@ class ProductController extends Controller
             'myFile.required' => 'El archivo es requerido.',
             'myFile.file' => 'El archivo debe ser de tipo archivo.',
             'myFile.mimes' => 'El archivo debe tener un formato válido: xlsx, xls.',
-        ]);        
+        ]);
 
         $file = $request->file('myFile')->store('temp');
-        $path = storage_path('app').'/'.$file;
+        $path = storage_path('').'/'.$file;
+        $pathWithPublic = str_replace('storage', 'public/storage', $path);
 
         if ($file){
             $helperImport = new ProductsImport;
-            Excel::import($helperImport, $path);
+            Excel::import($helperImport, $pathWithPublic);
 
             return ResponseHelper::Get([ 
                 'rowsSaved'=>$helperImport->getRowCount(), 
