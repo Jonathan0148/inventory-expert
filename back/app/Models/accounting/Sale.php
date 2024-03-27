@@ -23,4 +23,9 @@ class Sale extends Model
     {
         return $this->hasMany(SaleDetail::class);
     }
+    
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 }

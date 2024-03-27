@@ -74,11 +74,17 @@ export class FormSalesComponent implements OnInit, AfterViewChecked {
     this.loading = true;
 
     let path = this.id ? `/accounting/sales/edit/${this.id}` : `/accounting/sales/create`;
-    
+
+    const date = this.form.value.date.toLocaleString('es-CO', {
+      timeZone: 'America/Bogota',
+      hour12: false
+    });
+
     const body = {
       productsForm: this.setInfoProducts(),
-      ...this.form.value
-    }
+      ...this.form.value,
+      date: date
+    };
     
     this._crudSvc.postRequest(path, body)
     .pipe(finalize( () => this.loading = false))

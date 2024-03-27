@@ -48,9 +48,9 @@ export class ClosingDaylingComponent implements OnInit {
       this.bailsClosing = data?.bails;
       this.expensesClosing = data?.expenses;
       this.balanceClosing = data?.balance;
-      this.invoicesClosing = data?.invoices;
-      this.bailsInvoicesClosing = data?.bailsInvoices;
-      this.shoppingsClosing = data?.buys;
+      // this.invoicesClosing = data?.invoices;
+      // this.bailsInvoicesClosing = data?.bailsInvoices;
+      // this.shoppingsClosing = data?.buys;
     })
   }
 

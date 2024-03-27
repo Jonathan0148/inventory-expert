@@ -47,4 +47,9 @@ class Role extends Model
     {
         return $this->hasMany('App\Models\settings\User', 'role_id', 'id');
     }
+    
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 }

@@ -48,5 +48,8 @@ class RolesModule extends Model
         return $this->hasOne('App\Models\settings\Role', 'id', 'role_id');
     }
     
-
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 }

@@ -243,7 +243,7 @@
         "amount":"Cantidad",
         "productList":"Productos",
         "unitValue":"Valor Unitario",
-        "dailyClosing":"Cierre diario",
+        "dailyClosing":"Cierre Diario",
         "discount":"Descuento"
     },
     "local":{
@@ -288,8 +288,8 @@
         "year":"Año",
         "month":"Mes"
     },
-    "closingDaylind":{
-        "title":"Cierre diario",
+    "closingDayling":{
+        "title":"Cierre Diario",
         "sales":"Ventas",
         "bails":"Abonos",
         "bailsInvoicesClosing":"Abonos Facturas",

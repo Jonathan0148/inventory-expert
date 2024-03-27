@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\settings\Store', 'id', 'store_id');
     }
+    
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 }
