@@ -8,6 +8,7 @@ use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\contacts\CustomerController;
 use App\Http\Controllers\reports\ReportController;
 use App\Http\Controllers\contacts\SupplierController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\inventory\BrandController;
 use App\Http\Controllers\inventory\CategoryController;
@@ -42,6 +43,19 @@ Route::controller(FileController::class)->group(function (){
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::controller(AuthController::class)->group(function (){
         Route::get('logout', 'logout');
+    });
+
+    Route::controller(DashboardController::class)->prefix('dashboard')->group(function (){
+        Route::post('getSales', 'getSales');
+        Route::post('getCountSales', 'getCountSales');
+        Route::get('getCountProducts', 'getCountProducts');
+        Route::post('getValueProducts', 'getValueProducts');
+        Route::get('getTopProducts', 'getTopProducts');
+        Route::post('getPriceProducts', 'getPriceProducts');
+        Route::get('getCountUsers', 'getCountUsers');
+        Route::get('getRecentSales', 'getRecentSales');
+        Route::get('getTopClients', 'getTopClients');
+        Route::get('getTopDebtors', 'getTopDebtors');
     });
 
     Route::prefix('settings')->group(function() {
@@ -175,6 +189,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::delete('destroy/{id}', 'destroy');
             Route::get('getReference', 'getReference');
             Route::get('getPaymentMethods', 'getPaymentMethods');
+            Route::get('downloadInvoice/{id}', 'downloadInvoice');
         });
 
         Route::controller(BailController::class)->prefix('bails')->group(function () {

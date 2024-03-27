@@ -14,13 +14,15 @@
     },
     "notification":{
         "title":"Notificaciones",
-        "viewAll":"Ver todas"
+        "viewAll":"Ver Todos",
+        "sell":"Vender"
     },
     "dashboard":{
         "sales":"Total ingreso ventas",
         "monthlyGoal":"Meta mensual",
         "margin":"Número de ventas",
         "productsAll":"Total productos",
+        "costInventory":"Costo inventario",
         "valueInventory":"Valor inventario",
         "salesStatistics":"Estadísticas de ventas",
         "online":"En línea",

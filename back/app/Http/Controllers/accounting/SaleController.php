@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\accounting;
 
+use App\Helpers\InvoiceHelper;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
@@ -11,6 +12,7 @@ use App\Models\accounting\Sale;
 use App\Models\accounting\SaleDetail;
 use App\Models\contacts\Customer;
 use App\Models\inventory\Product;
+use App\Models\settings\Store;
 use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -302,5 +304,26 @@ class SaleController extends Controller
             $status = $this->newStatusProduct($stock, $productFind->stock_min);
             $productFind->update(['stock' => $stock, 'status' => $status ]);
         }
+    }
+
+    public function downloadInvoice($id)
+    {
+        $sale = Sale::select('sales.reference', 'sales.subtotal', 'sales.tax', 'sales.total', 'payment_methods.name as paymentMethod', 'sales.created_at', 'sales.date')
+            ->leftjoin('payment_methods', 'sales.payment_type_id', '=', 'payment_methods.id')
+            ->where('sales.id', $id)
+            ->first();
+
+        $detailSail = SaleDetail::select('products.name', 'sale_details.amount', 'sale_details.price')
+            ->leftjoin('products', 'sale_details.product_id', '=', 'products.id')
+            ->where('sale_id', $id)
+            ->get();
+
+        $local = Store::first();
+
+        $data['sale'] = $sale;
+        $data['detailSail'] = $detailSail;
+        $data['local'] = $local;
+        
+        return InvoiceHelper::download($data);
     }
 }
