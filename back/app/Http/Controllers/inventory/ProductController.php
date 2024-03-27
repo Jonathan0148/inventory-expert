@@ -5,12 +5,14 @@ namespace App\Http\Controllers\inventory;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Imports\ProductsImport;
 use App\Models\accounting\SaleDetail;
 use App\Models\inventory\Losse;
 use App\Models\inventory\Product;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -280,5 +282,31 @@ class ProductController extends Controller
             $newStatus = 'out-stock';
         }
         return $newStatus;
+    }
+
+    public function importExcel(Request $request)
+    {
+        $this->validate($request, [
+            'myFile' => 'required|file|mimes:xlsx,xls',
+        ], [
+            'myFile.required' => 'El archivo es requerido.',
+            'myFile.file' => 'El archivo debe ser de tipo archivo.',
+            'myFile.mimes' => 'El archivo debe tener un formato válido: xlsx, xls.',
+        ]);        
+
+        $file = $request->file('myFile')->store('temp');
+        $path = storage_path('app').'/'.$file;
+
+        if ($file){
+            $helperImport = new ProductsImport;
+            Excel::import($helperImport, $path);
+
+            return ResponseHelper::Get([ 
+                'rowsSaved'=>$helperImport->getRowCount(), 
+                'productsNoSaved' => $helperImport->getProductsNoSaved()
+            ]);
+        }
+
+        return ResponseHelper::NoExits('Archivo no valido');
     }
 }

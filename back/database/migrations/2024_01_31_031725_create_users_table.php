@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('document', 30)->unique()->comment('Número de documento');
             $table->string('email', 100)->unique()->comment('Correo electrónico');
             $table->string('password', 255)->comment('Contraseña');
-            $table->integer('state')->defult(1)->comment('Estado del usuario: 0: Si el usuario esta inactivo 1: Si el usuario esta activo 2: Si la empresa esta pendiente de pago');
+            $table->integer('state')->default(1)->comment('Estado del usuario: 0: Si el usuario esta inactivo 1: Si el usuario esta activo 2: Si la empresa esta pendiente de pago');
             $table->string('avatar', 255)->nullable()->comment('Avatar del usuario');
             $table->rememberToken();
             $table->timestamps();

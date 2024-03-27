@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('department', 50)->comment('Departamento');
             $table->string('city', 50)->comment('Ciudad');
             $table->string('address', 100)->comment('Dirección');
-            $table->integer('state')->defult(1)->comment('Estado del local: 0: Si el local esta inactivo 1: Si el local esta activo 2: Si el local esta pendiente de pago');
+            $table->integer('state')->default(1)->comment('Estado del local: 0: Si el local esta inactivo 1: Si el local esta activo 2: Si el local esta pendiente de pago');
             $table->timestamps();
             $table->softDeletes()->comment('Fecha de borrado lógico');
         });

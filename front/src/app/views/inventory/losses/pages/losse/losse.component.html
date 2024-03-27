@@ -13,7 +13,7 @@
             </div>          
         </div>
         <div class="col-lg-4 text-right">
-            <app-export-button class="mr-1" [path]="'/losses/exportExcel'" [type]="'excel'" [nameFile]="'Listado Bajas'"></app-export-button>
+            <!-- <app-export-button class="mr-1" [path]="'/losses/exportExcel'" [type]="'excel'" [nameFile]="'Listado Bajas'"></app-export-button> -->
             <a nz-button nzType="primary" [routerLink]="['/','inventario','bajas','crear']" [disabled]="!hasAdminModule">
                 <i nz-icon nzType="plus-circle" theme="outline"></i>
                 <span>{{ 'losse.add' | translate }}</span>

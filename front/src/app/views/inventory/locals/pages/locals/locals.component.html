@@ -13,7 +13,7 @@
             </div>          
         </div>
         <div class="col-lg-4 text-right">
-            <app-export-button class="mr-1" [path]="'/local/sections/exportExcel'" [type]="'excel'" [nameFile]="'Listado Secciones-Filas-Columnas'"></app-export-button>
+            <!-- <app-export-button class="mr-1" [path]="'/local/sections/exportExcel'" [type]="'excel'" [nameFile]="'Listado Secciones-Filas-Columnas'"></app-export-button> -->
             <a nz-button nzType="primary" [routerLink]="['/','inventario','local','crear']" [disabled]="!hasAdminModule">
                 <i nz-icon nzType="plus-circle" theme="outline"></i>
                 <span>{{ 'local.add' | translate }}</span>
