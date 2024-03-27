@@ -1,25 +1,3 @@
 <nz-spin [nzSpinning]="isSpinning">
-    <h5>Total productos importados: {{ rowImported }}</h5>
-    <hr>
-    <h5>Listado productos no importados</h5>
-    <nz-table #basicTable [nzData]="products" [nzPageSize]="25"	>
-      <thead>
-        <tr>
-          <th>Referencia</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Stock</th>
-          <th>Aplicación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of basicTable.data">
-          <td>{{ data.Referencia }}</td>
-          <td>{{ data.Nombre }}</td>
-          <td>{{ data['Descripción'] }}</td>
-          <td>{{ data.Stock }}</td>
-          <td>{{ data['Aplicación'] }}</td>
-        </tr>
-      </tbody>
-    </nz-table>
+    <h5>Se {{ rowImported === 1 ? 'importó' : 'importaron' }} {{ rowImported }} producto{{ rowImported === 1 ? '' : 's' }}</h5>           
 </nz-spin>

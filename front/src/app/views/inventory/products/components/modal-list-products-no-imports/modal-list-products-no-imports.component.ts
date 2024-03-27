@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsImportService } from '../../services/products-import.service';
-import { ProductModel } from '../../../../../shared/interfaces/product';
 
 @Component({
   selector: 'app-modal-list-products-no-imports',
@@ -10,7 +9,7 @@ import { ProductModel } from '../../../../../shared/interfaces/product';
 export class ModalListProductsNoImportsComponent implements OnInit {
   isSpinning:boolean = false;
   products:any = [];
-  rowImported:number = 0; 
+  rowImported:number = 0;
 
   constructor(
     private _productSvc:ProductsImportService

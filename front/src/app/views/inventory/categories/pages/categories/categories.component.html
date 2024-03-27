@@ -13,7 +13,7 @@
             </div>          
         </div>
         <div class="col-lg-4 text-right">
-            <app-export-button class="mr-1" [path]="'/categories/exportExcel'" [type]="'excel'" [nameFile]="'Listado Categorias'"></app-export-button>
+            <!-- <app-export-button class="mr-1" [path]="'/categories/exportExcel'" [type]="'excel'" [nameFile]="'Listado Categorias'"></app-export-button> -->
             <a nz-button nzType="primary" [routerLink]="['/','inventario','categorias','crear']" [disabled]="!hasAdminModule">
                 <i nz-icon nzType="plus-circle" theme="outline"></i>
                 <span>{{ 'categories.add' | translate }}</span>

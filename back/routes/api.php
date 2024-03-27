@@ -142,6 +142,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::delete('destroy/{id}', 'destroy');
             Route::get('getReference', 'getReference');
             Route::get('consultAvailability/{id}', 'consultAvailability');
+            Route::post('importExcel', 'importExcel');
         });
 
         Route::controller(LosseController::class)->prefix('losses')->group(function () {

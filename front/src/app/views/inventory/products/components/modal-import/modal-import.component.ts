@@ -40,7 +40,7 @@ export class ModalImportComponent implements OnInit {
     const body = new FormData();
     body.append('myFile', this.file.fileRaw, this.file.fileName)
 
-    this._crudSvc.postDataRequest('/products/importExcel', body).pipe(finalize( () => {
+    this._crudSvc.postDataRequest('/inventory/products/importExcel', body).pipe(finalize( () => {
         this.isSpinning = false;  
         this._crudSvc.requestEvent.emit('');
      })).subscribe( res => {
@@ -61,8 +61,7 @@ export class ModalImportComponent implements OnInit {
     this.modalService.create({
       nzTitle: 'Resumen',
       nzContent: ModalListProductsNoImportsComponent,
-      nzClosable: true,
-      nzWidth: '70%'
+      nzClosable: true
     });
   }
 
