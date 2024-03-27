@@ -64,7 +64,7 @@ class SaleController extends Controller
                 'store_id' => $request->input('store_id'),
                 'customer_id' => $customer,
                 'payment_type_id' => $request->input('payment_type_id'),
-                'date' => Carbon::parse($request->input('date'))->toDateTimeString(),
+                'date' => Carbon::createFromFormat('d/n/Y, H:i:s', $request->input('date'))->format('Y-m-d H:i:s'),
                 'reference' => $request->input('reference'),
                 'status' => $status,
                 'total_bails' => $request->input('bail'),
@@ -165,7 +165,7 @@ class SaleController extends Controller
     private function getSaleBypagination($term)
     {
         return Sale::select('sales.*')
-            ->join('customers', 'sales.customer_id', '=', 'customers.id')
+            ->leftjoin('customers', 'sales.customer_id', '=', 'customers.id')
             ->with(['customer' => function ($query) {
                 $query->select('id', 'full_name', 'type_document', 'document');
             }, 'paymentMethod:id,name'])

@@ -6,6 +6,7 @@ use App\Http\Controllers\accounting\SaleController;
 use App\Http\Controllers\settings\StoreController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\contacts\CustomerController;
+use App\Http\Controllers\reports\ReportController;
 use App\Http\Controllers\contacts\SupplierController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\inventory\BrandController;
@@ -183,5 +184,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('edit/{id}', 'edit');
             Route::delete('destroy/{id}', 'destroy');
         });
+    });
+
+    Route::controller(ReportController::class)->prefix('reports')->group(function (){
+        Route::post('closingDayling', 'closingDayling');
     });
 });
