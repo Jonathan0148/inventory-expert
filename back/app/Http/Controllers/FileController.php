@@ -15,30 +15,17 @@ class FileController extends Controller
     {
         if ($request->hasFile('avatar')) {
             $archivo = $request->file('avatar');
-            $nombreOriginal = $archivo->getClientOriginalName();
-            $extension = $archivo->getClientOriginalExtension();
-
-            $nuevoNombre = md5(uniqid() . time()) . '.' . $extension;
-
-            $archivo->storeAs('uploads', $nuevoNombre);
-
-            $url = url('/storage/uploads/' . $nuevoNombre);
-            
-            return response()->json(['url' => $url, 'message' => 'Archivo guardado correctamente']);
-        }else if ($request->hasFile('file')){
+        } elseif ($request->hasFile('file')) {
             $archivo = $request->file('file');
-            $nombreOriginal = $archivo->getClientOriginalName();
-            $extension = $archivo->getClientOriginalExtension();
-
-            $nuevoNombre = md5(uniqid() . time()) . '.' . $extension;
-
-            $archivo->storeAs('uploads', $nuevoNombre);
-
-            $url = url('/storage/uploads/' . $nuevoNombre);
-            
-            return response()->json(['url' => $url, 'message' => 'Archivo guardado correctamente']);
+        } else {
+            return response()->json(['error' => 'No se adjuntó ningún archivo'], 400);
         }
 
-        return response()->json(['error' => 'No se adjuntó ningún archivo'], 400);
+        $extension = $archivo->getClientOriginalExtension();
+        $nuevoNombre = md5(uniqid() . time()) . '.' . $extension;
+        $archivo->storeAs('uploads', $nuevoNombre);
+        $url = url('/storage/uploads/' . $nuevoNombre);
+
+        return response()->json(['url' => $url, 'message' => 'Archivo guardado correctamente']);
     }
 }

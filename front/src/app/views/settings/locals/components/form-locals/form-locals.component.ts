@@ -39,6 +39,7 @@ export class FormLocalsComponent implements OnInit {
     this.form = this.fb.group({
         store_name: [ null, [ Validators.required ] ],
         nit: [ null, [ Validators.required] ],
+        slogan: [ null, [ Validators.required] ],
         cell_phone: [ null, [ Validators.required ] ],
         landline: [ null, [] ],
         email: [ null, [ Validators.required, Validators.email ] ],

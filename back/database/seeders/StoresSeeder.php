@@ -17,15 +17,16 @@ class StoresSeeder extends Seeder
         $data = [
             [
                 "id" => 1,
-                "store_name" => "Nómbre",
-                "nit" => "Número NIT",
-                "cell_phone" => "Celular",
-                "landline" => "Teléfono fijo",
-                "email" => "Correo electrónico",
+                "store_name" => "Minimercado LanaRanja |||",
+                "slogan" => "Eslogan de la tienda",
+                "nit" => "12345678-9",
+                "cell_phone" => "3214501006",
+                "landline" => "3214501006",
+                "email" => "LanaRanja@gmail.com",
                 "country" => "Colombia",
-                "department" => "Bogotá DC",
-                "city" => "Bogotá DC",
-                "address" => "Dirección",
+                "department" => "DC",
+                "city" => "Bogotá",
+                "address" => "Cra 103a #20b-17 Local 1",
                 "state" => 1
             ]
         ];

@@ -3,6 +3,7 @@ import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { CrudServices } from 'src/app/shared/services/crud.service';
 
 @Component({
   selector: 'app-login',
@@ -10,14 +11,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
   form: FormGroup;
   loading:boolean; 
+  name: string = '';
+  slogan: string = '';
 
   constructor(
       private fb: FormBuilder,    
       private authSvc: AuthService,
       private router: Router,
+      private _crudSvc:CrudServices,
   ) { }
 
   ngOnInit(): void {
@@ -26,6 +29,7 @@ export class LoginComponent implements OnInit {
           password: ["", [ Validators.required ] ]
       });    
       this.checkSession();
+      this.getLocal();
   }
 
   
@@ -46,5 +50,13 @@ export class LoginComponent implements OnInit {
     this.authSvc.checkSession(true).then(() => {
       this.router.navigate(['']);
     }).catch(() => console.log)
+  }
+
+  public getLocal(){
+    this._crudSvc.getRequest(`/infoStore`).subscribe((res: any) => {
+      const { data } = res;
+      this.name = data.store_name,
+      this.slogan = data.slogan
+    })
   }
 }
