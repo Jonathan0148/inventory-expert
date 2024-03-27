@@ -17,7 +17,7 @@
             <a class="mr-1" nz-button nzType="primary" [routerLink]="['/','reportes','cierre-diario']">
                 <span>{{ 'sales.dailyClosing' | translate }}</span>
             </a>
-            <a nz-button nzType="primary" [routerLink]="['/','contabilidad','ventas','crear']">
+            <a nz-button nzType="primary" [routerLink]="['/','contabilidad','ventas','crear']" [disabled]="!hasAdminModule">
                 <i nz-icon nzType="plus-circle" theme="outline"></i>
                 <span>{{ 'sales.add' | translate }}</span>
             </a>
@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <app-list-sales [salesList]="salesList" [orderColumn]="orderColumn" [loading]="loading"></app-list-sales>
+    <app-list-sales [salesList]="salesList" [orderColumn]="orderColumn" [loading]="loading" [hasAdminModule]="hasAdminModule"></app-list-sales>
     
     <div class="row">
         <div class="col-12 mt-4 d-flex justify-content-end">

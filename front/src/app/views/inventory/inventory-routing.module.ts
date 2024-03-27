@@ -34,6 +34,14 @@ const routes: Routes = [
         title: 'Categorías'
     },
     loadChildren: () => import('../../views/inventory/categories/categories.module').then(m => m.CategoriesModule),
+  },
+  {
+    path: 'bajas',
+    canActivate: [ NoAuthGuard ],
+    data: {
+        title: 'Bajas'
+    },
+    loadChildren: () => import('../../views/inventory/losses/losses.module').then(m => m.LossesModule),
   }
 ];
 

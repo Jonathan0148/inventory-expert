@@ -5,6 +5,8 @@ namespace App\Http\Controllers\inventory;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\accounting\SaleDetail;
+use App\Models\inventory\Losse;
 use App\Models\inventory\Product;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -131,7 +133,7 @@ class ProductController extends Controller
         ->with(['categories' => function ($query) { 
             $query->select('categories.id as category_id','categories.name as name_category');
         }])
-        // ->withSum('sales_detail','amount')
+        ->withSum('sales_detail','amount')
         ->find($id);
         
         if (!$data) {
@@ -208,6 +210,17 @@ class ProductController extends Controller
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
 
+        $sale = SaleDetail::where('product_id', $id)->first();
+        $losse = Losse::where('product_id', $id)->first();
+        
+        if ($sale) {
+            return ResponseHelper::NoExits('No es posible eliminar el producto debido a que está asociado con una venta');
+        }
+
+        if ($losse) {
+            return ResponseHelper::NoExits('No es posible eliminar el producto debido a que está asociado con una baja');
+        }
+
         $data->delete();
 
         return ResponseHelper::Delete('Información eliminada correctamente');
@@ -243,7 +256,7 @@ class ProductController extends Controller
         ->with(['categories' => function ($query) { 
             $query->select('categories.id as category_id','categories.name as name_category');
         }])
-        // ->withSum('sale_details','amount')
+        ->withSum('sales_detail','amount')
         ->find($id);
 
         if (!$data) {

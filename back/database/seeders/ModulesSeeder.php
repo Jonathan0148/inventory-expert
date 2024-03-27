@@ -78,6 +78,12 @@ class ModulesSeeder extends Seeder
                 "code" => 21,
                 "name" => "Locales",
                 "description" => "El módulo de Gestión de Locales proporciona una plataforma integral para administrar eficientemente los locales físicos de una empresa u organización. Permite a los usuarios registrar, editar y visualizar información detallada de cada local, incluyendo datos como dirección, horarios de apertura y contacto. Con funcionalidades de búsqueda y filtrado, facilita la localización rápida de locales específicos."
+            ],
+            [
+                "id" => 12,
+                "code" => 22,
+                "name" => "Bajas",
+                "description" => "El módulo de Bajas proporciona una funcionalidad para gestionar los productos que han sido retirados o eliminados del inventario de la empresa. Permite registrar las bajas de productos debido a pérdidas, daños u otros motivos, lo que resulta en una disminución del stock disponible."
             ]
         ];
 

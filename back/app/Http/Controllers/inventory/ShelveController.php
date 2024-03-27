@@ -7,6 +7,7 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Models\inventory\Shelve;
 use App\Models\inventory\Column;
+use App\Models\inventory\Product;
 use App\Models\inventory\Row;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -118,6 +119,12 @@ class ShelveController extends Controller
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
+        }
+
+        $product = Product::where('shelf_id', $id)->first();
+        
+        if ($product) {
+            return ResponseHelper::NoExits('No es posible eliminar la sección ya que está asociada con productos existentes');
         }
 
         $data->delete();

@@ -132,6 +132,15 @@ export const ROUTES: SideNavInterface[] = [
                 icon: 'shop',
                 iconTheme: 'outline',
                 submenu: []
+            },
+            {
+                path: '/inventario/bajas',
+                code: 22,
+                title: 'Bajas',
+                iconType: 'nzIcon',
+                icon: 'delete',
+                iconTheme: 'outline',
+                submenu: []
             }
         ]
     },

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\contacts;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
+use App\Models\accounting\Sale;
 use App\Models\contacts\Customer;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -127,6 +128,12 @@ class CustomerController extends Controller
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
+        }
+
+        $sale = Sale::where('customer_id', $id)->first();
+        
+        if ($sale) {
+            return ResponseHelper::NoExits('No es posible eliminar al cliente debido a que está asociado con ventas existentes');
         }
 
         $data->delete();

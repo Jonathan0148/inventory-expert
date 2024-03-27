@@ -5,11 +5,12 @@ namespace App\Http\Controllers\inventory;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
-use App\Models\inventory\Column;
+use App\Models\inventory\Losse;
 use App\Models\inventory\Product;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 
-class ColumnController extends Controller
+class LosseController extends Controller
 {
     /**
      * Muestra muchos registros.
@@ -22,16 +23,19 @@ class ColumnController extends Controller
         $page = $request->get('page') ? $request->get('page') : 1;
         $limit = $request->get('limit') ? $request->get('limit') : 10;
         $term = $request->get('term');
-        $shelf_id = $request->get('shelf_id');
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
         });
 
-        $data = Column::where('shelf_id', $shelf_id)
+        $data = Losse::select('losses.*', 'stores.store_name as storeName', 'products.name as productName')
+        ->join('stores', 'losses.store_id', '=', 'stores.id')
+        ->join('products', 'losses.product_id', '=', 'products.id')
+        ->where('losses.store_id', Auth::user()->store_id)
         ->where(function ($query) use ($term) {
-            $query->where('name', 'like', "%$term%");
-        })->orderBy('id', 'DESC')->paginate($limit);
+            $query->where('losses.description', 'like', "%$term%");
+            $query->orWhere('products.name', 'like', "%$term%");
+        })->orderBy('losses.id', 'DESC')->paginate($limit);
 
         return ResponseHelper::Get($data);
     }
@@ -46,11 +50,18 @@ class ColumnController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'shelf_id' => 'required',
-                'name' => 'required'
+                'store_id' => 'required',
+                'product_id' => 'required',
+                'amount' => 'required',
+                'description' => 'nullable'
             ]);
             
-            $data = Column::create($validatedData);
+            $data = Losse::create($validatedData);
+
+            $product = Product::where('id', $request->input('product_id'))->first();
+            $stock = $product->stock - $request->input('amount');
+            $status = $this->newStatusProduct($stock, $product->stock_min);
+            $product->update(['stock' => $stock, 'status' => $status]);
             
             return ResponseHelper::CreateOrUpdate($data, 'Información creada correctamente');
         } catch (\Throwable $th) {
@@ -66,11 +77,12 @@ class ColumnController extends Controller
      */
     public function show($id)
     {
-        $data = Column::find($id);
+        $data = Losse::find($id);
         
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
+
         return ResponseHelper::Get($data);
     }
 
@@ -83,15 +95,17 @@ class ColumnController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $data = Column::find($id);
+        $data = Losse::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
         try {
             $data->update([
-                'shelf_id' => $request->input('shelf_id'),
-                'name' => $request->input('name')
+                'store_id' => $request->input('store_id'),
+                'product_id' => $request->input('product_id'),
+                'amount' => $request->input('amount'),
+                'description' => $request->input('description')
             ]);
 
             return  ResponseHelper::CreateOrUpdate($data, 'Información actualizada correctamente',);
@@ -108,20 +122,31 @@ class ColumnController extends Controller
      */
     public function destroy($id)
     {
-        $data = Column::find($id);
+        $data = Losse::find($id);
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
 
-        $product = Product::where('column_id', $id)->first();
-        
-        if ($product) {
-            return ResponseHelper::NoExits('No es posible eliminar la columna ya que está asociada con productos existentes');
-        }
+        $product = Product::where('id', $data->product_id)->first();
+        $stock = $product->stock + $data->amount;
+        $status = $this->newStatusProduct($stock, $product->stock_min);
+        $product->update(['stock' => $stock, 'status' => $status]);
 
         $data->delete();
 
         return ResponseHelper::Delete('Información eliminada correctamente');
+    }
+
+    private function newStatusProduct(Int $stock, Int $minStock): string
+    {
+        $newStatus = 'in-stock';
+        if ($minStock >= $stock) {
+            $newStatus = 'low-stock';
+        }
+        if ($stock == 0) {
+            $newStatus = 'out-stock';
+        }
+        return $newStatus;
     }
 }

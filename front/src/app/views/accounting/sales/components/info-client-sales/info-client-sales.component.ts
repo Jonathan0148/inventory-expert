@@ -11,12 +11,12 @@ import { TypeDocumentsService } from 'src/app/views/settings/users/services/type
   styleUrls: ['./info-client-sales.component.scss']
 })
 export class InfoClientSalesComponent implements OnInit {
-
   @Input() form:UntypedFormGroup;
   typeDocumentsList = this._typeDocumentsSvC.get();
   typePersonsList:TypePersonModel[];
   isClient:boolean = false;
   loading:boolean;
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private _crudSvc:CrudServices,

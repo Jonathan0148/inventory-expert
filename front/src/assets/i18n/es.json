@@ -180,6 +180,15 @@
         "name":"Nombre",
         "description":"Descripción"
     },
+    "losse":{
+        "add":"Agregar Baja",
+        "addTitle":"Agregar Baja",
+        "editTitle":"Editar Baja",
+        "store":"Tienda | Local",
+        "product":"Producto",
+        "amount":"Cantidad",
+        "description":"Descripción"
+    },
     "locals":{
         "add":"Agregar Local",
         "addTitle":"Agregar Local",
@@ -234,7 +243,8 @@
         "amount":"Cantidad",
         "productList":"Productos",
         "unitValue":"Valor Unitario",
-        "dailyClosing":"Cierre diario"
+        "dailyClosing":"Cierre diario",
+        "discount":"Descuento"
     },
     "local":{
         "add":"Agregar Sección",
