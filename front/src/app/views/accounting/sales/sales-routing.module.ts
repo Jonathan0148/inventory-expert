@@ -4,7 +4,6 @@ import { AddSalesComponent } from './pages/add-sales/add-sales.component';
 import { SalesComponent } from './pages/sales/sales.component';
 import { ViewBailsComponent } from './pages/view-bails/view-bails.component';
 import { AddBailsComponent } from './pages/add-bails/add-bails.component';
-import { FormExitGuard } from 'src/app/shared/guards/form-exit.guard';
 import { FormSalesComponent } from './components/form-sales/form-sales.component';
 
 const routes: Routes = [
@@ -18,8 +17,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: FormSalesComponent,
-        canDeactivate: [FormExitGuard],
+        component: FormSalesComponent
       },
     ],
     data: {
@@ -34,7 +32,6 @@ const routes: Routes = [
       {
         path: '',
         component: FormSalesComponent,
-        canDeactivate: [FormExitGuard],
       },
     ],
     data: {

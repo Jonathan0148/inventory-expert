@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Models\inventory\Brand;
+use App\Models\inventory\Product;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
@@ -74,6 +75,7 @@ class BrandController extends Controller
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
         }
+
         return ResponseHelper::Get($data);
     }
 
@@ -116,6 +118,12 @@ class BrandController extends Controller
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
+        }
+
+        $product = Product::where('brand_id', $id)->first();
+        
+        if ($product) {
+            return ResponseHelper::NoExits('No es posible eliminar la marca ya que está asociada con productos existentes');
         }
 
         $data->delete();

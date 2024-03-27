@@ -1,0 +1,31 @@
+<nz-card>
+    <div class="row m-b-30">
+        <div class="col-lg-8">
+            <div class="d-md-flex">
+                <div class="m-b-10 m-r-20">
+                    <nz-input-group [nzPrefix]="prefixTemplate">
+                        <input type="text" nz-input placeholder="Buscar baja" [(ngModel)]="searchInput" (ngModelChange)="search()">
+                    </nz-input-group>      
+                    <ng-template #prefixTemplate>
+                        <i nz-icon nzType="search" class="opacity-05"></i>
+                    </ng-template>   
+                </div>
+            </div>          
+        </div>
+        <div class="col-lg-4 text-right">
+            <app-export-button class="mr-1" [path]="'/losses/exportExcel'" [type]="'excel'" [nameFile]="'Listado Bajas'"></app-export-button>
+            <a nz-button nzType="primary" [routerLink]="['/','inventario','bajas','crear']" [disabled]="!hasAdminModule">
+                <i nz-icon nzType="plus-circle" theme="outline"></i>
+                <span>{{ 'losse.add' | translate }}</span>
+            </a>
+        </div>
+    </div>
+
+    <app-list-losse [lossesList]="lossesList" [orderColumn]="orderColumn" [loading]="loading" [hasAdminModule]="hasAdminModule"></app-list-losse>
+    <div class="row">
+        <div class="col-12 mt-4 d-flex justify-content-end">
+            <nz-pagination class="pagination" nzShowSizeChanger nzShowQuickJumper [nzResponsive]="true" [nzTotal]="totalItems" [(nzPageIndex)]="page" (nzPageSizeChange)="pageSizeChanged($event)" (nzPageIndexChange)="pageIndexChanged($event)">
+            </nz-pagination>
+        </div>
+    </div>
+</nz-card>

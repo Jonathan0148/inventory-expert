@@ -1,0 +1,11 @@
+<nz-page-header class="site-page-header" nzBackIcon>
+    <nz-page-header-title>
+      <ng-container>{{ (isDetail ? 'global.detail' : (id ? 'losse.editTitle' : 'losse.addTitle')) | translate }}</ng-container>
+    </nz-page-header-title>
+</nz-page-header>
+
+<div class="container mt-3">
+    <nz-card>
+      <app-form-losse></app-form-losse>
+    </nz-card>
+</div>

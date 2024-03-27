@@ -1,0 +1,30 @@
+<nz-table #sortTable  [nzData]="lossesList" [nzLoading]="loading"
+[nzShowPagination]="false" [nzFrontPagination]="false">
+    <thead>
+        <tr>
+            <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                {{ column.title }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of sortTable.data;  let i = index">
+            <td>#{{item.id}}</td>
+            <td>{{ item.productName }}</td>
+            <td>{{ item.amount}}</td>
+            <td>{{ item.storeName}}</td>
+            <td class="text-md-right">
+                <a class="m-r-5 btn-primary" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.detail' | translate }}" [routerLink]="['/', 'inventario', 'bajas', 'detalle', item.id]">
+                    <span nz-icon nzType="eye" nzTheme="outline"></span>
+                </a>
+                <!-- <a class="m-r-5 btn-warning" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.edit' | translate }}" [routerLink]="['/', 'inventario', 'bajas','editar', item.id]" [disabled]="!hasAdminModule">
+                    <span nz-icon nzType="edit" nzTheme="outline"></span>
+                </a> -->
+                <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm" (nzOnConfirm)="confirm(item.id)" (nzOnCancel)="cancel()" [disabled]="!hasAdminModule">
+                    <i nz-icon nzType="delete" theme="outline"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+

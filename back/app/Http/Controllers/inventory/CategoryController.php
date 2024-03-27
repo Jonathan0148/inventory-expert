@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Models\inventory\Category;
+use App\Models\inventory\ProductCategory;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
@@ -116,6 +117,12 @@ class CategoryController extends Controller
 
         if (!$data) {
             return ResponseHelper::NoExits('No existe información con el id '.  $id);
+        }
+
+        $productCategory = ProductCategory::where('category_id', $id)->first();
+        
+        if ($productCategory) {
+            return ResponseHelper::NoExits('No es posible eliminar la categoría ya que está asociada con productos existentes');
         }
 
         $data->delete();

@@ -11,6 +11,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\inventory\BrandController;
 use App\Http\Controllers\inventory\CategoryController;
 use App\Http\Controllers\inventory\ColumnController;
+use App\Http\Controllers\inventory\LosseController;
 use App\Http\Controllers\inventory\ProductController;
 use App\Http\Controllers\inventory\RowController;
 use App\Http\Controllers\inventory\ShelveController;
@@ -126,6 +127,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::delete('destroy/{id}', 'destroy');
             Route::get('getReference', 'getReference');
             Route::get('consultAvailability/{id}', 'consultAvailability');
+        });
+
+        Route::controller(LosseController::class)->prefix('losses')->group(function () {
+            Route::get('index', 'index');
+            Route::post('create', 'create');
+            Route::get('show/{id}', 'show');
+            Route::post('edit/{id}', 'edit');
+            Route::delete('destroy/{id}', 'destroy');
         });
     });
 

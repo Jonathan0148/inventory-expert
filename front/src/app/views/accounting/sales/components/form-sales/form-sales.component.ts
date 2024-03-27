@@ -4,22 +4,23 @@ import { Validators, UntypedFormGroup, UntypedFormArray, UntypedFormBuilder } fr
 import { CrudServices } from '../../../../../shared/services/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ValidationsForm } from '../../validations/validations-form';
-import { OnExit } from 'src/app/shared/guards/form-exit.guard';
 import { ModalService } from '../../../../../shared/services/modal.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-form-sales',
   templateUrl: './form-sales.component.html',
   styleUrls: ['./form-sales.component.scss']
 })
-export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
+export class FormSalesComponent implements OnInit, AfterViewChecked {
   id:number;
-  
   date:Date = new Date();
   form: UntypedFormGroup;
   loading:boolean;
   typeDocumentsList: any;
   hasSubmit: boolean = false;
+  hasAdminModule: boolean = false;
+  modules = this.cookieSvc.get('modules') ? JSON.parse(this.cookieSvc.get('modules')) : []; 
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -27,7 +28,8 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
     private router:Router,
     private readonly changeDetectorRef: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
-    private _modalSvc: ModalService
+    private _modalSvc: ModalService,
+    private cookieSvc: CookieService
   ) {
     this.activatedRoute.params.subscribe((params) => {
         this.id = params.id ?? '';
@@ -64,6 +66,7 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
 
     if(this.id) this.getSale();
     if(!this.id) this.getReference();
+    this.setHasAdmin();
   }
   
   public submit(): void {
@@ -114,6 +117,7 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   //------------------------------------------------------------------------
   //-------------------------------EVENTS-----------------------------------
   //------------------------------------------------------------------------
+
   get products():UntypedFormArray{
     return this.form.controls["products"] as UntypedFormArray;
   }
@@ -121,6 +125,7 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
   //------------------------------------------------------------------------
   //------------------------AUXILIAR FUNCTIONS------------------------------
   //------------------------------------------------------------------------
+
   private setInfoProducts():any[] {
     let products = [];    
     this.products.value.forEach(element => {
@@ -159,21 +164,9 @@ export class FormSalesComponent implements OnInit, OnExit, AfterViewChecked {
       this.products.push(lessonForm);
     });         
   }
-
-  // ------------------------------------------------------
-  // ------------------------ MODAL ----------------------- 
-  // ------------------------------------------------------
-
-  async onExit(){
-    if(this.form.touched && (this.form.dirty || this.products.length) && !this.hasSubmit){
-      try {
-        let res = await this._modalSvc.confirm(`Tienes cambios sin guardar`,`<p>Si abandonas esta página perderas tus cambios.<br> <strong>¿Estas
-        seguro que quieres abandonar la página?<strong></p>`);
-        return res;
-      } catch (error) {
-          return false;
-      }
-    }
-    return true;
+  
+  private setHasAdmin(){
+    const hasAdminModule = this.modules.find((module) => module.code === 18);
+    if (hasAdminModule.has_admin) this.hasAdminModule = true;
   }
 }

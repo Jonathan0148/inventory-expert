@@ -18,10 +18,10 @@
                     <div class="row">
                         <div class="col-9">
                             <nz-card>
-                                <app-info-client-sales [form]="form"></app-info-client-sales>
+                                <app-info-client-sales [form]="form" [hasAdminModule]="hasAdminModule"></app-info-client-sales>
                             </nz-card>
                             <nz-card>
-                                <app-list-products-form [form]="form" [products]="products"></app-list-products-form>
+                                <app-list-products-form [form]="form" [products]="products" [hasAdminModule]="hasAdminModule"></app-list-products-form>
                             </nz-card>
                         </div>
                         <div class="col-3">
@@ -29,7 +29,7 @@
                                 <app-form-store [form]="form"></app-form-store>
                             </nz-card>
                             <nz-card>
-                                <app-detail-payment [form]="form" [products]="products" (submited)="submit()" [id]="id"></app-detail-payment>
+                                <app-detail-payment [form]="form" [products]="products" (submited)="submit()" [id]="id" [hasAdminModule]="hasAdminModule"></app-detail-payment>
                             </nz-card>
                         </div>
                     </div>

@@ -1,67 +1,53 @@
 import { Component, OnInit } from '@angular/core';
-import { finalize } from 'rxjs/operators';
-import { StatusService } from '../../../../inventory/products/services/status.service';
-import { CrudServices } from '../../../../../shared/services/crud.service';
-import { SalesModel } from '../../../../../shared/interfaces/sales';
 import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { CrudServices } from 'src/app/shared/services/crud.service';
+import { LosseModel } from 'src/app/shared/interfaces/losse';
+import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-sales',
-  templateUrl: './sales.component.html',
-  styleUrls: ['./sales.component.scss']
+  selector: 'app-losse',
+  templateUrl: './losse.component.html',
+  styleUrls: ['./losse.component.scss']
 })
-export class SalesComponent implements OnInit {
-
+export class LosseComponent implements OnInit {
   listSubscribers: Subscription[] = [];
-  loading: boolean = false;
   limit: number = 10;
+  loading: boolean = false;
   orderColumn = [
     {
       title: 'ID',
-      compare: (a: SalesModel, b: SalesModel) => a.id - b.id,
-      priority: false
+      compare: (a: LosseModel, b: LosseModel) => a.id - b.id,
     },
     {
-      title: 'Referencia',
+      title: 'Producto',
     },
     {
-      title: 'Cliente',
+      title: 'Cantidad',
     },
     {
-      title: 'Metodo pago',
-    },
-    {
-      title: 'Fecha',
-    },
-    {
-      title: 'Valor',
-    },
-    {
-      title: 'Estado'
+      title: 'Local',
     },
     {
       title: ''
     }
   ]
   page: number = 1;
+  lossesList:LosseModel[];
   searchInput: any;
   term: string = '';
   totalItems:number;
-  salesList:SalesModel[];
-  date:Date = null;
-  type:string = '';
   hasAdminModule: boolean = false;
   modules = this.cookieSvc.get('modules') ? JSON.parse(this.cookieSvc.get('modules')) : []; 
-
-  constructor( 
+  
+  constructor(
     private _crudSvc:CrudServices,
     private cookieSvc: CookieService
   ){}
 
   ngOnInit(): void {
     this.listenObserver();
-    this.getSales();
+    this.getLosses();
     this.setHasAdmin();
   }
 
@@ -69,20 +55,19 @@ export class SalesComponent implements OnInit {
   // ----------------------------GET DATA---------------------------------
   // ---------------------------------------------------------------------
 
-  private getSales():void {
+  private getLosses():void {
     this.loading = true;
 
-    const body = {  
-      page:  this.page,
-      term: this.term,
-      limit:this.limit,
-      date:this.date,
-      type:this.type,
-    };
+    const query = [
+      `?page=${this.page}`,
+      `&term=${this.term}`,
+      `&limit=${this.limit}`
+    ].join('');
 
-    this._crudSvc.postRequest(`/accounting/sales/index`, body).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
+    this._crudSvc.getRequest(`/inventory/losses/index${query}`).pipe(finalize( () => this.loading = false)).subscribe((res: any) => {
         const { data } = res;
-        this.salesList = data.data;
+
+        this.lossesList = data.data;
         this.totalItems = data.total;
       })
   }
@@ -93,35 +78,29 @@ export class SalesComponent implements OnInit {
 
   public search(): void {
       this.term = this.searchInput;
-      this.getSales()
+      this.getLosses()
   }
-
+  
   public pageIndexChanged(page:number):void {
     this.page = page; 
-    this.getSales();
+    this.getLosses();
   }
-
+  
   public pageSizeChanged(limit: number):void {
       this.limit = limit; this.page = 1;
-      this.getSales();
-  }
-
-  public onChangeFilter(event:any){
-    const { date, type } = event;
-    this.date = date; this.type = type;
-    this._crudSvc.requestEvent.emit('');
+      this.getLosses();
   }
 
   private listenObserver = () => {
     const observer1$ = this._crudSvc.requestEvent.subscribe((res) => {
-      this.getSales();
+      this.getLosses();
     });
 
     this.listSubscribers = [observer1$];
   }
-  
+
   private setHasAdmin(){
-    const hasAdminModule = this.modules.find((module) => module.code === 18);
+    const hasAdminModule = this.modules.find((module) => module.code === 22);
     if (hasAdminModule.has_admin) this.hasAdminModule = true;
   }
   

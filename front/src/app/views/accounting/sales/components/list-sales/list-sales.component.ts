@@ -13,6 +13,7 @@ export class ListSalesComponent implements OnInit {
   @Input() salesList:SalesModel[]; 
   @Input() orderColumn:any;
   @Input() loading:boolean;  
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private nzMessageService: NzMessageService,

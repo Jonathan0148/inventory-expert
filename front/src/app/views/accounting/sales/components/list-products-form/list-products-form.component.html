@@ -4,7 +4,7 @@
             <h4>{{ 'sales.productList' | translate }}</h4>
         </div>
         <div class="col-12 col-sm-4">
-            <button nz-button nzType="text" nzBlock class="w-100" type="button" (click)="onClikOpenModal(footer)">
+            <button nz-button nzType="text" nzBlock class="w-100" type="button" (click)="onClikOpenModal(footer)" [disabled]="!hasAdminModule">
                 <i nz-icon nzType="appstore-add" theme="outline"></i>
                 {{ 'sales.searchProduct' | translate }}
             </button>
@@ -32,21 +32,20 @@
                         <td style="vertical-align: middle;">
                             <nz-form-control>
                                 <nz-input-group [nzErrorTip]="errorsPassword">
-                                    <input nz-input placeholder="{{ 'sales.amount' | translate }}" type="number" formControlName="amount"(change)="onChangeAmount(indexProduct)" >
+                                    <input nz-input placeholder="{{ 'sales.amount' | translate }}" type="number" formControlName="amount" (change)="onChangeAmount(indexProduct)" [readonly]="!hasAdminModule">
                                 </nz-input-group>
                             </nz-form-control>
                         </td>
                         <td style="vertical-align: middle;"> 
                             <nz-form-control>
                                 <nz-input-group [nzPrefix]="pricePrefix">
-                                    <input nz-input placeholder="{{ 'sales.unitValue' | translate }}" type="text" formControlName="price" (ngModelChange)="onChangePrice()" currencyMask class="m-w-100">
+                                    <input nz-input placeholder="{{ 'sales.unitValue' | translate }}" type="text" formControlName="price" (ngModelChange)="onChangePrice()" currencyMask class="m-w-100" [readonly]="!hasAdminModule">
                                 </nz-input-group>
                             </nz-form-control>
                         </td>
                         <td>{{ (productsForm?.get('amount')?.value * productsForm?.get('price')?.value) | currency:'USD': 'symbol':'1.0-0'  }}</td>
                         <td>
-                            <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm"
-                            (nzOnConfirm)="confirm(indexProduct, productsForm?.get('sale_id')?.value)" (nzOnCancel)="cancel()">
+                            <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="{{ 'global.delete' | translate }}" class="btn-delete" nz-popconfirm nzPopconfirmTitle="{{ 'global.deleteConfirm' | translate }}" [nzBeforeConfirm]="beforeConfirm" (nzOnConfirm)="confirm(indexProduct, productsForm?.get('sale_id')?.value)" (nzOnCancel)="cancel()" [disabled]="!hasAdminModule">
                                 <i nz-icon nzType="delete" theme="outline"></i>
                             </button>
                         </td>

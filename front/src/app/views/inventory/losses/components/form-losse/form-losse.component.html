@@ -1,0 +1,53 @@
+<form nz-form [formGroup]="form" (ngSubmit)="submit()" [nzLayout]="'vertical'" >
+    <div class="row">
+        <div class="col-4">
+            <nz-form-item>
+                <nz-form-label>{{ 'losse.store' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'brand.store' | translate }}" nzAllowClear formControlName="store_id" [nzDisabled]="isDetail || basicLicense">
+                        <nz-option *ngFor="let option of storesList" [nzValue]="option.id" [nzLabel]="option.store_name"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-4">
+            <nz-form-item>
+                <nz-form-label>{{ 'losse.product' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <nz-select class="w-100" nzPlaceHolder="{{ 'losse.product' | translate }}" (ngModelChange)="onChangeProduct()" nzAllowClear formControlName="product_id" [nzDisabled]="isDetail">
+                        <nz-option *ngFor="let option of productsList" [nzValue]="option.id" [nzLabel]="option.name"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div class="col-4">
+            <nz-form-item>
+                <nz-form-label nzFor="stock" nzRequired>{{ 'losse.amount' | translate }}:</nz-form-label>
+                <nz-form-control>
+                    <nz-input-group>
+                        <input nz-input formControlName="amount" type="number" (change)="onChangeAmount()" [readonly]="isDetail">
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <nz-form-item>
+                <nz-form-label>{{ 'losse.description' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input placeholder="{{ 'brand.description' | translate }}" [nzAutosize]="{ minRows: 2 }" formControlName="description" [readonly]="isDetail"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
+    <div class="row" *ngIf="!isDetail">
+        <div class="col-md-12 text-right">
+            <nz-form-item>
+                <nz-form-control>
+                    <button nz-button nzType="primary" [disabled]="!form.valid" nz-button nzType="primary" [nzLoading]="loading">{{ 'global.save' | translate }}</button>
+                </nz-form-control>
+            </nz-form-item>
+        </div>    
+    </div>
+</form>

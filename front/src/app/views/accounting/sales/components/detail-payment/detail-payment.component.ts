@@ -26,6 +26,7 @@ export class DetailPaymentComponent implements OnInit, OnDestroy {
   lastPageStore: number;
   basicLicense: boolean = false;
   hasProducts: boolean = false;
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private _statusSvC: StatusService,

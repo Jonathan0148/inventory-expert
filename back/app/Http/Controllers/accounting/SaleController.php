@@ -165,12 +165,15 @@ class SaleController extends Controller
     private function getSaleBypagination($term)
     {
         return Sale::select('sales.*')
+            ->join('customers', 'sales.customer_id', '=', 'customers.id')
             ->with(['customer' => function ($query) {
                 $query->select('id', 'full_name', 'type_document', 'document');
             }, 'paymentMethod:id,name'])
             ->where(function ($query) use ($term) {
-                $query->where('reference', 'like', "%$term%");
-                $query->orWhere('status', 'like', "%$term%");
+                $query->where('sales.reference', 'like', "%$term%");
+                $query->orWhere('sales.status', 'like', "%$term%");
+                $query->orWhere('customers.full_name', 'like', "%$term%");
+                $query->orWhere('customers.document', 'like', "%$term%");
             });
     }
 

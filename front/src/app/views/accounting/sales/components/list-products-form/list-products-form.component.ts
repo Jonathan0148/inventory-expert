@@ -20,6 +20,7 @@ export class ListProductsFormComponent implements OnInit {
   @Input() products:UntypedFormArray;
   productList:ProductModel[] = [];
   subscription: Subscription;
+  @Input() hasAdminModule:boolean;
 
   constructor(
     private _notificationSvC:NotificationsService,    
