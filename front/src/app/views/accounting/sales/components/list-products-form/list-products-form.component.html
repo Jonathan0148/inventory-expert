@@ -10,6 +10,16 @@
             </button>
         </div>
     </div>
+    <div class="row mt-5">
+        <div class="col-6">
+            <nz-form-item>
+                <nz-form-label>{{ 'products.reference' | translate }}</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="{{ 'products.reference' | translate }}" type="text" formControlName="referenceSearch" (change)="searchProduct($event.target.value)" [readonly]="!hasAdminModule">
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </div>
     <nz-table nzTemplateMode>
         <thead>
             <tr>

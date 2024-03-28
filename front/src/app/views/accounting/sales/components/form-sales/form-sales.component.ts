@@ -59,6 +59,7 @@ export class FormSalesComponent implements OnInit, AfterViewChecked {
       bail:[null, [  ]],
       products: this.fb.array([]),
       observations:[null],
+      referenceSearch:[null, []]
     },
     {
       validator: ValidationsForm.matchValidation('bail', 'total', 'no-same')

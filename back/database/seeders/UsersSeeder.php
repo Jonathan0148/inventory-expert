@@ -18,13 +18,13 @@ class UsersSeeder extends Seeder
                 "id" => 1,
                 "store_id" => 1,
                 "role_id" => 1,
-                "names" => "Jonathan",
+                "names" => "Vanessa",
                 "surnames" => "Bohorquez",
                 "type_document" => 1,
-                "document" => "1003527670",
-                "email" => "bohorquezvillamiljonathan@gmail.com",
-                'password' => Hash::make('1003527670'.strtolower(substr('Jonathan', 0, 1))),
-                'avatar' => "/assets/images/avatars/11.png",
+                "document" => "1073241045",
+                "email" => "vaneb09@hotmail.es",
+                'password' => Hash::make('1073241045'.strtolower(substr('Vanessa', 0, 1))),
+                'avatar' => "/assets/images/avatars/16.png",
                 "state" => 1
             ]
         ];
