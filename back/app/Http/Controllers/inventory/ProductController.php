@@ -49,8 +49,8 @@ class ProductController extends Controller
         ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
         ->where('products.store_id', Auth::user()->store_id)
         ->where(function ($query) use ($term) {
-            $query->where('products.name', 'like', "%$term%");
-            $query->orWhere('products.reference', 'like', "%$term%");
+            $query->where('products.reference', 'like', "%$term%");
+            $query->orWhere('products.name', 'like', "%$term%");
         })
         ->with(['categories' => function ($query) { 
             $query->select('categories.id as category_id','categories.name as name_category');
@@ -309,5 +309,24 @@ class ProductController extends Controller
         }
 
         return ResponseHelper::NoExits('Archivo no valido');
+    }
+
+    public function searchProduct(Request $request)
+    {
+        $reference = $request->input('reference');
+
+        $data = Product::select('products.*','brands.name as brand', 'shelves.name as section', 'columns.name as column', 'rows.name as row')
+        ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
+        ->leftjoin('shelves', 'products.shelf_id', '=', 'shelves.id')
+        ->leftjoin('columns', 'products.column_id', '=', 'columns.id')
+        ->leftjoin('rows', 'products.row_id', '=', 'rows.id')
+        ->with(['categories' => function ($query) { 
+            $query->select('categories.id as category_id','categories.name as name_category');
+        }])
+        ->withSum('sales_detail','amount')
+        ->where('reference', $reference)
+        ->first();
+        
+        return ResponseHelper::Get($data);
     }
 }

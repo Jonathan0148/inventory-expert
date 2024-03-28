@@ -17,7 +17,7 @@ class StoresSeeder extends Seeder
         $data = [
             [
                 "id" => 1,
-                "store_name" => "Minimercado LanaRanja |||",
+                "store_name" => "Minimercado LanaRanja",
                 "slogan" => "Eslogan de la tienda",
                 "nit" => "12345678-9",
                 "cell_phone" => "3214501006",

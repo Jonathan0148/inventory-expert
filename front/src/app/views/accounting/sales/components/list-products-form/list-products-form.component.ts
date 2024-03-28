@@ -89,6 +89,23 @@ export class ListProductsFormComponent implements OnInit {
     });
   }
 
+  public searchProduct(event: any){
+    const body = {
+      reference: event
+    }
+    this._crudSvc.postRequest(`/inventory/products/searchProduct`, body).subscribe((res: any) => {
+      const { data } = res;
+      if(!this.validateExistsForMultiple(data.id)){
+        this.addProductsForm(data);
+        this._productDetailSvC.setChangePrice$(true);
+        this.form.patchValue({referenceSearch: null});
+        return 
+      }
+      this.showNotificationExists();
+      this.form.patchValue({referenceSearch: null});
+    })
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

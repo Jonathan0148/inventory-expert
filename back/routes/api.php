@@ -147,6 +147,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('getReference', 'getReference');
             Route::get('consultAvailability/{id}', 'consultAvailability');
             Route::post('importExcel', 'importExcel');
+            Route::post('searchProduct', 'searchProduct');
         });
 
         Route::controller(LosseController::class)->prefix('losses')->group(function () {
