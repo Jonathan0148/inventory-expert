@@ -37,7 +37,8 @@ export class ListSalesComponent implements OnInit {
   }
 
   downloadInvoice(id:number): void {
-    this.fileService.exportFile(`/accounting/sales/downloadInvoice/${id}`, 'Factura de venta');
+    this.fileService.printInvoice(id);
+    // this.fileService.exportFile(`/accounting/sales/downloadInvoice/${id}`, 'Factura de venta');
   }
 
   beforeConfirm(): Promise<boolean> {

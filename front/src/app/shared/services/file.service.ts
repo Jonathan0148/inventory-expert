@@ -57,6 +57,30 @@ export class FilesService {
     )
   }
 
+  printInvoice(id:number): void {
+    const token: string = sessionStorage.getItem('api_key');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.http.get(`${this.serverUrl}/accounting/sales/downloadInvoice/${id}`, { headers, responseType: 'blob' as 'json' }).subscribe(
+      (response: any) => {
+        const dataType = response.type;
+        const blob = new Blob([response], { type: dataType });
+
+        const fileURL = URL.createObjectURL(blob);
+
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = fileURL;
+        document.body.appendChild(iframe);
+
+        iframe.onload = () => {
+          setTimeout(() => {
+            iframe.contentWindow.print();
+          }, 1000);
+        };
+      }
+    );
+  }
+
   exportFilePOST(path:string,body:any | Array<any>,filename:string) {
     const token: string = sessionStorage.getItem('api_key');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);

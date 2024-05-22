@@ -30,7 +30,10 @@ class InvoiceHelper
         $pdf = PDF::loadView('exportsPdf.invoice', [
             'data' => $dataPdf
         ]);
-        $pdf->setPaper('b7', 'portrait');
+        $contentHeight = $pdf->getDomPDF()->get_canvas()->get_height();
+        $height = ($contentHeight-500);
+
+        $pdf->setPaper(array(0, 0, 120, $height), 'portrait');
         
         return $pdf->download("Factura #$reference.pdf");
     }
