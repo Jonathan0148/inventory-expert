@@ -82,7 +82,7 @@
     <div class="ticket">
         <div class="header-fix">
             <div class="logo">
-                <img src="img/logo_market.png" alt="Logotipo">
+                <img src="img/logo_market_2.png" alt="Logotipo">
             </div>
             <p class="center">
                 <b>{{ @$data['nameLocal'] }}</b>
